@@ -3,6 +3,10 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+export const config = {
+	serverActions: { bodySizeLimit: '20mb' },
+};
+
 export async function POST(request: Request) {
 	try {
 		const { email, photoData, name } = await request.json();
@@ -13,6 +17,14 @@ export async function POST(request: Request) {
 			from: 'ONER Photo Booth <photobooth@and-element.io>',
 			to: email,
 			subject: 'Your ONER Photo Booth Picture',
+			attachments: [
+				{
+					filename: 'photobooth.jpg',
+					content: photoData,
+					contentType: 'image/jpeg',
+					// cid: 'selfie'           // uncomment when Resend ships cid support
+				},
+			],
 			html: `
         <!DOCTYPE html>
         <html>
@@ -31,13 +43,8 @@ export async function POST(request: Request) {
               <h1 style="color: #1a1a1a; font-size: 24px; margin-bottom: 20px;">Hi ${name}!</h1>
               
               <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
-                Thank you for visiting the ONER Photo Booth. Here's your photo:
+                Thank you for visiting the ONER Photo Booth. Find your photo attached below.
               </p>
-              
-              <img src="data:image/jpeg;base64,${photoData}" 
-                   alt="Your photo" 
-                   style="display: block; width: 100%; max-width: 400px; margin: 0 auto 30px; border: 20px solid black;"
-              />
               
               <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
                 Visit our website to explore our latest collection and find your perfect fit.
