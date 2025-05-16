@@ -23,7 +23,7 @@ export function PhotoBoothMobilePreview({
 				/>
 			</div>
 
-			<div className="flex-1 flex flex-col justify-center space-y-4">
+			<div className="flex-1 flex flex-col space-y-4">
 				<Button
 					onClick={onAccept}
 					className="w-full h-12 bg-black text-white hover:bg-gray-900"

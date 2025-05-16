@@ -25,7 +25,7 @@ export function PhotoBoothMobileCapture({ onNavigate, onCancel }: PhotoBoothMobi
 				/>
 			</div>
 
-			<div className="flex-1 flex flex-col items-center justify-center space-y-4">
+			<div className="flex-1 flex flex-col items-center  space-y-4">
 				<Button
 					onClick={handleTakePhoto}
 					className="w-full h-12 bg-black text-white hover:bg-gray-900"
