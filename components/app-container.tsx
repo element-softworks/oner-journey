@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
@@ -12,83 +12,104 @@ import { CompleteScreen } from '@/components/screens/complete-screen';
 import { UserProvider } from '@/context/user-context';
 import { useRegisterSW } from '@/hooks/use-register-sw';
 
-export type AppScreen = 'landing' | 'intro' | 'name' | 'email' | 'products' | 'summary' | 'complete';
+export type AppScreen =
+	| 'landing'
+	| 'intro'
+	| 'name'
+	| 'email'
+	| 'products'
+	| 'summary'
+	| 'complete';
 
 export function AppContainer() {
-  const [currentScreen, setCurrentScreen] = useState<AppScreen>('landing');
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [selectedTop, setSelectedTop] = useState(0);
-  const [selectedTopColor, setSelectedTopColor] = useState('#8896B2');
-  const [selectedBottom, setSelectedBottom] = useState(0);
-  const [selectedBottomColor, setSelectedBottomColor] = useState('#8896B2');
-  const router = useRouter();
-  const pathname = usePathname();
+	const [currentScreen, setCurrentScreen] = useState<AppScreen>('landing');
+	const [isTransitioning, setIsTransitioning] = useState(false);
+	const [selectedTop, setSelectedTop] = useState(0);
+	const [selectedTopColor, setSelectedTopColor] = useState('#8896B2');
+	const [selectedBottom, setSelectedBottom] = useState(0);
+	const [selectedBottomColor, setSelectedBottomColor] = useState('#8896B2');
+	const router = useRouter();
+	const pathname = usePathname();
 
-  useRegisterSW();
+	useRegisterSW();
 
-  const navigateTo = (screen: AppScreen) => {
-    setIsTransitioning(true);
-    const path = screen === 'landing' ? '/' : `/${screen}`;
-    router.push(path);
-    setTimeout(() => {
-      setCurrentScreen(screen);
-      setIsTransitioning(false);
-    }, 500);
-  };
+	const navigateTo = (screen: AppScreen) => {
+		setIsTransitioning(true);
+		const path = screen === 'landing' ? '/' : `/${screen}`;
+		router.push(path);
+		setTimeout(() => {
+			setCurrentScreen(screen);
+			setIsTransitioning(false);
+		}, 300);
+	};
 
-  useEffect(() => {
-    const path = pathname === '/' ? 'landing' : pathname.substring(1) as AppScreen;
-    const validScreens: AppScreen[] = ['landing', 'intro', 'name', 'email', 'products', 'summary', 'complete'];
-    const newScreen = validScreens.includes(path as AppScreen) ? path as AppScreen : 'landing';
-    
-    setCurrentScreen(newScreen);
-    
-    const setVH = () => {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-    };
-    
-    setVH();
-    window.addEventListener('resize', setVH);
-    
-    return () => {
-      window.removeEventListener('resize', setVH);
-    };
-  }, [pathname]);
+	useEffect(() => {
+		const path = pathname === '/' ? 'landing' : (pathname.substring(1) as AppScreen);
+		const validScreens: AppScreen[] = [
+			'landing',
+			'intro',
+			'name',
+			'email',
+			'products',
+			'summary',
+			'complete',
+		];
+		const newScreen = validScreens.includes(path as AppScreen)
+			? (path as AppScreen)
+			: 'landing';
 
-  return (
-    <UserProvider>
-      <div className={`w-full h-full transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
-        {currentScreen === 'landing' && <LandingScreen onNavigate={navigateTo} />}
-        {currentScreen === 'intro' && <IntroductionVideo onNavigate={navigateTo} />}
-        {currentScreen === 'name' && <NameEntryScreen onNavigate={navigateTo} />}
-        {currentScreen === 'email' && <EmailEntryScreen onNavigate={navigateTo} />}
-        {currentScreen === 'products' && (
-          <ProductSelectionScreen 
-            onNavigate={navigateTo}
-            onSelectionChange={(top, topColor, bottom, bottomColor) => {
-              setSelectedTop(top);
-              setSelectedTopColor(topColor);
-              setSelectedBottom(bottom);
-              setSelectedBottomColor(bottomColor);
-            }}
-            initialTop={selectedTop}
-            initialTopColor={selectedTopColor}
-            initialBottom={selectedBottom}
-            initialBottomColor={selectedBottomColor}
-          />
-        )}
-        {currentScreen === 'summary' && (
-          <SummaryScreen 
-            onNavigate={navigateTo}
-            selectedTop={selectedTop}
-            selectedTopColor={selectedTopColor}
-            selectedBottom={selectedBottom}
-            selectedBottomColor={selectedBottomColor}
-          />
-        )}
-        {currentScreen === 'complete' && <CompleteScreen onNavigate={navigateTo} />}
-      </div>
-    </UserProvider>
-  );
+		setCurrentScreen(newScreen);
+
+		const setVH = () => {
+			const vh = window.innerHeight * 0.01;
+			document.documentElement.style.setProperty('--vh', `${vh}px`);
+		};
+
+		setVH();
+		window.addEventListener('resize', setVH);
+
+		return () => {
+			window.removeEventListener('resize', setVH);
+		};
+	}, [pathname]);
+
+	return (
+		<UserProvider>
+			<div
+				className={`w-full h-full transition-opacity duration-300 ${
+					isTransitioning ? 'opacity-0' : 'opacity-100'
+				}`}
+			>
+				{currentScreen === 'landing' && <LandingScreen onNavigate={navigateTo} />}
+				{currentScreen === 'intro' && <IntroductionVideo onNavigate={navigateTo} />}
+				{currentScreen === 'name' && <NameEntryScreen onNavigate={navigateTo} />}
+				{currentScreen === 'email' && <EmailEntryScreen onNavigate={navigateTo} />}
+				{currentScreen === 'products' && (
+					<ProductSelectionScreen
+						onNavigate={navigateTo}
+						onSelectionChange={(top, topColor, bottom, bottomColor) => {
+							setSelectedTop(top);
+							setSelectedTopColor(topColor);
+							setSelectedBottom(bottom);
+							setSelectedBottomColor(bottomColor);
+						}}
+						initialTop={selectedTop}
+						initialTopColor={selectedTopColor}
+						initialBottom={selectedBottom}
+						initialBottomColor={selectedBottomColor}
+					/>
+				)}
+				{currentScreen === 'summary' && (
+					<SummaryScreen
+						onNavigate={navigateTo}
+						selectedTop={selectedTop}
+						selectedTopColor={selectedTopColor}
+						selectedBottom={selectedBottom}
+						selectedBottomColor={selectedBottomColor}
+					/>
+				)}
+				{currentScreen === 'complete' && <CompleteScreen onNavigate={navigateTo} />}
+			</div>
+		</UserProvider>
+	);
 }

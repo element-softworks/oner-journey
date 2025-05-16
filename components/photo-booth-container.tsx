@@ -7,8 +7,15 @@ import { PhotoBoothWelcome } from '@/components/screens/photo-booth-welcome';
 import { PhotoBoothCapture } from '@/components/screens/photo-booth-capture';
 import { PhotoBoothDetails } from './screens/photo-booth-details';
 import { PhotoBoothPreview } from './screens/photo-booth-preview';
+import { PhotoBoothThankYou } from './screens/photo-booth-thank-you';
 
-export type PhotoBoothScreen = 'landing' | 'welcome' | 'details' | 'capture' | 'preview';
+export type PhotoBoothScreen =
+	| 'landing'
+	| 'welcome'
+	| 'details'
+	| 'capture'
+	| 'preview'
+	| 'thank-you';
 
 interface PhotoBoothContainerProps {
 	initialScreen?: PhotoBoothScreen;
@@ -28,11 +35,11 @@ export function PhotoBoothContainer({ initialScreen = 'landing' }: PhotoBoothCon
 			setPhoto(data?.blob);
 		}
 		const path = getPathForScreen(screen);
-		router.push(path);
 		setTimeout(() => {
 			setCurrentScreen(screen);
+			router.push(path);
 			setIsTransitioning(false);
-		}, 500);
+		}, 300);
 	};
 
 	const getPathForScreen = (screen: PhotoBoothScreen): string => {
@@ -45,9 +52,10 @@ export function PhotoBoothContainer({ initialScreen = 'landing' }: PhotoBoothCon
 				return '/photo-booth/form';
 			case 'capture':
 				return '/photo-booth/capture';
-
 			case 'preview':
 				return '/photo-booth/preview';
+			case 'thank-you':
+				return '/photo-booth/thank-you';
 			default:
 				return '/photo-booth/start';
 		}
@@ -55,7 +63,7 @@ export function PhotoBoothContainer({ initialScreen = 'landing' }: PhotoBoothCon
 
 	return (
 		<div
-			className={`w-full h-full transition-opacity duration-500 ${
+			className={`w-full h-full transition-opacity duration-300 ${
 				isTransitioning ? 'opacity-0' : 'opacity-100'
 			}`}
 		>
@@ -67,6 +75,7 @@ export function PhotoBoothContainer({ initialScreen = 'landing' }: PhotoBoothCon
 			)}
 			{currentScreen === 'details' && <PhotoBoothDetails onNavigate={navigateToScreen} />}
 			{currentScreen === 'welcome' && <PhotoBoothWelcome onNavigate={navigateToScreen} />}
+			{currentScreen === 'thank-you' && <PhotoBoothThankYou onNavigate={navigateToScreen} />}
 
 			{currentScreen === 'capture' && (
 				<>

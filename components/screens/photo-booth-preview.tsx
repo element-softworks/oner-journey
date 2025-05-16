@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { PhotoBoothScreen } from '@/components/photo-booth-container';
 import { Button } from '@/components/ui/button';
 import { useHapticFeedback } from '@/hooks/use-haptic-feedback';
@@ -72,7 +72,7 @@ export function PhotoBoothPreview({ photo, onNavigate, onRetake }: PhotoBoothPre
 				<Button
 					onClick={() => {
 						triggerHaptic('heavy');
-						// onNavigate('share');
+						onNavigate('thank-you');
 					}}
 					className="h-14 bg-gray-900 text-white hover:bg-gray-800"
 				>
