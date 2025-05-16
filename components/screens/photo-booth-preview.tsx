@@ -5,25 +5,22 @@ import { PhotoBoothScreen } from '@/components/photo-booth-container';
 import { Button } from '@/components/ui/button';
 import { useHapticFeedback } from '@/hooks/use-haptic-feedback';
 import { Camera, Check, RotateCcw } from 'lucide-react';
+import { useUser } from '@/context/user-context';
+import { useToast } from '@/hooks/use-toast';
+import { blobToBase64 } from '@/lib/utils';
 
 interface PhotoBoothPreviewProps {
-	/**
-	 * Blob coming from the capture step
-	 */
 	photo: Blob | null;
-	/**
-	 * Navigate back to a previous or next screen.
-	 * - "capture"  → retake
-	 * - "share"    → move forward
-	 */
 	onNavigate: (screen: PhotoBoothScreen) => void;
 	onRetake: () => void;
 }
 
 export function PhotoBoothPreview({ photo, onNavigate, onRetake }: PhotoBoothPreviewProps) {
 	const [url, setUrl] = useState<string | null>(null);
-
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const { userData } = useUser();
 	const { triggerHaptic } = useHapticFeedback();
+	const { toast } = useToast();
 
 	useEffect(() => {
 		const objectUrl = URL.createObjectURL(photo!);
@@ -32,22 +29,54 @@ export function PhotoBoothPreview({ photo, onNavigate, onRetake }: PhotoBoothPre
 		return () => URL.revokeObjectURL(objectUrl);
 	}, [photo]);
 
-	/* -------------------------------------------------------------------------- */
-	/*                                   UI                                       */
-	/* -------------------------------------------------------------------------- */
+	const handleContinue = async () => {
+		// if (!url || !userData.email || isSubmitting) return;
+		if (!photo || isSubmitting) return;
+		setIsSubmitting(true);
+		triggerHaptic('medium');
 
-	if (!url) return null; // loading very briefly
+		const base64 = await blobToBase64(photo);
+
+		setIsSubmitting(true);
+		triggerHaptic('medium');
+
+		console.log(url, 'confirmted url');
+		try {
+			const res = await fetch('/api/send-photo', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					// email: userData?.email,
+					// photoUrl: url,
+					// name: userData.name,
+					email: 'nathan@and-element.com',
+					photoData: base64,
+					name: 'Nathan',
+				}),
+			});
+
+			if (!res.ok) throw new Error('Failed to send email');
+			toast({ title: 'Success!', description: 'Your photo is on its way ✉️' });
+			onNavigate('thank-you');
+		} catch (err) {
+			toast({ title: 'Error', description: 'Please try again.', variant: 'destructive' });
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
+
+	if (!url) return null;
 
 	return (
 		<div className="relative w-full h-screen flex flex-col items-center justify-center bg-[#e5e5e5] px-4 py-8">
-			{/* Photo with branded frame */}
 			<img
 				src="https://www.purpldiscounts.com/_next/image?url=https%3A%2F%2Fverification.purpldiscounts.com%2Fassets%2Fbrand_logo%2FoVEXAJ6RTzflVHvf3ePEs0e&w=828&q=75"
 				alt="ONER"
 				className="h-12 w-auto mx-auto mb-4"
 			/>
 			<div className="relative max-h-[80vh] w-auto border-[20px] border-black">
-				{/* The captured image */}
 				<img
 					src={url}
 					alt="Your captured selfie"
@@ -56,7 +85,6 @@ export function PhotoBoothPreview({ photo, onNavigate, onRetake }: PhotoBoothPre
 				/>
 			</div>
 
-			{/* Action buttons */}
 			<div className="mt-8 grid grid-cols-2 gap-4 w-full max-w-md">
 				<Button
 					variant="outline"
@@ -65,19 +93,18 @@ export function PhotoBoothPreview({ photo, onNavigate, onRetake }: PhotoBoothPre
 						onRetake();
 					}}
 					className="h-14"
+					disabled={isSubmitting}
 				>
 					<RotateCcw className="mr-2 h-5 w-5" />
 					Retake
 				</Button>
 				<Button
-					onClick={() => {
-						triggerHaptic('heavy');
-						onNavigate('thank-you');
-					}}
+					onClick={handleContinue}
 					className="h-14 bg-gray-900 text-white hover:bg-gray-800"
+					disabled={isSubmitting}
 				>
 					<Check className="mr-2 h-5 w-5" />
-					Continue
+					{isSubmitting ? 'Sending...' : 'Continue'}
 				</Button>
 			</div>
 		</div>
