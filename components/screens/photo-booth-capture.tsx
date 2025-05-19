@@ -72,9 +72,17 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 				},
 			});
 
+			console.log('all tracks:', stream.getTracks());
+			console.log('video tracks:', stream.getVideoTracks());
+
 			if (videoRef.current) {
-				videoRef.current.srcObject = stream;
-				await videoRef.current.play();
+				const vid = videoRef.current;
+				vid.onloadedmetadata = () => {
+					console.log('video size:', vid.videoWidth, vid.videoHeight);
+				};
+				vid.srcObject = stream;
+				await vid.play();
+				console.log('video.paused =', vid.paused);
 			}
 
 			streamRef.current = stream;
