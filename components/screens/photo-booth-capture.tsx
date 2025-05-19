@@ -42,11 +42,6 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 	/*                               Camera access                                */
 	/* -------------------------------------------------------------------------- */
 
-	const stopStream = () => {
-		streamRef.current?.getTracks().forEach((t) => t.stop());
-		streamRef.current = null;
-	};
-
 	const initializeCamera = async () => {
 		setIsLoading(true);
 		setError(null);
@@ -116,7 +111,6 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 
 	useEffect(() => {
 		initializeCamera();
-		return stopStream; // clean-up on unmount
 	}, [videoRef, streamRef, countdownRef, setIsLoading, setError, setHasPermission]);
 
 	/* -------------------------------------------------------------------------- */
@@ -213,7 +207,6 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 	};
 
 	const handleRetry = () => {
-		stopStream();
 		initializeCamera();
 	};
 
