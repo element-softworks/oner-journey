@@ -8,18 +8,23 @@ const nextConfig = {
 		ignoreBuildErrors: true,
 	},
 	async headers() {
+		const csp = [
+			// allow media streams and blob: URLs
+			"media-src 'self' blob: mediastream:",
+			// keep the rest of your policy…
+		].join('; ');
+
 		return [
 			{
 				source: '/:path*',
 				headers: [
-					{
-						key: 'Permissions-Policy',
-						value: 'camera=(self)', // or camera=(self "https://your-cdn.com")
-					},
+					{ key: 'Content-Security-Policy', value: csp },
+					{ key: 'Permissions-Policy', value: 'camera=(self)' },
 				],
 			},
 		];
 	},
+
 	// Disable webpack cache to prevent serialization issues
 	webpack: (config) => {
 		config.cache = false;
