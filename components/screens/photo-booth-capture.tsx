@@ -274,11 +274,6 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 				muted
 				className="w-full h-full object-cover mirror"
 			/>
-			<style jsx>{`
-				.mirror {
-					transform: scaleX(-1);
-				}
-			`}</style>
 
 			{/* Countdown overlay */}
 			{countdown !== null && (

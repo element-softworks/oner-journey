@@ -9,8 +9,8 @@ import type { Socket } from 'socket.io-client';
 // Union of all possible socket event names
 export type SocketEventName =
 	| (typeof CORE_EVENTS)[keyof typeof CORE_EVENTS]
-	| typeof import('@/lib/socket-events').MOBILE_EVENTS[keyof typeof import('@/lib/socket-events').MOBILE_EVENTS]
-	| typeof import('@/lib/socket-events').KIOSK_EVENTS[keyof typeof import('@/lib/socket-events').KIOSK_EVENTS];
+	| (typeof import('@/lib/socket-events').MOBILE_EVENTS)[keyof typeof import('@/lib/socket-events').MOBILE_EVENTS]
+	| (typeof import('@/lib/socket-events').KIOSK_EVENTS)[keyof typeof import('@/lib/socket-events').KIOSK_EVENTS];
 
 interface UseSocketRoomOptions {
 	sessionId: string;
