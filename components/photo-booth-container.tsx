@@ -19,22 +19,29 @@ export type PhotoBoothScreen =
 
 interface PhotoBoothContainerProps {
 	initialScreen?: PhotoBoothScreen;
+	sessionId?: string;
 }
 
-export function PhotoBoothContainer({ initialScreen = 'landing' }: PhotoBoothContainerProps) {
+export function PhotoBoothContainer({
+	initialScreen = 'landing',
+	sessionId,
+}: PhotoBoothContainerProps) {
 	const [currentScreen, setCurrentScreen] = useState<PhotoBoothScreen>(initialScreen);
 	const [isTransitioning, setIsTransitioning] = useState(false);
 	const [photo, setPhoto] = useState<Blob | null>(null);
 	const router = useRouter();
 	const pathname = usePathname();
 
-	const navigateToScreen = (screen: PhotoBoothScreen, data?: { blob?: Blob }) => {
+	const navigateToScreen = (
+		screen: PhotoBoothScreen,
+		data?: { blob?: Blob; email?: string; name?: string }
+	) => {
 		setIsTransitioning(true);
 
 		if (!!data?.blob) {
 			setPhoto(data?.blob);
 		}
-		const path = getPathForScreen(screen);
+		const path = getPathForScreen(screen, data);
 		setTimeout(() => {
 			setCurrentScreen(screen);
 			router.push(path);
@@ -42,22 +49,29 @@ export function PhotoBoothContainer({ initialScreen = 'landing' }: PhotoBoothCon
 		}, 300);
 	};
 
-	const getPathForScreen = (screen: PhotoBoothScreen): string => {
+	const getPathForScreen = (
+		screen: PhotoBoothScreen,
+		data?: {
+			blob?: Blob;
+			email?: string;
+			name?: string;
+		}
+	): string => {
 		switch (screen) {
 			case 'landing':
-				return '/photo-booth/start';
+				return `/photo-booth/start`;
 			case 'details':
-				return '/photo-booth/details';
+				return `/photo-booth/details?sessionId=${sessionId}${!!data?.email ? `&email=${data?.email}` : ''}${!!data?.name ? `&name=${data?.name}` : ''}`;
 			case 'welcome':
-				return '/photo-booth/form';
+				return `/photo-booth/form?sessionId=${sessionId}${!!data?.email ? `&email=${data?.email}` : ''}${!!data?.name ? `&name=${data?.name}` : ''}`;
 			case 'capture':
-				return '/photo-booth/capture';
+				return `/photo-booth/capture?sessionId=${sessionId}${!!data?.email ? `&email=${data?.email}` : ''}${!!data?.name ? `&name=${data?.name}` : ''}`;
 			case 'preview':
-				return '/photo-booth/preview';
+				return `/photo-booth/preview?sessionId=${sessionId}${!!data?.email ? `&email=${data?.email}` : ''}${!!data?.name ? `&name=${data?.name}` : ''}`;
 			case 'thank-you':
-				return '/photo-booth/thank-you';
+				return `/photo-booth/thank-you?sessionId=${sessionId}${!!data?.email ? `&email=${data?.email}` : ''}${!!data?.name ? `&name=${data?.name}` : ''}`;
 			default:
-				return '/photo-booth/start';
+				return `/photo-booth/start`;
 		}
 	};
 
@@ -69,11 +83,15 @@ export function PhotoBoothContainer({ initialScreen = 'landing' }: PhotoBoothCon
 		>
 			{currentScreen === 'landing' && (
 				<PhotoBoothLanding
-					onStart={() => navigateToScreen('details')}
+					onStart={(sessionId: string) =>
+						router.push(`/photo-booth/details?sessionId=${sessionId}`)
+					}
 					onBack={() => router.push('/')}
 				/>
 			)}
-			{currentScreen === 'details' && <PhotoBoothDetails onNavigate={navigateToScreen} />}
+			{currentScreen === 'details' && (
+				<PhotoBoothDetails sessionId={sessionId ?? ''} onNavigate={navigateToScreen} />
+			)}
 			{currentScreen === 'welcome' && <PhotoBoothWelcome onNavigate={navigateToScreen} />}
 			{currentScreen === 'thank-you' && <PhotoBoothThankYou onNavigate={navigateToScreen} />}
 
@@ -81,6 +99,7 @@ export function PhotoBoothContainer({ initialScreen = 'landing' }: PhotoBoothCon
 				<>
 					{!!photo ? (
 						<PhotoBoothPreview
+							sessionId={sessionId ?? ''}
 							photo={photo}
 							onNavigate={navigateToScreen}
 							onRetake={() => {
@@ -89,6 +108,7 @@ export function PhotoBoothContainer({ initialScreen = 'landing' }: PhotoBoothCon
 						/>
 					) : (
 						<PhotoBoothCapture
+							sessionId={sessionId ?? ''}
 							onNavigate={(screen: PhotoBoothScreen, data?: { blob?: Blob }) => {
 								if (screen === 'details') {
 									navigateToScreen(screen);

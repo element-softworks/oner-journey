@@ -11,10 +11,12 @@ export type PhotoBoothMobileScreen = 'details' | 'capture' | 'preview' | 'thank-
 
 interface PhotoBoothMobileContainerProps {
 	initialScreen?: PhotoBoothMobileScreen;
+	sessionId: string;
 }
 
 export function PhotoBoothMobileContainer({
 	initialScreen = 'details',
+	sessionId,
 }: PhotoBoothMobileContainerProps) {
 	const [currentScreen, setCurrentScreen] = useState<PhotoBoothMobileScreen>(initialScreen);
 	const [isTransitioning, setIsTransitioning] = useState(false);
@@ -38,7 +40,7 @@ export function PhotoBoothMobileContainer({
 	};
 
 	const getPathForScreen = (screen: PhotoBoothMobileScreen): string => {
-		return `/photo-booth/mobile/${screen}`;
+		return `/photo-booth/mobile/${screen}?sessionId=${sessionId}`;
 	};
 
 	return (
@@ -53,6 +55,7 @@ export function PhotoBoothMobileContainer({
 
 			{currentScreen === 'capture' && (
 				<PhotoBoothMobileCapture
+					sessionId={sessionId}
 					onNavigate={(screen, data) => {
 						if (data?.blob) {
 							setPhoto(data.blob);
@@ -65,6 +68,7 @@ export function PhotoBoothMobileContainer({
 
 			{currentScreen === 'preview' && (
 				<PhotoBoothMobilePreview
+					sessionId={sessionId}
 					onAccept={() => navigateToScreen('thank-you')}
 					onRetake={() => {
 						setPhoto(null);

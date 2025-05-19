@@ -40,7 +40,7 @@ export function AppContainer() {
 		setTimeout(() => {
 			setCurrentScreen(screen);
 			setIsTransitioning(false);
-		}, 300);
+		}, 500);
 	};
 
 	useEffect(() => {
@@ -76,9 +76,7 @@ export function AppContainer() {
 	return (
 		<UserProvider>
 			<div
-				className={`w-full h-full transition-opacity duration-300 ${
-					isTransitioning ? 'opacity-0' : 'opacity-100'
-				}`}
+				className={`w-full h-full transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
 			>
 				{currentScreen === 'landing' && <LandingScreen onNavigate={navigateTo} />}
 				{currentScreen === 'intro' && <IntroductionVideo onNavigate={navigateTo} />}

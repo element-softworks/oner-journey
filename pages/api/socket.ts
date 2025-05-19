@@ -29,9 +29,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 				origin:
 					process.env.NODE_ENV === 'production'
 						? [
+								process.env.NEXT_PUBLIC_BASE_URL as string,
+								'https://oner-journey-production.up.railway.app/',
 								'https://oner.and-element.io/',
 								'https://reliable-bonbon-7afda0.netlify.app/',
-						  ]
+							]
 						: '*',
 				credentials: false,
 			},
