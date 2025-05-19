@@ -99,8 +99,9 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 			</div>
 
 			<div className="text-center mb-8">
-				<h1 className="text-xl font-bold mb-2">WELCOME TO THE PHOTO BOOTH</h1>
-				<p className="text-sm">TO TAKE A PHOTO ENTER DETAILS BELOW</p>
+				<h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
+					WELCOME TO THE PHOTO BOOTH, TO TAKE A PHOTO ENTER THE DETAILS BELOW
+				</h1>
 			</div>
 
 			<div className="space-y-6">

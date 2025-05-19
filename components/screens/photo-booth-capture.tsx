@@ -5,6 +5,9 @@ import { PhotoBoothScreen } from '@/components/photo-booth-container';
 import { Button } from '@/components/ui/button';
 import { useHapticFeedback } from '@/hooks/use-haptic-feedback';
 import { Camera, X } from 'lucide-react';
+import { useSocketRoom } from '@/hooks/use-socket';
+import { CORE_EVENTS, DEVICE_TYPE, KIOSK_EVENTS, MOBILE_EVENTS } from '@/lib/socket-events';
+import { toast } from '@/hooks/use-toast';
 
 interface PhotoBoothCaptureProps {
 	/**
@@ -16,9 +19,10 @@ interface PhotoBoothCaptureProps {
 			blob: Blob;
 		}
 	) => void;
+	sessionId: string;
 }
 
-export function PhotoBoothCapture({ onNavigate }: PhotoBoothCaptureProps) {
+export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCaptureProps) {
 	/** Generic state */
 	const [isLoading, setIsLoading] = useState(true);
 	const [hasPermission, setHasPermission] = useState(false);
@@ -163,6 +167,34 @@ export function PhotoBoothCapture({ onNavigate }: PhotoBoothCaptureProps) {
 		}, 1000);
 	};
 
+	const { socket } = useSocketRoom({
+		sessionId,
+		role: DEVICE_TYPE.KIOSK,
+		handlers: {
+			// server-side error
+			[CORE_EVENTS.JOINED_ROOM]: () => {
+				console.log(`Kiosk joined room ${sessionId}`);
+			},
+			[CORE_EVENTS.ERROR]: (err: string) => {
+				console.error('Socket error', err);
+				toast({ title: 'Socket error', description: err, variant: 'destructive' });
+			},
+
+			[KIOSK_EVENTS.TRIGGER_CAMERA]: (data) => {
+				console.log('Take photo event received:', data);
+				beginCountdown();
+			},
+			[KIOSK_EVENTS.CANCEL_PHOTO]: () => {
+				console.log('Cancel event received');
+				if (countdownRef.current) {
+					clearInterval(countdownRef.current);
+					setCountdown(null);
+				}
+				onNavigate('details');
+			},
+		},
+	});
+
 	/* -------------------------------------------------------------------------- */
 	/*                               UI handlers                                  */
 	/* -------------------------------------------------------------------------- */
@@ -220,7 +252,12 @@ export function PhotoBoothCapture({ onNavigate }: PhotoBoothCaptureProps) {
 	}
 
 	return (
-		<div className="relative w-full h-screen bg-black">
+		<div className="relative w-full h-screen flex flex-col items-center justify-center bg-[#e5e5e5] px-4 py-8">
+			<img
+				src="https://www.purpldiscounts.com/_next/image?url=https%3A%2F%2Fverification.purpldiscounts.com%2Fassets%2Fbrand_logo%2FoVEXAJ6RTzflVHvf3ePEs0e&w=828&q=75"
+				alt="ONER"
+				className="h-12 w-auto mx-auto mb-4"
+			/>
 			{/* Video preview */}
 			<video
 				ref={videoRef}
@@ -243,32 +280,6 @@ export function PhotoBoothCapture({ onNavigate }: PhotoBoothCaptureProps) {
 					</span>
 				</div>
 			)}
-
-			{/* Top controls */}
-			<div className="absolute inset-x-0 top-6 flex justify-between px-6">
-				<Button
-					onClick={handleCancel}
-					variant="ghost"
-					size="icon"
-					className="text-white hover:bg-white/20"
-				>
-					<X className="h-6 w-6" />
-					<span className="sr-only">Cancel</span>
-				</Button>
-			</div>
-
-			{/* Bottom controls */}
-			<div className="absolute inset-x-0 bottom-0 p-6">
-				<Button
-					onClick={beginCountdown}
-					size="lg"
-					disabled={countdown !== null}
-					className="w-full h-14 bg-white text-gray-900 hover:bg-gray-100 disabled:opacity-50"
-				>
-					<Camera className="mr-2 h-5 w-5" />
-					{countdown ? 'Smile!' : 'Take Photo'}
-				</Button>
-			</div>
 		</div>
 	);
 }

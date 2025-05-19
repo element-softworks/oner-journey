@@ -10,7 +10,7 @@ import { useSocketRoom } from '@/hooks/use-socket';
 import { CORE_EVENTS, KIOSK_EVENTS, DEVICE_TYPE } from '@/lib/socket-events';
 
 interface PhotoBoothLandingProps {
-	onStart: () => void;
+	onStart: (sessionId: string) => void;
 	onBack: () => void;
 }
 
@@ -42,7 +42,7 @@ export function PhotoBoothLanding({ onStart, onBack }: PhotoBoothLandingProps) {
 			// B) Only: when the mobile joins, advance to the next screen
 			[KIOSK_EVENTS.MOBILE_JOINED]: () => {
 				console.log(`Mobile joined room ${sessionId}`);
-				onStart();
+				onStart(sessionId);
 			},
 		},
 	});
@@ -108,29 +108,18 @@ export function PhotoBoothLanding({ onStart, onBack }: PhotoBoothLandingProps) {
 
 				{qrCodeUrl ? (
 					<div className="flex flex-col items-center mb-6">
+						<h1 className="text-2xl lg:text-3xl max-w-[20ch] font-bold text-white text-center mb-2">
+							SCAN THE QR CODE TO CONNECT YOUR PHONE
+						</h1>
 						<img
 							src={qrCodeUrl}
 							alt="Scan QR code"
 							className="w-44 h-44 mb-2 rounded-lg border bg-white"
 						/>
-						<p className="text-white text-center text-sm">
-							Scan with your mobile to begin
-						</p>
 					</div>
 				) : (
 					<p className="text-white mb-6">Generating session…</p>
 				)}
-
-				<Button
-					onClick={() => {
-						triggerHaptic('medium');
-						onStart();
-					}}
-					disabled={!sessionId}
-					className="w-full max-w-md h-14 bg-white text-gray-900 hover:bg-gray-100 disabled:opacity-50"
-				>
-					{sessionId ? 'Start Photo Booth Experience' : 'Loading…'}
-				</Button>
 			</div>
 		</div>
 	);

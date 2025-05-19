@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 						? [
 								'https://oner.and-element.io/',
 								'https://reliable-bonbon-7afda0.netlify.app/',
-						  ]
+							]
 						: '*',
 				credentials: false,
 			},

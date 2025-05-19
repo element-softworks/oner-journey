@@ -8,14 +8,22 @@ import { Camera, Check, RotateCcw } from 'lucide-react';
 import { useUser } from '@/context/user-context';
 import { useToast } from '@/hooks/use-toast';
 import { blobToBase64 } from '@/lib/utils';
+import { useSocketRoom } from '@/hooks/use-socket';
+import { CORE_EVENTS, DEVICE_TYPE, KIOSK_EVENTS } from '@/lib/socket-events';
 
 interface PhotoBoothPreviewProps {
 	photo: Blob | null;
 	onNavigate: (screen: PhotoBoothScreen) => void;
 	onRetake: () => void;
+	sessionId: string;
 }
 
-export function PhotoBoothPreview({ photo, onNavigate, onRetake }: PhotoBoothPreviewProps) {
+export function PhotoBoothPreview({
+	photo,
+	onNavigate,
+	onRetake,
+	sessionId,
+}: PhotoBoothPreviewProps) {
 	const [url, setUrl] = useState<string | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const { userData } = useUser();
@@ -67,6 +75,32 @@ export function PhotoBoothPreview({ photo, onNavigate, onRetake }: PhotoBoothPre
 		}
 	};
 
+	const { socket } = useSocketRoom({
+		sessionId,
+		role: DEVICE_TYPE.KIOSK,
+		handlers: {
+			// server-side error
+			[CORE_EVENTS.JOINED_ROOM]: () => {
+				console.log(`Kiosk joined room ${sessionId}`);
+			},
+			[CORE_EVENTS.ERROR]: (err: string) => {
+				console.error('Socket error', err);
+				toast({ title: 'Socket error', description: err, variant: 'destructive' });
+			},
+
+			[KIOSK_EVENTS.CANCEL_PHOTO]: (data) => {
+				console.log('Cancel photo received:', data);
+				triggerHaptic('light');
+				onRetake();
+			},
+			[KIOSK_EVENTS.PHOTO_DECISION]: (data) => {
+				console.log('Cancel photo received:', data);
+				triggerHaptic('light');
+				handleContinue();
+			},
+		},
+	});
+
 	if (!url) return null;
 
 	return (
@@ -76,7 +110,7 @@ export function PhotoBoothPreview({ photo, onNavigate, onRetake }: PhotoBoothPre
 				alt="ONER"
 				className="h-12 w-auto mx-auto mb-4"
 			/>
-			<div className="relative max-h-[80vh] w-auto border-[20px] border-black">
+			<div className="relative h-full w-auto border-[20px] border-black">
 				<img
 					src={url}
 					alt="Your captured selfie"
@@ -85,7 +119,7 @@ export function PhotoBoothPreview({ photo, onNavigate, onRetake }: PhotoBoothPre
 				/>
 			</div>
 
-			<div className="mt-8 grid grid-cols-2 gap-4 w-full max-w-md">
+			{/* <div className="mt-8 grid grid-cols-2 gap-4 w-full max-w-md">
 				<Button
 					variant="outline"
 					onClick={() => {
@@ -106,7 +140,7 @@ export function PhotoBoothPreview({ photo, onNavigate, onRetake }: PhotoBoothPre
 					<Check className="mr-2 h-5 w-5" />
 					{isSubmitting ? 'Sending...' : 'Continue'}
 				</Button>
-			</div>
+			</div> */}
 		</div>
 	);
 }
