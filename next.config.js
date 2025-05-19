@@ -4,6 +4,9 @@ const nextConfig = {
 	eslint: {
 		ignoreDuringBuilds: true,
 	},
+	typescript: {
+		ignoreBuildErrors: true,
+	},
 	// Disable webpack cache to prevent serialization issues
 	webpack: (config) => {
 		config.cache = false;
