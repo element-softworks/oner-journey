@@ -3,10 +3,6 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export const config = {
-	serverActions: { bodySizeLimit: '20mb' },
-};
-
 export async function POST(request: Request) {
 	try {
 		const { email, photoData, name } = await request.json();
