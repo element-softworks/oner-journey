@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 								'https://oner-journey-production.up.railway.app/',
 								'https://oner.and-element.io/',
 								'https://reliable-bonbon-7afda0.netlify.app/',
-							]
+						  ]
 						: '*',
 				credentials: false,
 			},
@@ -124,6 +124,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 								socket.emit(MOBILE_EVENTS.THANK_YOU);
 							}
 						);
+
+						//Mobile timeout “warning”
+						socket.on(MOBILE_EVENTS.TIMEOUT_WARNING, () => {
+							console.log(
+								`[Timeout Warning] mobile ${socket.id} in session ${sessionId}`
+							);
+							io.to(sessionId).emit(KIOSK_EVENTS.TIMEOUT_WARNING, { sessionId });
+						});
+
+						//Mobile confirms “I’m still here”
+						socket.on(MOBILE_EVENTS.TIMEOUT_CONFIRM, () => {
+							console.log(
+								`[Timeout Confirm] mobile ${socket.id} in session ${sessionId}`
+							);
+							io.to(sessionId).emit(KIOSK_EVENTS.TIMEOUT_CONFIRM, { sessionId });
+						});
+
+						//Mobile cancels (or auto‐cancels) the session
+						socket.on(MOBILE_EVENTS.TIMEOUT_CANCEL, () => {
+							console.log(
+								`[Timeout Cancel] mobile ${socket.id} in session ${sessionId}`
+							);
+							io.to(sessionId).emit(KIOSK_EVENTS.TIMEOUT_CANCEL, { sessionId });
+						});
 					}
 
 					// ─── KIOSK HANDLERS ─────────────────────────────────────────────
