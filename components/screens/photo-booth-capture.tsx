@@ -47,7 +47,7 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 		streamRef.current = null;
 	};
 
-	const initializeCamera = useCallback(async () => {
+	const initializeCamera = async () => {
 		setIsLoading(true);
 		setError(null);
 
@@ -112,12 +112,12 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 		} finally {
 			setIsLoading(false);
 		}
-	}, [videoRef, streamRef, setIsLoading, setError, setHasPermission]);
+	};
 
 	useEffect(() => {
 		initializeCamera();
 		return stopStream; // clean-up on unmount
-	}, [initializeCamera]);
+	}, [videoRef, streamRef, countdownRef, setIsLoading, setError, setHasPermission]);
 
 	/* -------------------------------------------------------------------------- */
 	/*                            Counting & Taking photo                         */
