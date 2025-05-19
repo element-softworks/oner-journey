@@ -7,6 +7,19 @@ const nextConfig = {
 	typescript: {
 		ignoreBuildErrors: true,
 	},
+	async headers() {
+		return [
+			{
+				source: '/:path*',
+				headers: [
+					{
+						key: 'Permissions-Policy',
+						value: 'camera=(self)', // or camera=(self "https://your-cdn.com")
+					},
+				],
+			},
+		];
+	},
 	// Disable webpack cache to prevent serialization issues
 	webpack: (config) => {
 		config.cache = false;
