@@ -104,7 +104,7 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 		} finally {
 			setIsLoading(false);
 		}
-	}, []);
+	}, [videoRef, streamRef, setIsLoading, setError, setHasPermission]);
 
 	useEffect(() => {
 		initializeCamera();
