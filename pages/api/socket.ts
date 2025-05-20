@@ -92,7 +92,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 								}
 							);
 
-							// user pressed "Take a Photo" or "Cancel"
 							socket.on(
 								MOBILE_EVENTS.TAKE_PHOTO,
 								({ cancel }: { cancel?: boolean } = {}) => {

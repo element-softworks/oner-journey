@@ -1,7 +1,9 @@
 'use client';
 
 import { PhotoBoothScreen } from '@/components/photo-booth-container';
+import { Button } from '@/components/ui/button';
 import { useHapticFeedback } from '@/hooks/use-haptic-feedback';
+import { toast } from '@/hooks/use-toast';
 import { Check } from 'lucide-react';
 import { useEffect } from 'react';
 
@@ -18,11 +20,11 @@ export function PhotoBoothThankYou({ onNavigate }: PhotoBoothThankYouProps) {
 	};
 
 	useEffect(() => {
-		const timer = setTimeout(() => {
-			window.location.href = '/';
-		}, 5000);
+		toast({ title: 'Success!', description: 'Your photo is on its way ✉️' });
 
-		return () => clearTimeout(timer);
+		setTimeout(() => {
+			handleFinish();
+		}, 10000);
 	}, []);
 
 	return (

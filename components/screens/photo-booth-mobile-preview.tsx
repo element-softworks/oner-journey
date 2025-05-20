@@ -76,19 +76,8 @@ export function PhotoBoothMobilePreview({
 					ACCEPT
 				</Button>
 
-				<Button
-					onClick={handleRetakePhoto}
-					className="w-full h-12 bg-black text-white hover:bg-gray-900"
-				>
+				<Button variant="outline" onClick={handleRetakePhoto}>
 					RETAKE PHOTO
-				</Button>
-
-				<Button
-					onClick={handleRetakePhoto}
-					variant="outline"
-					className="w-full h-12 border-2"
-				>
-					CANCEL
 				</Button>
 			</div>
 		</div>

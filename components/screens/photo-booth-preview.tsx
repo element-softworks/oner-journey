@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { PhotoBoothScreen } from '@/components/photo-booth-container';
 import { Button } from '@/components/ui/button';
 import { useHapticFeedback } from '@/hooks/use-haptic-feedback';
@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { blobToBase64 } from '@/lib/utils';
 import { useSocketRoom } from '@/hooks/use-socket';
 import { CORE_EVENTS, DEVICE_TYPE, KIOSK_EVENTS } from '@/lib/socket-events';
+import { useRouter } from 'next/navigation';
 
 interface PhotoBoothPreviewProps {
 	photo: Blob | null;
@@ -24,11 +25,14 @@ export function PhotoBoothPreview({
 	onRetake,
 	sessionId,
 }: PhotoBoothPreviewProps) {
+	const router = useRouter();
+
 	const [url, setUrl] = useState<string | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const { userData } = useUser();
 	const { triggerHaptic } = useHapticFeedback();
 	const { toast } = useToast();
+	const hasSubmitted = useRef(false);
 
 	useEffect(() => {
 		const objectUrl = URL.createObjectURL(photo!);
@@ -66,8 +70,8 @@ export function PhotoBoothPreview({
 			});
 
 			if (!res.ok) throw new Error('Failed to send email');
-			toast({ title: 'Success!', description: 'Your photo is on its way ✉️' });
-			onNavigate('thank-you');
+			hasSubmitted.current = false;
+			router.push('/photo-booth/thank-you?sessionId=' + sessionId);
 		} catch (err) {
 			toast({ title: 'Error', description: 'Please try again.', variant: 'destructive' });
 		} finally {
@@ -94,8 +98,8 @@ export function PhotoBoothPreview({
 				onRetake();
 			},
 			[KIOSK_EVENTS.PHOTO_DECISION]: (data) => {
+				hasSubmitted.current = true;
 				console.log('Cancel photo received:', data);
-				triggerHaptic('light');
 				handleContinue();
 			},
 		},
