@@ -147,6 +147,11 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 
 	return (
 		<div className="relative flex h-screen w-full flex-col items-center justify-center bg-[#e5e5e5] px-4 py-8">
+			<img
+				src="https://www.purpldiscounts.com/_next/image?url=https%3A%2F%2Fverification.purpldiscounts.com%2Fassets%2Fbrand_logo%2FoVEXAJ6RTzflVHvf3ePEs0e&w=828&q=75"
+				alt="ONER"
+				className="h-12 w-auto mx-auto mb-4"
+			/>
 			<Webcam
 				ref={webcamRef}
 				audio={false}
