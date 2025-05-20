@@ -73,8 +73,8 @@ export function PhotoBoothMobileCapture({
 			return;
 		}
 
-		socket.emit(KIOSK_EVENTS.MOBILE_JOINED);
-		// onCancel();
+		socket.emit(MOBILE_EVENTS.TAKE_PHOTO, { cancel: true });
+		onCancel();
 	};
 
 	return (
@@ -101,13 +101,13 @@ export function PhotoBoothMobileCapture({
 						>
 							TAKE PHOTO
 						</Button>
-						{/* <Button
+						<Button
 							onClick={handleCancel}
 							variant="outline"
 							className="w-full h-12 border-2"
 						>
 							CANCEL
-						</Button> */}
+						</Button>
 					</>
 				)}
 			</div>

@@ -40,7 +40,7 @@ export function IdleTimer({ sessionId, role }: IdleTimerProps) {
 				setCountdown(30);
 			},
 			[KIOSK_EVENTS.TIMEOUT_CANCEL]: () => {
-				router.push('/');
+				router.push('/photo-booth');
 			},
 		},
 	});
@@ -79,7 +79,7 @@ export function IdleTimer({ sessionId, role }: IdleTimerProps) {
 						if (socket && role === DEVICE_TYPE.MOBILE) {
 							socket.emit(MOBILE_EVENTS.TIMEOUT_CANCEL);
 						}
-						router.push('/');
+						router.push('/photo-booth');
 						return 0;
 					}
 					return prev - 1;
@@ -111,7 +111,7 @@ export function IdleTimer({ sessionId, role }: IdleTimerProps) {
 			socket.emit(MOBILE_EVENTS.TIMEOUT_CANCEL);
 		}
 
-		router.push('/');
+		router.push('/photo-booth');
 	};
 
 	return (
