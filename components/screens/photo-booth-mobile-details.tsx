@@ -89,59 +89,71 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 	}, [sessionId, toast]);
 
 	return (
-		<div className="flex flex-col h-full bg-white p-6">
-			<div className="flex justify-center mb-8">
+		<div className="flex flex-col h-full bg-[#1C4639] p-6 py-16">
+			<div className="flex justify-center flex-1">
 				<img
-					src="https://www.purpldiscounts.com/_next/image?url=https%3A%2F%2Fverification.purpldiscounts.com%2Fassets%2Fbrand_logo%2FoVEXAJ6RTzflVHvf3ePEs0e&w=828&q=75"
+					src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
 					alt="ONER"
-					className="h-8 w-auto"
+					className="h-20 w-auto"
 				/>
 			</div>
 
-			<div className="text-center mb-8">
-				<h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
-					WELCOME TO THE PHOTO BOOTH, TO TAKE A PHOTO ENTER THE DETAILS BELOW
-				</h1>
+			<div>
+				<div className="text-center mb-8">
+					<h1 className="text-xl lg:text-xl font-semibold text-white mb-2">WELCOME</h1>
+					<p className="text-xl lg:text-xl font-semibold text-white mb-2">
+						TAKE A PHOTO AND ENTER YOUR DETAILS BELOW
+					</p>
+				</div>
+
+				<div className="space-y-6 text-white flex flex-col items-center justify-center w-full mx-auto">
+					{/* Name field */}
+					<div className="space-y-2 text-white w-full">
+						<Label htmlFor="name" className="text-sm">
+							NAME
+						</Label>
+						<Input
+							id="name"
+							placeholder="Enter your name"
+							value={name}
+							onChange={(e) => setName(e.target.value)}
+							className={`h-12 ${nameError ? 'border-red-500' : ''}`}
+						/>
+						{nameError && <p className="text-red-500 text-xs">{nameError}</p>}
+					</div>
+
+					{/* Email field */}
+					<div className="space-y-2 w-full">
+						<Label htmlFor="email" className="text-sm">
+							EMAIL
+						</Label>
+						<Input
+							placeholder="Enter your email"
+							id="email"
+							type="email"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+							className={`h-12 ${emailError ? 'border-red-500' : ''}`}
+						/>
+						{emailError && <p className="text-red-500 text-xs">{emailError}</p>}
+					</div>
+
+					{/* Submit */}
+					<Button
+						onClick={handleSubmit}
+						disabled={!ready}
+						className="mx-auto  h-12 rounded-full bg-white text-black hover:bg-gray-100 disabled:opacity-50 w-fit px-6"
+					>
+						{ready ? 'TAKE A PHOTO' : 'CONNECTING…'}
+					</Button>
+				</div>
 			</div>
-
-			<div className="space-y-6">
-				{/* Name field */}
-				<div className="space-y-2">
-					<Label htmlFor="name" className="text-sm">
-						NAME
-					</Label>
-					<Input
-						id="name"
-						value={name}
-						onChange={(e) => setName(e.target.value)}
-						className={`h-12 ${nameError ? 'border-red-500' : ''}`}
-					/>
-					{nameError && <p className="text-red-500 text-xs">{nameError}</p>}
-				</div>
-
-				{/* Email field */}
-				<div className="space-y-2">
-					<Label htmlFor="email" className="text-sm">
-						EMAIL
-					</Label>
-					<Input
-						id="email"
-						type="email"
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-						className={`h-12 ${emailError ? 'border-red-500' : ''}`}
-					/>
-					{emailError && <p className="text-red-500 text-xs">{emailError}</p>}
-				</div>
-
-				{/* Submit */}
-				<Button
-					onClick={handleSubmit}
-					disabled={!ready}
-					className="w-full h-12 bg-black text-white hover:bg-gray-900 disabled:opacity-50"
-				>
-					{ready ? 'TAKE A PHOTO' : 'CONNECTING…'}
-				</Button>
+			<div className="flex-1 flex items-end justify-center ">
+				<img
+					src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"
+					alt="ONER"
+					className="h-14 w-auto"
+				/>
 			</div>
 		</div>
 	);
