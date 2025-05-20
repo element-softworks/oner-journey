@@ -78,38 +78,49 @@ export function PhotoBoothMobileCapture({
 	};
 
 	return (
-		<div className="flex flex-col h-full bg-white p-6">
-			<div className="flex justify-center mb-8">
+		<div className="flex flex-col h-full bg-[#1C4639] p-6 py-16">
+			<div className="flex justify-center flex-1">
 				<img
-					src="https://www.purpldiscounts.com/_next/image?url=https%3A%2F%2Fverification.purpldiscounts.com%2Fassets%2Fbrand_logo%2FoVEXAJ6RTzflVHvf3ePEs0e&w=828&q=75"
-					alt="ONER ACTIVE"
-					className="h-8 w-auto"
+					src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
+					alt="ONER"
+					className="h-20 w-auto"
 				/>
 			</div>
 
-			<div className="flex-1 flex flex-col items-center  space-y-4">
-				{takingPhoto ? (
-					<div>
-						<p className="text-gray-900 text-center">Taking photo...</p>
-						<div className="mt-4 mx-auto w-8 h-8 border-4 border-gray-900 border-t-transparent rounded-full animate-spin" />
+			<div>
+				<div className="space-y-6 text-white flex flex-col items-center justify-center w-full mx-auto">
+					<div className="flex-1 flex flex-col items-center  space-y-4">
+						{takingPhoto ? (
+							<div>
+								<p className="text-white text-center">TAKING PHOTO...</p>
+								<div className="mt-4 mx-auto w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
+							</div>
+						) : (
+							<div className="flex flex-col items-center gap-6">
+								<Button
+									onClick={handleTakePhoto}
+									className="mx-auto  h-14 rounded-full text-xl bg-white text-black hover:bg-gray-100 disabled:opacity-50 w-fit px-6"
+								>
+									TAKE PHOTO
+								</Button>
+								<Button
+									onClick={handleCancel}
+									variant="outline"
+									className="mx-auto text-xl h-14 rounded-full bg-transparent border-white border-2 hover:text-gray-100 hover:border-gray-100 text-white hover:bg-transparent disabled:opacity-50 w-full px-6"
+								>
+									CANCEL
+								</Button>
+							</div>
+						)}
 					</div>
-				) : (
-					<>
-						<Button
-							onClick={handleTakePhoto}
-							className="w-full h-12 bg-black text-white hover:bg-gray-900"
-						>
-							TAKE PHOTO
-						</Button>
-						<Button
-							onClick={handleCancel}
-							variant="outline"
-							className="w-full h-12 border-2"
-						>
-							CANCEL
-						</Button>
-					</>
-				)}
+				</div>
+			</div>
+			<div className="flex-1 flex items-end justify-center ">
+				<img
+					src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"
+					alt="ONER"
+					className="h-14 w-auto"
+				/>
 			</div>
 		</div>
 	);
