@@ -52,27 +52,27 @@ export function PhotoBoothLanding({ onStart, onBack }: PhotoBoothLandingProps) {
 
 	// 3) Background video autoplay
 	useEffect(() => {
-		const video = videoRef.current;
-		if (!video) return;
+		const vid = videoRef.current;
+		if (!vid) return;
 
-		const attemptPlay = async () => {
-			try {
-				await video.play();
-			} catch {
-				const resume = async () => {
-					try {
-						await video.play();
-					} catch {}
-					document.removeEventListener('click', resume);
-				};
-				document.addEventListener('click', resume);
-			}
-		};
-		attemptPlay();
+		const onLoadedData = () => console.log('[Video] loadeddata, readyState=', vid.readyState);
+		const onPlay = () => console.log('[Video] play event fired');
+		const onError = () => console.error('[Video] error:', vid.error);
+
+		vid.addEventListener('loadeddata', onLoadedData);
+		vid.addEventListener('play', onPlay);
+		vid.addEventListener('error', onError);
+
+		// Force a load + play
+		vid.load();
+		vid.play().catch((err) => console.warn('[Video] autoplay prevented:', err));
 
 		return () => {
-			video.pause();
-			video.src = '';
+			vid.removeEventListener('loadeddata', onLoadedData);
+			vid.removeEventListener('play', onPlay);
+			vid.removeEventListener('error', onError);
+			vid.pause();
+			vid.src = '';
 		};
 	}, []);
 
@@ -84,16 +84,15 @@ export function PhotoBoothLanding({ onStart, onBack }: PhotoBoothLandingProps) {
 	return (
 		<div className="relative w-full h-screen">
 			<video
-				ref={videoRef}
 				className="w-full h-full object-cover"
 				playsInline
 				muted
 				loop
 				autoPlay
 				preload="auto"
-				poster="https://images.pexels.com/photos/7319307/pexels-photo-7319307.jpeg"
 			>
-				<source src="https://i.imgur.com/NAPXMiL.mp4" type="video/mp4" />
+				<source src="/videos/think-live-video.mp4" type="video/mp4" />
+				Sorry, your browser doesn’t support embedded videos.
 			</video>
 
 			<div className="absolute inset-0 bg-black/40 z-10" />
@@ -103,26 +102,29 @@ export function PhotoBoothLanding({ onStart, onBack }: PhotoBoothLandingProps) {
 					onClick={handleBack}
 					variant="ghost"
 					size="icon"
-					className="self-start text-white hover:bg-white/10"
+					className="self-start text-white hover:bg-white/10 z-50"
 				>
 					<ArrowLeft className="h-6 w-6" />
 					<span className="sr-only">Back</span>
 				</Button>
 
-				{qrCodeUrl ? (
-					<div className="flex flex-col items-center mb-6">
-						<h1 className="text-2xl lg:text-3xl max-w-[20ch] font-bold text-white text-center mb-2">
-							SCAN THE QR CODE TO CONNECT YOUR PHONE
-						</h1>
-						<img
-							src={qrCodeUrl}
-							alt="Scan QR code"
-							className="w-44 h-44 mb-2 rounded-lg border bg-white"
-						/>
-					</div>
-				) : (
-					<p className="text-white mb-6">Generating session…</p>
-				)}
+				<div className="flex flex-col items-center justify-center w-full h-full gap-4 mx-auto absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+					<p className="z-[50] text-white text-center text-4xl lg:text-5xl font-bold max-w-[80%] !mb-6">
+						SCAN BELOW TO USE OUR SELFIE MIRROR
+					</p>
+
+					{qrCodeUrl ? (
+						<div className="flex flex-col items-center mb-6">
+							<img
+								src={qrCodeUrl}
+								alt="Scan QR code"
+								className="w-44 h-44 mb-2 rounded-lg border bg-white"
+							/>
+						</div>
+					) : (
+						<p className="text-white mb-6">Generating session…</p>
+					)}
+				</div>
 			</div>
 		</div>
 	);
