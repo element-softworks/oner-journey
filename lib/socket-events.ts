@@ -12,6 +12,9 @@ export const MOBILE_EVENTS = {
 	TAKE_PHOTO: 'mobile_take_photo' as const,
 	PHOTO_DECISION: 'mobile_photo_decision' as const,
 	THANK_YOU: 'mobile_thank_you' as const,
+	TIMEOUT_CONFIRM: 'mobile_timeout_confirm' as const,
+	TIMEOUT_CANCEL: 'mobile_timeout_cancel' as const,
+	TIMEOUT_WARNING: 'mobile_timeout_warning' as const,
 };
 export type MobileEvent = (typeof MOBILE_EVENTS)[keyof typeof MOBILE_EVENTS];
 
@@ -24,6 +27,9 @@ export const KIOSK_EVENTS = {
 	CANCEL_PHOTO: 'kiosk_cancel_photo' as const,
 	THANK_YOU: 'kiosk_thank_you' as const,
 	MOBILE_JOINED: 'mobile_joined' as const,
+	TIMEOUT_WARNING: 'kiosk_timeout_warning' as const,
+	TIMEOUT_CONFIRM: 'kiosk_timeout_confirm' as const,
+	TIMEOUT_CANCEL: 'kiosk_timeout_cancel' as const,
 };
 export type KioskEvent = (typeof KIOSK_EVENTS)[keyof typeof KIOSK_EVENTS];
 
