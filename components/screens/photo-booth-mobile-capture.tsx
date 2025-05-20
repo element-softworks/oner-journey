@@ -3,9 +3,10 @@
 import { Button } from '@/components/ui/button';
 import { PhotoBoothMobileScreen } from './photo-booth-mobile-container';
 import { useSocketRoom } from '@/hooks/use-socket';
-import { CORE_EVENTS, DEVICE_TYPE, MOBILE_EVENTS } from '@/lib/socket-events';
+import { CORE_EVENTS, DEVICE_TYPE, MOBILE_EVENTS, KIOSK_EVENTS } from '@/lib/socket-events';
 import { toast } from '@/hooks/use-toast';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { EventEmitter } from 'events';
 
 interface PhotoBoothMobileCaptureProps {
 	onNavigate: (screen: PhotoBoothMobileScreen, data?: { blob?: Blob }) => void;
@@ -18,8 +19,6 @@ export function PhotoBoothMobileCapture({
 	onCancel,
 	sessionId,
 }: PhotoBoothMobileCaptureProps) {
-	// 2) Kick off socket & join the room
-
 	const [ready, setReady] = useState(false);
 	const [takingPhoto, setTakingPhoto] = useState(false);
 
@@ -27,20 +26,32 @@ export function PhotoBoothMobileCapture({
 		sessionId,
 		role: DEVICE_TYPE.MOBILE,
 		handlers: {
-			// server sent joined_room → we can enable UI
 			[CORE_EVENTS.JOINED_ROOM]: () => {
 				console.log(`Mobile joined room ${sessionId}`);
 				setReady(true);
 			},
-			// server-side error
 			[CORE_EVENTS.ERROR]: (err: string) => {
 				console.error('Socket error', err);
 				toast({ title: 'Socket error', description: err, variant: 'destructive' });
 			},
-
-			[MOBILE_EVENTS.TAKE_PHOTO]: (data) => {},
 		},
 	});
+
+	useEffect(() => {
+		if (!socket) return;
+
+		// Safely increase max listeners using EventEmitter
+		if (socket instanceof EventEmitter) {
+			socket.setMaxListeners(20);
+		}
+
+		return () => {
+			// Reset on cleanup
+			if (socket instanceof EventEmitter) {
+				socket.setMaxListeners(10);
+			}
+		};
+	}, [socket]);
 
 	const handleTakePhoto = () => {
 		if (!socket || !ready) {
@@ -49,7 +60,6 @@ export function PhotoBoothMobileCapture({
 		}
 		setTakingPhoto(true);
 
-		// 4) Emit mobile_details into the room
 		socket.emit(MOBILE_EVENTS.TAKE_PHOTO, { cancel: false });
 
 		setTimeout(() => {
@@ -58,13 +68,13 @@ export function PhotoBoothMobileCapture({
 	};
 
 	const handleCancel = () => {
-		if (!socket) {
+		if (!socket || !ready) {
 			toast({ title: 'Not ready', description: 'Still connecting…', variant: 'warning' });
 			return;
 		}
 
-		socket.emit(MOBILE_EVENTS.TAKE_PHOTO, { cancel: true });
-		onCancel();
+		socket.emit(KIOSK_EVENTS.MOBILE_JOINED);
+		// onCancel();
 	};
 
 	return (
@@ -91,13 +101,13 @@ export function PhotoBoothMobileCapture({
 						>
 							TAKE PHOTO
 						</Button>
-						<Button
+						{/* <Button
 							onClick={handleCancel}
 							variant="outline"
 							className="w-full h-12 border-2"
 						>
 							CANCEL
-						</Button>
+						</Button> */}
 					</>
 				)}
 			</div>
