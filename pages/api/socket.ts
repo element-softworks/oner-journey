@@ -92,10 +92,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 								}
 							);
 
-							socket.on(MOBILE_EVENTS.RETAKE_PHOTO, () => {
-								io.to(sessionId).emit(KIOSK_EVENTS.RETAKE_PHOTO, { sessionId });
-							});
-
 							socket.on(
 								MOBILE_EVENTS.TAKE_PHOTO,
 								({ cancel }: { cancel?: boolean } = {}) => {

@@ -28,6 +28,16 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [countdown, setCountdown] = useState<number | null>(null);
+	const [isReady, setIsReady] = useState(false);
+
+	useEffect(() => {
+		if (isReady) return;
+		setTimeout(() => {
+			setIsReady(true);
+		}, 100);
+	}, [isReady]);
+
+	console.log(isReady, 'isReady data');
 
 	const webcamRef = useRef<Webcam>(null);
 	const countdownRef = useRef<NodeJS.Timeout | null>(null);
@@ -91,9 +101,12 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 				toast({ title: 'Socket error', description: err, variant: 'destructive' }),
 			[KIOSK_EVENTS.TRIGGER_CAMERA]: startCaptureSequence,
 			[KIOSK_EVENTS.CANCEL_PHOTO]: () => {
+				console.log('cancel photo data ccc', isReady);
+				if (!isReady) return;
+
 				if (countdownRef.current) clearInterval(countdownRef.current);
 				setCountdown(null);
-				// onNavigate('details');
+				onNavigate('details');
 			},
 		},
 	});

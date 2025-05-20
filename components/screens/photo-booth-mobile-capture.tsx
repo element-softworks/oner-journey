@@ -50,7 +50,7 @@ export function PhotoBoothMobileCapture({
 		setTakingPhoto(true);
 
 		// 4) Emit mobile_details into the room
-		socket.emit(MOBILE_EVENTS.TAKE_PHOTO);
+		socket.emit(MOBILE_EVENTS.TAKE_PHOTO, { cancel: false });
 
 		setTimeout(() => {
 			onNavigate('preview');
@@ -62,6 +62,7 @@ export function PhotoBoothMobileCapture({
 			toast({ title: 'Not ready', description: 'Still connecting…', variant: 'warning' });
 			return;
 		}
+
 		socket.emit(MOBILE_EVENTS.TAKE_PHOTO, { cancel: true });
 		onCancel();
 	};
