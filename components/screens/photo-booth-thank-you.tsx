@@ -1,9 +1,9 @@
 'use client';
 
 import { PhotoBoothScreen } from '@/components/photo-booth-container';
-import { Button } from '@/components/ui/button';
 import { useHapticFeedback } from '@/hooks/use-haptic-feedback';
 import { Check } from 'lucide-react';
+import { useEffect } from 'react';
 
 interface PhotoBoothThankYouProps {
 	onNavigate: (screen: PhotoBoothScreen) => void;
@@ -16,6 +16,14 @@ export function PhotoBoothThankYou({ onNavigate }: PhotoBoothThankYouProps) {
 		triggerHaptic('success');
 		onNavigate('landing');
 	};
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			window.location.href = '/';
+		}, 5000);
+
+		return () => clearTimeout(timer);
+	}, []);
 
 	return (
 		<div className="w-full h-screen flex flex-col justify-center items-center bg-gray-50 p-6">
