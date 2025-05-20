@@ -43,8 +43,7 @@ export function PhotoBoothMobilePreview({
 			return;
 		}
 
-		// 4) Emit mobile_details into the room
-		socket.emit(MOBILE_EVENTS.TAKE_PHOTO, { cancel: true });
+		socket.emit(MOBILE_EVENTS.PHOTO_DECISION, { decision: true, retake: true });
 		onRetake();
 	};
 	const handleAccept = () => {
@@ -56,6 +55,16 @@ export function PhotoBoothMobilePreview({
 		// 4) Emit mobile_details into the room
 		socket.emit(MOBILE_EVENTS.PHOTO_DECISION, { decision: true });
 		onAccept();
+	};
+
+	const handleCancel = () => {
+		if (!socket || !ready) {
+			toast({ title: 'Not ready', description: 'Still connecting…' });
+			return;
+		}
+
+		socket.emit(MOBILE_EVENTS.PHOTO_DECISION, { decision: false });
+		onCancel();
 	};
 
 	return (
@@ -86,7 +95,7 @@ export function PhotoBoothMobilePreview({
 								RETAKE
 							</Button>
 							<Button
-								onClick={handleRetakePhoto}
+								onClick={handleCancel}
 								variant="outline"
 								className="mx-auto text-xl h-14 rounded-full bg-transparent border-white border-2 hover:text-gray-100 hover:border-gray-100 text-white hover:bg-transparent disabled:opacity-50 w-full px-6"
 							>

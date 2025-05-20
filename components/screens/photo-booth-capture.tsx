@@ -99,7 +99,9 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 			[CORE_EVENTS.JOINED_ROOM]: () => console.log(`Kiosk joined room ${sessionId}`),
 			[CORE_EVENTS.ERROR]: (err: string) =>
 				toast({ title: 'Socket error', description: err, variant: 'destructive' }),
-			[KIOSK_EVENTS.TRIGGER_CAMERA]: startCaptureSequence,
+			[KIOSK_EVENTS.TRIGGER_CAMERA]: () => {
+				startCaptureSequence();
+			},
 			[KIOSK_EVENTS.MOBILE_JOINED]: () => {
 				console.log('cancel photo data ccc', isReady);
 				if (!isReady) return;
@@ -110,8 +112,7 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 			},
 			[KIOSK_EVENTS.CANCEL_PHOTO]: () => {
 				console.log('cancel photo data ccc', isReady);
-				if (!isReady) return;
-
+				// if (!isReady) return;
 				if (countdownRef.current) clearInterval(countdownRef.current);
 				setCountdown(null);
 				onNavigate('details');

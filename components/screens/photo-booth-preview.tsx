@@ -91,7 +91,6 @@ export function PhotoBoothPreview({
 				console.error('Socket error', err);
 				toast({ title: 'Socket error', description: err, variant: 'destructive' });
 			},
-
 			[KIOSK_EVENTS.CANCEL_PHOTO]: (data) => {
 				console.log('Cancel photo received:', data);
 				triggerHaptic('light');
@@ -101,6 +100,11 @@ export function PhotoBoothPreview({
 				hasSubmitted.current = true;
 				console.log('Cancel photo received:', data);
 				handleContinue();
+			},
+			[KIOSK_EVENTS.RETAKE_PHOTO]: () => {
+				console.log('RETAKE_PHOTO received');
+				triggerHaptic('light');
+				onRetake();
 			},
 		},
 	});
