@@ -99,7 +99,9 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 			[CORE_EVENTS.JOINED_ROOM]: () => console.log(`Kiosk joined room ${sessionId}`),
 			[CORE_EVENTS.ERROR]: (err: string) =>
 				toast({ title: 'Socket error', description: err, variant: 'destructive' }),
-			[KIOSK_EVENTS.TRIGGER_CAMERA]: startCaptureSequence,
+			[KIOSK_EVENTS.TRIGGER_CAMERA]: () => {
+				startCaptureSequence();
+			},
 			[KIOSK_EVENTS.MOBILE_JOINED]: () => {
 				console.log('cancel photo data ccc', isReady);
 				if (!isReady) return;
@@ -110,8 +112,7 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 			},
 			[KIOSK_EVENTS.CANCEL_PHOTO]: () => {
 				console.log('cancel photo data ccc', isReady);
-				if (!isReady) return;
-
+				// if (!isReady) return;
 				if (countdownRef.current) clearInterval(countdownRef.current);
 				setCountdown(null);
 				onNavigate('details');
@@ -123,7 +124,7 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 
 	if (error) {
 		return (
-			<div className="flex h-screen w-full flex-col items-center justify-center bg-gray-50 p-6">
+			<div className="flex h-screen w-full flex-col items-center justify-center bg-[#1C4639] p-6">
 				<div className="w-full max-w-md space-y-6 rounded-2xl bg-white p-8 shadow-lg">
 					<h2 className="text-center text-2xl font-bold text-gray-900">
 						Camera Access Required
@@ -146,11 +147,11 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 	}
 
 	return (
-		<div className="relative flex h-screen w-full flex-col items-center justify-center bg-[#e5e5e5] px-4 py-8">
+		<div className="relative flex h-screen w-full flex-col items-center justify-center bg-[#1C4639] px-4 py-8">
 			<img
-				src="https://www.purpldiscounts.com/_next/image?url=https%3A%2F%2Fverification.purpldiscounts.com%2Fassets%2Fbrand_logo%2FoVEXAJ6RTzflVHvf3ePEs0e&w=828&q=75"
+				src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
 				alt="ONER"
-				className="h-12 w-auto mx-auto mb-4"
+				className="h-20 w-auto mb-8"
 			/>
 			<Webcam
 				ref={webcamRef}
@@ -165,6 +166,11 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 				onUserMedia={handleUserMedia}
 				onUserMediaError={handleUserMediaError}
 				className="h-full w-full object-cover"
+			/>
+			<img
+				src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"
+				alt="ONER"
+				className="h-14 w-auto mt-8"
 			/>
 
 			{countdown !== null && (

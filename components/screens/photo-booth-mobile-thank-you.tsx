@@ -5,27 +5,44 @@ import { Button } from '@/components/ui/button';
 export function PhotoBoothMobileThankYou() {
 	return (
 		<div className="flex flex-col h-full bg-white">
-			<div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-				<div className="flex justify-center items-start p-4 mb-auto">
+			<div className="flex flex-col h-full bg-[#1C4639] p-6 py-16">
+				<div className="flex justify-center flex-1">
 					<img
-						src="https://www.purpldiscounts.com/_next/image?url=https%3A%2F%2Fverification.purpldiscounts.com%2Fassets%2Fbrand_logo%2FoVEXAJ6RTzflVHvf3ePEs0e&w=828&q=75"
+						src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
 						alt="ONER"
-						className="h-8 w-auto  "
+						className="h-20 w-auto"
 					/>
 				</div>
-				<div>
-					<h1 className="text-3xl font-bold text-gray-900 mb-2">Thank You!</h1>
-					<p className="text-gray-600">
-						Your photo has now been sent to your email address!
-					</p>
-				</div>
 
-				<Button
-					onClick={() => (window.location.href = 'https://www.oneractive.com')}
-					className="w-full mt-auto h-12 bg-black text-white hover:bg-gray-900"
-				>
-					VISIT ONER ACTIVE WEBSITE
-				</Button>
+				<div>
+					<div className="space-y-6 text-white flex flex-col items-center justify-center w-full mx-auto">
+						<div className="flex-1 flex flex-col items-center  space-y-4">
+							<div className="flex flex-col items-center gap-4">
+								<p className="z-[50] text-white text-center text-4xl lg:text-5xl font-bold  ">
+									THANK YOU
+								</p>
+								<p className="z-[50] text-white text-center text-base font-medium  ">
+									We hope you love your photo.
+								</p>
+								<Button
+									onClick={() =>
+										(window.location.href = 'https://www.oneractive.com')
+									}
+									className="mx-auto w-full h-14 rounded-full text-xl !mt-8 bg-white text-black hover:bg-gray-100 disabled:opacity-50 px-6"
+								>
+									VISIT ONER ACTIVE WEBSITE
+								</Button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div className="flex-1 flex items-end justify-center ">
+					<img
+						src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"
+						alt="ONER"
+						className="h-14 w-auto"
+					/>
+				</div>
 			</div>
 		</div>
 	);

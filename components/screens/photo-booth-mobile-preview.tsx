@@ -43,8 +43,7 @@ export function PhotoBoothMobilePreview({
 			return;
 		}
 
-		// 4) Emit mobile_details into the room
-		socket.emit(MOBILE_EVENTS.TAKE_PHOTO, { cancel: true });
+		socket.emit(MOBILE_EVENTS.PHOTO_DECISION, { decision: true, retake: true });
 		onRetake();
 	};
 	const handleAccept = () => {
@@ -58,27 +57,60 @@ export function PhotoBoothMobilePreview({
 		onAccept();
 	};
 
+	const handleCancel = () => {
+		if (!socket || !ready) {
+			toast({ title: 'Not ready', description: 'Still connecting…' });
+			return;
+		}
+
+		socket.emit(MOBILE_EVENTS.PHOTO_DECISION, { decision: false });
+		onCancel();
+	};
+
 	return (
-		<div className="flex flex-col h-full bg-white p-6">
-			<div className="flex justify-center mb-8">
+		<div className="flex flex-col h-full bg-[#1C4639] p-6 py-16">
+			<div className="flex justify-center flex-1">
 				<img
-					src="https://www.purpldiscounts.com/_next/image?url=https%3A%2F%2Fverification.purpldiscounts.com%2Fassets%2Fbrand_logo%2FoVEXAJ6RTzflVHvf3ePEs0e&w=828&q=75"
-					alt="ONER ACTIVE"
-					className="h-8 w-auto"
+					src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
+					alt="ONER"
+					className="h-20 w-auto"
 				/>
 			</div>
 
-			<div className="flex-1 flex flex-col space-y-4">
-				<Button
-					onClick={handleAccept}
-					className="w-full h-12 bg-black text-white hover:bg-gray-900"
-				>
-					ACCEPT
-				</Button>
-
-				<Button variant="outline" onClick={handleRetakePhoto}>
-					RETAKE PHOTO
-				</Button>
+			<div>
+				<div className="space-y-6 text-white flex flex-col items-center justify-center w-full mx-auto">
+					<div className="flex-1 flex flex-col items-center  space-y-4">
+						<div className="flex flex-col items-center gap-6">
+							<Button
+								onClick={handleAccept}
+								className="mx-auto w-full h-14 rounded-full text-xl bg-white text-black hover:bg-gray-100 disabled:opacity-50 px-6"
+							>
+								GET MY PHOTO
+							</Button>
+							<Button
+								onClick={handleRetakePhoto}
+								variant="default"
+								className="mx-auto w-full h-14 rounded-full text-xl bg-white text-black hover:bg-gray-100 disabled:opacity-50 px-6"
+							>
+								RETAKE
+							</Button>
+							<Button
+								onClick={handleCancel}
+								variant="outline"
+								className="mx-auto text-xl h-14 rounded-full bg-transparent border-white border-2 hover:text-gray-100 hover:border-gray-100 text-white hover:bg-transparent disabled:opacity-50 w-full px-6"
+							>
+								CANCEL
+							</Button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div className="flex-1 flex items-end justify-center ">
+				<img
+					src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"
+					alt="ONER"
+					className="h-14 w-auto"
+				/>
 			</div>
 		</div>
 	);

@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 								'https://oner-journey-production.up.railway.app/',
 								'https://oner.and-element.io/',
 								'https://reliable-bonbon-7afda0.netlify.app/',
-						  ]
+							]
 						: '*',
 				credentials: false,
 			},
@@ -102,7 +102,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 										io.to(sessionId).emit(KIOSK_EVENTS.CANCEL_PHOTO);
 									} else {
 										console.log(
-											`Event: ${MOBILE_EVENTS.TAKE_PHOTO} — sessionId=${sessionId}`
+											`Event: ${MOBILE_EVENTS.TAKE_PHOTO} — sessionId=${sessionId} - cancel = ${cancel}`
 										);
 										io.to(sessionId).emit(KIOSK_EVENTS.TRIGGER_CAMERA);
 									}
@@ -112,10 +112,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 							// user accepted or declined the photo preview
 							socket.on(
 								MOBILE_EVENTS.PHOTO_DECISION,
-								({ decision }: { decision: boolean }) => {
+								({
+									decision,
+									retake = false,
+								}: {
+									decision: boolean;
+									retake?: boolean;
+								}) => {
 									console.log(
 										`Event: ${MOBILE_EVENTS.PHOTO_DECISION} — sessionId=${sessionId}, decision=${decision}`
 									);
+
+									// If retake requested, send RETAKE_PHOTO and skip everything else
+									if (retake) {
+										console.log(
+											`Mobile requested a retake for session ${sessionId}`
+										);
+										io.to(sessionId).emit(KIOSK_EVENTS.RETAKE_PHOTO);
+										return;
+									}
 
 									if (decision) {
 										io.to(sessionId).emit(KIOSK_EVENTS.PHOTO_DECISION, {
@@ -126,7 +141,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 									}
 
 									// tell mobile to show thank-you screen
-									socket.emit(MOBILE_EVENTS.THANK_YOU);
+									// socket.emit(MOBILE_EVENTS.THANK_YOU);
 								}
 							);
 

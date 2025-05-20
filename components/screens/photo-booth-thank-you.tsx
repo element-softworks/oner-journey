@@ -20,7 +20,7 @@ export function PhotoBoothThankYou({ onNavigate }: PhotoBoothThankYouProps) {
 	};
 
 	useEffect(() => {
-		toast({ title: 'Success!', description: 'Your photo is on its way ✉️' });
+		toast({ title: 'Success!', description: 'Your photo is on its way ✉️', duration: 4000 });
 
 		setTimeout(() => {
 			handleFinish();
@@ -28,27 +28,36 @@ export function PhotoBoothThankYou({ onNavigate }: PhotoBoothThankYouProps) {
 	}, []);
 
 	return (
-		<div className="w-full h-screen flex flex-col justify-center items-center bg-gray-50 p-6">
-			<div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
-				<div className="flex justify-center mb-8">
+		<div className="flex flex-col h-full bg-white">
+			<div className="flex flex-col h-full bg-[#1C4639] p-6 py-16">
+				<div className="flex justify-center flex-1">
 					<img
-						src="https://www.purpldiscounts.com/_next/image?url=https%3A%2F%2Fverification.purpldiscounts.com%2Fassets%2Fbrand_logo%2FoVEXAJ6RTzflVHvf3ePEs0e&w=828&q=75"
+						src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
 						alt="ONER"
-						className="h-12 w-auto"
+						className="h-20 w-auto"
 					/>
 				</div>
 
-				<div className="space-y-6 text-center">
-					<div className="flex justify-center">
-						<div className="h-20 w-20 rounded-full bg-green-100 flex items-center justify-center">
-							<Check className="h-10 w-10 text-green-600" />
+				<div>
+					<div className="space-y-6 text-white flex flex-col items-center justify-center w-full mx-auto">
+						<div className="flex-1 flex flex-col items-center  space-y-4">
+							<div className="flex flex-col items-center gap-4">
+								<p className="z-[50] text-white text-center text-4xl lg:text-5xl font-bold  ">
+									THANK YOU
+								</p>
+								<p className="z-[50] text-white text-center text-base font-medium ">
+									We hope you love your photo.
+								</p>
+							</div>
 						</div>
 					</div>
-
-					<div>
-						<h1 className="text-3xl font-bold text-gray-900 mb-2">Thank You!</h1>
-						<p className="text-gray-600">Thanks for using our photo booth!</p>
-					</div>
+				</div>
+				<div className="flex-1 flex items-end justify-center ">
+					<img
+						src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"
+						alt="ONER"
+						className="h-14 w-auto"
+					/>
 				</div>
 			</div>
 		</div>

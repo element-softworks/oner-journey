@@ -78,7 +78,9 @@ export function PhotoBoothMobileContainer({
 						setPhoto(null);
 						navigateToScreen('capture');
 					}}
-					onCancel={() => navigateToScreen('details')}
+					onCancel={() => {
+						navigateToScreen('details');
+					}}
 				/>
 			)}
 
