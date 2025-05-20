@@ -1,0 +1,143 @@
+'use client';
+import { useEffect, useState } from 'react';
+import { useIdleTimer } from 'react-idle-timer';
+import { useRouter } from 'next/navigation';
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { useSocketRoom } from '@/hooks/use-socket';
+import { CORE_EVENTS, DEVICE_TYPE, MOBILE_EVENTS, KIOSK_EVENTS } from '@/lib/socket-events';
+
+interface IdleTimerProps {
+	sessionId: string;
+	role: DEVICE_TYPE;
+}
+
+export function IdleTimer({ sessionId, role }: IdleTimerProps) {
+	const [showWarning, setShowWarning] = useState(false);
+	const [countdown, setCountdown] = useState(30);
+	const router = useRouter();
+	const [ready, setReady] = useState(false);
+
+	const { socket } = useSocketRoom({
+		sessionId,
+		role,
+		handlers: {
+			[CORE_EVENTS.JOINED_ROOM]: () => {
+				setReady(true);
+			},
+			[CORE_EVENTS.ERROR]: (err: string) => console.error('Socket error:', err),
+			[KIOSK_EVENTS.TIMEOUT_WARNING]: () => setShowWarning(true),
+			[KIOSK_EVENTS.TIMEOUT_CONFIRM]: () => {
+				setShowWarning(false);
+				setCountdown(30);
+			},
+			[KIOSK_EVENTS.TIMEOUT_CANCEL]: () => {
+				router.push('/');
+			},
+		},
+	});
+
+	const onIdle = () => {
+		console.log('User is idle', socket);
+		if (!socket) return;
+
+		if (role === DEVICE_TYPE.MOBILE) {
+			socket.emit(MOBILE_EVENTS.TIMEOUT_WARNING);
+			setShowWarning(true);
+		}
+	};
+
+	const { reset } = useIdleTimer({
+		// timeout: 60 * 1000, // 1 minute
+		timeout: 1000 * 60,
+		onIdle,
+		onActive(event, idleTimer) {
+			console.log('User is active', event, idleTimer);
+		},
+		onAction: () => {
+			console.log('User did something');
+		},
+
+		debounce: 500,
+	});
+
+	useEffect(() => {
+		let timer: NodeJS.Timeout;
+
+		if (showWarning) {
+			timer = setInterval(() => {
+				setCountdown((prev) => {
+					if (prev <= 1) {
+						if (socket && role === DEVICE_TYPE.MOBILE) {
+							socket.emit(MOBILE_EVENTS.TIMEOUT_CANCEL);
+						}
+						router.push('/');
+						return 0;
+					}
+					return prev - 1;
+				});
+			}, 1000);
+		}
+
+		return () => {
+			if (timer) clearInterval(timer);
+		};
+	}, [showWarning, socket, role, router]);
+
+	const handleContinue = () => {
+		if (!socket) return;
+
+		if (role === DEVICE_TYPE.MOBILE) {
+			socket.emit(MOBILE_EVENTS.TIMEOUT_CONFIRM);
+		}
+
+		setShowWarning(false);
+		setCountdown(30);
+		reset();
+	};
+
+	const handleEnd = () => {
+		if (!socket) return;
+
+		if (role === DEVICE_TYPE.MOBILE) {
+			socket.emit(MOBILE_EVENTS.TIMEOUT_CANCEL);
+		}
+
+		router.push('/');
+	};
+
+	return (
+		<AlertDialog open={showWarning}>
+			<AlertDialogContent>
+				<AlertDialogHeader>
+					<AlertDialogTitle>Are you still there?</AlertDialogTitle>
+					<AlertDialogDescription>
+						{role === DEVICE_TYPE.KIOSK ? (
+							<>Session will timeout in {countdown} seconds</>
+						) : (
+							<>Your session will end soon due to inactivity.</>
+						)}
+					</AlertDialogDescription>
+				</AlertDialogHeader>
+				<AlertDialogFooter>
+					{role === DEVICE_TYPE.MOBILE && (
+						<>
+							<AlertDialogCancel onClick={handleEnd}>End Journey</AlertDialogCancel>
+							<AlertDialogAction onClick={handleContinue}>
+								Continue Journey
+							</AlertDialogAction>
+						</>
+					)}
+				</AlertDialogFooter>
+			</AlertDialogContent>
+		</AlertDialog>
+	);
+}

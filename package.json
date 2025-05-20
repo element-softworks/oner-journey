@@ -56,6 +56,7 @@
     "react-day-picker": "8.10.0",
     "react-dom": "18.2.0",
     "react-hook-form": "7.50.0",
+    "react-idle-timer": "^5.7.2",
     "react-resizable-panels": "2.0.9",
     "react-webcam": "^7.2.0",
     "recharts": "2.12.0",

@@ -37,6 +37,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 						: '*',
 				credentials: false,
 			},
+			// Add ping timeout and interval configuration
+			pingTimeout: 60000,
+			pingInterval: 25000,
 		});
 		res.socket.server.io = io;
 
@@ -56,117 +59,124 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 						`Event: ${CORE_EVENTS.JOIN_ROOM} — socketId=${socket.id}, sessionId=${sessionId}, role=${role}`
 					);
 
-					if (!(await isSessionValid(sessionId))) {
-						console.warn(`Invalid sessionId=${sessionId}`);
-						return socket.emit(CORE_EVENTS.ERROR, 'Invalid session');
-					}
+					try {
+						const valid = await isSessionValid(sessionId);
+						if (!valid) {
+							console.warn(`Invalid sessionId=${sessionId}`);
+							socket.emit(CORE_EVENTS.ERROR, 'Invalid session');
+							return;
+						}
 
-					await pubClient.hSet(CLIENT_ROOMS_HASH, socket.id, sessionId);
-					socket.join(sessionId);
-					socket.data.sessionId = sessionId;
-					socket.data.role = role;
+						await pubClient.hSet(CLIENT_ROOMS_HASH, socket.id, sessionId);
+						socket.join(sessionId);
+						socket.data.sessionId = sessionId;
+						socket.data.role = role;
 
-					console.log(`Socket ${socket.id} joined room ${sessionId}`);
-					socket.emit(CORE_EVENTS.JOINED_ROOM, { sessionId, role });
+						console.log(`Socket ${socket.id} joined room ${sessionId}`);
+						socket.emit(CORE_EVENTS.JOINED_ROOM, { sessionId, role });
 
-					if (role === DEVICE_TYPE.MOBILE) {
-						io.to(sessionId).emit(KIOSK_EVENTS.MOBILE_JOINED, { sessionId });
-					}
+						if (role === DEVICE_TYPE.MOBILE) {
+							io.to(sessionId).emit(KIOSK_EVENTS.MOBILE_JOINED, { sessionId });
+						}
 
-					// ─── MOBILE HANDLERS ────────────────────────────────────────────
-					if (role === DEVICE_TYPE.MOBILE) {
-						// user entered name/email
-						socket.on(
-							MOBILE_EVENTS.DETAILS,
-							({ name, email }: { name: string; email: string }) => {
-								console.log(
-									`Event: ${MOBILE_EVENTS.DETAILS} — sessionId=${sessionId}, name=${name}, email=${email}`
-								);
-								io.to(sessionId).emit(MOBILE_EVENTS.DETAILS, { name, email });
-							}
-						);
-
-						// user pressed “Take a Photo” or “Cancel”
-						socket.on(
-							MOBILE_EVENTS.TAKE_PHOTO,
-							({ cancel }: { cancel?: boolean } = {}) => {
-								if (cancel) {
+						// ─── MOBILE HANDLERS ────────────────────────────────────────────
+						if (role === DEVICE_TYPE.MOBILE) {
+							// user entered name/email
+							socket.on(
+								MOBILE_EVENTS.DETAILS,
+								({ name, email }: { name: string; email: string }) => {
 									console.log(
-										`Event: MOBILE_EVENTS.TAKE_PHOTO (cancel) — sessionId=${sessionId}`
+										`Event: ${MOBILE_EVENTS.DETAILS} — sessionId=${sessionId}, name=${name}, email=${email}`
 									);
-									io.to(sessionId).emit(KIOSK_EVENTS.CANCEL_PHOTO);
-								} else {
+									io.to(sessionId).emit(MOBILE_EVENTS.DETAILS, { name, email });
+								}
+							);
+
+							// user pressed "Take a Photo" or "Cancel"
+							socket.on(
+								MOBILE_EVENTS.TAKE_PHOTO,
+								({ cancel }: { cancel?: boolean } = {}) => {
+									if (cancel) {
+										console.log(
+											`Event: MOBILE_EVENTS.TAKE_PHOTO (cancel) — sessionId=${sessionId}`
+										);
+										io.to(sessionId).emit(KIOSK_EVENTS.CANCEL_PHOTO);
+									} else {
+										console.log(
+											`Event: ${MOBILE_EVENTS.TAKE_PHOTO} — sessionId=${sessionId}`
+										);
+										io.to(sessionId).emit(KIOSK_EVENTS.TRIGGER_CAMERA);
+									}
+								}
+							);
+
+							// user accepted or declined the photo preview
+							socket.on(
+								MOBILE_EVENTS.PHOTO_DECISION,
+								({ decision }: { decision: boolean }) => {
 									console.log(
-										`Event: ${MOBILE_EVENTS.TAKE_PHOTO} — sessionId=${sessionId}`
+										`Event: ${MOBILE_EVENTS.PHOTO_DECISION} — sessionId=${sessionId}, decision=${decision}`
 									);
-									io.to(sessionId).emit(KIOSK_EVENTS.TRIGGER_CAMERA);
+
+									if (decision) {
+										io.to(sessionId).emit(KIOSK_EVENTS.PHOTO_DECISION, {
+											decision: true,
+										});
+									} else {
+										io.to(sessionId).emit(KIOSK_EVENTS.CANCEL_PHOTO);
+									}
+
+									// tell mobile to show thank-you screen
+									socket.emit(MOBILE_EVENTS.THANK_YOU);
 								}
-							}
-						);
+							);
 
-						// user accepted or declined the photo preview
-						socket.on(
-							MOBILE_EVENTS.PHOTO_DECISION,
-							({ decision }: { decision: boolean }) => {
+							//Mobile timeout "warning"
+							socket.on(MOBILE_EVENTS.TIMEOUT_WARNING, () => {
 								console.log(
-									`Event: ${MOBILE_EVENTS.PHOTO_DECISION} — sessionId=${sessionId}, decision=${decision}`
+									`[Timeout Warning] mobile ${socket.id} in session ${sessionId}`
 								);
+								io.to(sessionId).emit(KIOSK_EVENTS.TIMEOUT_WARNING, { sessionId });
+							});
 
-								if (decision) {
-									io.to(sessionId).emit(KIOSK_EVENTS.PHOTO_DECISION, {
-										decision: true,
-									});
-								} else {
-									io.to(sessionId).emit(KIOSK_EVENTS.CANCEL_PHOTO);
+							//Mobile confirms "I'm still here"
+							socket.on(MOBILE_EVENTS.TIMEOUT_CONFIRM, () => {
+								console.log(
+									`[Timeout Confirm] mobile ${socket.id} in session ${sessionId}`
+								);
+								io.to(sessionId).emit(KIOSK_EVENTS.TIMEOUT_CONFIRM, { sessionId });
+							});
+
+							//Mobile cancels (or auto‐cancels) the session
+							socket.on(MOBILE_EVENTS.TIMEOUT_CANCEL, () => {
+								console.log(
+									`[Timeout Cancel] mobile ${socket.id} in session ${sessionId}`
+								);
+								io.to(sessionId).emit(KIOSK_EVENTS.TIMEOUT_CANCEL, { sessionId });
+							});
+						}
+
+						// ─── KIOSK HANDLERS ─────────────────────────────────────────────
+						if (role === DEVICE_TYPE.KIOSK) {
+							// kiosk sends back the captured photo URL
+							socket.on(
+								KIOSK_EVENTS.PHOTO_TAKEN,
+								({ photoUrl }: { photoUrl: string }) => {
+									console.log(
+										`Event: ${KIOSK_EVENTS.PHOTO_TAKEN} — sessionId=${sessionId}, photoUrl=${photoUrl}`
+									);
+
+									// send preview to mobile
+									io.to(sessionId).emit(KIOSK_EVENTS.PHOTO_PREVIEW, { photoUrl });
+
+									// then show kiosk's thank-you screen
+									socket.emit(KIOSK_EVENTS.THANK_YOU);
 								}
-
-								// tell mobile to show thank-you screen
-								socket.emit(MOBILE_EVENTS.THANK_YOU);
-							}
-						);
-
-						//Mobile timeout “warning”
-						socket.on(MOBILE_EVENTS.TIMEOUT_WARNING, () => {
-							console.log(
-								`[Timeout Warning] mobile ${socket.id} in session ${sessionId}`
 							);
-							io.to(sessionId).emit(KIOSK_EVENTS.TIMEOUT_WARNING, { sessionId });
-						});
-
-						//Mobile confirms “I’m still here”
-						socket.on(MOBILE_EVENTS.TIMEOUT_CONFIRM, () => {
-							console.log(
-								`[Timeout Confirm] mobile ${socket.id} in session ${sessionId}`
-							);
-							io.to(sessionId).emit(KIOSK_EVENTS.TIMEOUT_CONFIRM, { sessionId });
-						});
-
-						//Mobile cancels (or auto‐cancels) the session
-						socket.on(MOBILE_EVENTS.TIMEOUT_CANCEL, () => {
-							console.log(
-								`[Timeout Cancel] mobile ${socket.id} in session ${sessionId}`
-							);
-							io.to(sessionId).emit(KIOSK_EVENTS.TIMEOUT_CANCEL, { sessionId });
-						});
-					}
-
-					// ─── KIOSK HANDLERS ─────────────────────────────────────────────
-					if (role === DEVICE_TYPE.KIOSK) {
-						// kiosk sends back the captured photo URL
-						socket.on(
-							KIOSK_EVENTS.PHOTO_TAKEN,
-							({ photoUrl }: { photoUrl: string }) => {
-								console.log(
-									`Event: ${KIOSK_EVENTS.PHOTO_TAKEN} — sessionId=${sessionId}, photoUrl=${photoUrl}`
-								);
-
-								// send preview to mobile
-								io.to(sessionId).emit(KIOSK_EVENTS.PHOTO_PREVIEW, { photoUrl });
-
-								// then show kiosk’s thank-you screen
-								socket.emit(KIOSK_EVENTS.THANK_YOU);
-							}
-						);
+						}
+					} catch (error) {
+						console.error('Error in JOIN_ROOM handler:', error);
+						socket.emit(CORE_EVENTS.ERROR, 'Server error');
 					}
 				}
 			);
@@ -175,18 +185,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 			socket.on('disconnect', async (reason) => {
 				console.log(`Disconnect: socketId=${socket.id}, reason=${reason}`);
 
-				const sessionId = await pubClient.hGet(CLIENT_ROOMS_HASH, socket.id);
-				if (!sessionId) return;
+				try {
+					const sessionId = await pubClient.hGet(CLIENT_ROOMS_HASH, socket.id);
+					if (!sessionId) return;
 
-				await pubClient.hDel(CLIENT_ROOMS_HASH, socket.id);
-				console.log(`Removed socketId=${socket.id} from session=${sessionId}`);
+					await pubClient.hDel(CLIENT_ROOMS_HASH, socket.id);
+					console.log(`Removed socketId=${socket.id} from session=${sessionId}`);
 
-				const allSessions = await pubClient.hVals(CLIENT_ROOMS_HASH);
-				const stillInRoom = allSessions.includes(sessionId);
+					const allSessions = await pubClient.hVals(CLIENT_ROOMS_HASH);
+					const stillInRoom = allSessions.includes(sessionId);
 
-				if (!stillInRoom) {
-					await pubClient.hDel(SESSIONS_HASH, sessionId);
-					console.log(`Removed sessionId=${sessionId} from ${SESSIONS_HASH}`);
+					if (!stillInRoom) {
+						await pubClient.hDel(SESSIONS_HASH, sessionId);
+						console.log(`Removed sessionId=${sessionId} from ${SESSIONS_HASH}`);
+					}
+				} catch (error) {
+					console.error('Error in disconnect handler:', error);
 				}
 			});
 		});
