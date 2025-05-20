@@ -19,9 +19,12 @@ export function PhotoBoothLanding({ onStart, onBack }: PhotoBoothLandingProps) {
 	const [sessionId, setSessionId] = useState<string>('');
 	const { triggerHaptic } = useHapticFeedback();
 	const videoRef = useRef<HTMLVideoElement>(null);
+	const hasInitialized = useRef(false);
 
 	// 1) Generate a new session and QR code on mount
 	useEffect(() => {
+		if (hasInitialized.current) return;
+		hasInitialized.current = true;
 		(async () => {
 			const { sessionId } = await createKioskSession();
 			setSessionId(sessionId);
