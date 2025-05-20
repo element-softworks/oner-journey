@@ -88,7 +88,7 @@ export function PhotoBoothPreview({
 				toast({ title: 'Socket error', description: err, variant: 'destructive' });
 			},
 
-			[KIOSK_EVENTS.CANCEL_PHOTO]: (data) => {
+			[KIOSK_EVENTS.RETAKE_PHOTO]: (data) => {
 				console.log('Cancel photo received:', data);
 				triggerHaptic('light');
 				onRetake();

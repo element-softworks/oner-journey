@@ -59,31 +59,26 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 
 	/* --------------------------- countdown logic --------------------------- */
 
-	const beginCountdown = () => {
-		triggerHaptic('medium');
-		setCountdown(3);
+	function startCaptureSequence() {
+		[3, 2, 1].forEach((num, i) => {
+			setTimeout(() => {
+				setCountdown(num);
+				triggerHaptic(i === 0 ? 'medium' : 'light');
 
-		countdownRef.current = setInterval(() => {
-			setCountdown((prev) => {
-				if (prev === null) return null;
-				if (prev > 1) {
-					triggerHaptic('light');
-					return prev - 1;
+				if (num === 1) {
+					// one more second after showing “1”
+					setTimeout(() => {
+						setCountdown(null);
+						const blob = capturePhoto();
+						if (blob) {
+							triggerHaptic('heavy');
+							onNavigate('preview', { blob });
+						}
+					}, 1_000);
 				}
-
-				/* prev === 1  → take the photo */
-				if (countdownRef.current) clearInterval(countdownRef.current);
-				setCountdown(null);
-
-				const blob = capturePhoto();
-				if (blob) {
-					triggerHaptic('heavy');
-					onNavigate('preview', { blob });
-				}
-				return null;
-			});
-		}, 1_000);
-	};
+			}, i * 1_000);
+		});
+	}
 
 	/* ----------------------------- socket hooks ----------------------------- */
 
@@ -94,11 +89,11 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 			[CORE_EVENTS.JOINED_ROOM]: () => console.log(`Kiosk joined room ${sessionId}`),
 			[CORE_EVENTS.ERROR]: (err: string) =>
 				toast({ title: 'Socket error', description: err, variant: 'destructive' }),
-			[KIOSK_EVENTS.TRIGGER_CAMERA]: beginCountdown,
+			[KIOSK_EVENTS.TRIGGER_CAMERA]: startCaptureSequence,
 			[KIOSK_EVENTS.CANCEL_PHOTO]: () => {
 				if (countdownRef.current) clearInterval(countdownRef.current);
 				setCountdown(null);
-				onNavigate('details');
+				// onNavigate('details');
 			},
 		},
 	});

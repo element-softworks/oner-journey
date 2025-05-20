@@ -8,6 +8,7 @@ export type CoreEvent = (typeof CORE_EVENTS)[keyof typeof CORE_EVENTS];
 
 /** Events sent from the mobile client */
 export const MOBILE_EVENTS = {
+	RETAKE_PHOTO: 'mobile_retake_photo' as const,
 	DETAILS: 'mobile_details' as const,
 	TAKE_PHOTO: 'mobile_take_photo' as const,
 	PHOTO_DECISION: 'mobile_photo_decision' as const,
@@ -20,6 +21,7 @@ export type MobileEvent = (typeof MOBILE_EVENTS)[keyof typeof MOBILE_EVENTS];
 
 /** Events sent from the kiosk client */
 export const KIOSK_EVENTS = {
+	RETAKE_PHOTO: 'kiosk_retake_photo' as const,
 	TRIGGER_CAMERA: 'kiosk_trigger_camera' as const,
 	PHOTO_TAKEN: 'kiosk_photo_taken' as const,
 	PHOTO_PREVIEW: 'mobile_photo_preview' as const,

@@ -44,8 +44,8 @@ export function PhotoBoothMobilePreview({
 		}
 
 		// 4) Emit mobile_details into the room
-		socket.emit(MOBILE_EVENTS.TAKE_PHOTO, { cancel: true });
-		onRetake();
+		socket.emit(MOBILE_EVENTS.RETAKE_PHOTO, { sessionId });
+		// onRetake();
 	};
 	const handleAccept = () => {
 		if (!socket || !ready) {
