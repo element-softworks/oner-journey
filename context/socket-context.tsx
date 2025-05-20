@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { Socket } from 'socket.io-client';
 import { getSocket } from '@/lib/socket-client';
 
@@ -9,47 +9,35 @@ interface SocketContextType {
 	isConnected: boolean;
 }
 
-const SocketContext = createContext<SocketContextType>({
-	socket: null,
-	isConnected: false,
-});
+const SocketContext = createContext<SocketContextType | undefined>(undefined);
 
-export function SocketProvider({ children }: { children: React.ReactNode }) {
+export function SocketProvider({ children }: { children: ReactNode }) {
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [isConnected, setIsConnected] = useState(false);
 
 	useEffect(() => {
-		const socket = getSocket();
+		// Wake server
+		fetch('/api/socket').finally(() => {
+			const sock = getSocket();
+			setSocket(sock);
 
-		function onConnect() {
-			console.log(`Socket connected [id=${socket.id}]`);
-			setIsConnected(true);
-		}
+			const onConnect = () => setIsConnected(true);
+			const onDisconnect = () => setIsConnected(false);
+			const onError = (err: any) => console.error('Socket error', err);
 
-		function onDisconnect() {
-			console.log('Socket disconnected');
-			setIsConnected(false);
-		}
+			sock.on('connect', onConnect);
+			sock.on('disconnect', onDisconnect);
+			sock.on('connect_error', onError);
 
-		function onError(err: Error) {
-			console.error('Socket error:', err);
-			// Attempt to reconnect on error
-			socket.connect();
-		}
+			sock.connect();
 
-		socket.on('connect', onConnect);
-		socket.on('disconnect', onDisconnect);
-		socket.on('error', onError);
-
-		setSocket(socket);
-		socket.connect();
-
-		return () => {
-			socket.off('connect', onConnect);
-			socket.off('disconnect', onDisconnect);
-			socket.off('error', onError);
-			socket.disconnect();
-		};
+			return () => {
+				sock.off('connect', onConnect);
+				sock.off('disconnect', onDisconnect);
+				sock.off('connect_error', onError);
+				sock.disconnect();
+			};
+		});
 	}, []);
 
 	return (
@@ -58,9 +46,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useSocket() {
-	const context = useContext(SocketContext);
-	if (!context) {
-		throw new Error('useSocket must be used within a SocketProvider');
-	}
-	return context;
+	const ctx = useContext(SocketContext);
+	if (!ctx) throw new Error('useSocket must be inside <SocketProvider>');
+	return ctx;
 }
