@@ -6,6 +6,8 @@ import { PhotoBoothMobileDetails } from './photo-booth-mobile-details';
 import { PhotoBoothMobileCapture } from './photo-booth-mobile-capture';
 import { PhotoBoothMobilePreview } from './photo-booth-mobile-preview';
 import { PhotoBoothMobileThankYou } from './photo-booth-mobile-thank-you';
+import { IdleTimer } from '../idle-timer';
+import { DEVICE_TYPE } from '@/lib/socket-events';
 
 export type PhotoBoothMobileScreen = 'details' | 'capture' | 'preview' | 'thank-you';
 
@@ -49,6 +51,8 @@ export function PhotoBoothMobileContainer({
 				isTransitioning ? 'opacity-0' : 'opacity-100'
 			}`}
 		>
+			{!!sessionId && <IdleTimer sessionId={sessionId} role={DEVICE_TYPE.MOBILE} />}
+
 			{currentScreen === 'details' && (
 				<PhotoBoothMobileDetails onNavigate={navigateToScreen} />
 			)}

@@ -39,13 +39,6 @@ export function PhotoBoothThankYou({ onNavigate }: PhotoBoothThankYouProps) {
 						<h1 className="text-3xl font-bold text-gray-900 mb-2">Thank You!</h1>
 						<p className="text-gray-600">Thanks for using our photo booth!</p>
 					</div>
-
-					<Button
-						onClick={handleFinish}
-						className="w-full h-14 mt-8 bg-gray-900 text-white hover:bg-gray-800 group"
-					>
-						<span>Done</span>
-					</Button>
 				</div>
 			</div>
 		</div>

@@ -8,6 +8,8 @@ import { PhotoBoothCapture } from '@/components/screens/photo-booth-capture';
 import { PhotoBoothDetails } from './screens/photo-booth-details';
 import { PhotoBoothPreview } from './screens/photo-booth-preview';
 import { PhotoBoothThankYou } from './screens/photo-booth-thank-you';
+import { IdleTimer } from '@/components/idle-timer';
+import { DEVICE_TYPE } from '@/lib/socket-events';
 
 export type PhotoBoothScreen =
 	| 'landing'
@@ -61,15 +63,25 @@ export function PhotoBoothContainer({
 			case 'landing':
 				return `/photo-booth/start`;
 			case 'details':
-				return `/photo-booth/details?sessionId=${sessionId}${!!data?.email ? `&email=${data?.email}` : ''}${!!data?.name ? `&name=${data?.name}` : ''}`;
+				return `/photo-booth/details?sessionId=${sessionId}${
+					!!data?.email ? `&email=${data?.email}` : ''
+				}${!!data?.name ? `&name=${data?.name}` : ''}`;
 			case 'welcome':
-				return `/photo-booth/form?sessionId=${sessionId}${!!data?.email ? `&email=${data?.email}` : ''}${!!data?.name ? `&name=${data?.name}` : ''}`;
+				return `/photo-booth/form?sessionId=${sessionId}${
+					!!data?.email ? `&email=${data?.email}` : ''
+				}${!!data?.name ? `&name=${data?.name}` : ''}`;
 			case 'capture':
-				return `/photo-booth/capture?sessionId=${sessionId}${!!data?.email ? `&email=${data?.email}` : ''}${!!data?.name ? `&name=${data?.name}` : ''}`;
+				return `/photo-booth/capture?sessionId=${sessionId}${
+					!!data?.email ? `&email=${data?.email}` : ''
+				}${!!data?.name ? `&name=${data?.name}` : ''}`;
 			case 'preview':
-				return `/photo-booth/preview?sessionId=${sessionId}${!!data?.email ? `&email=${data?.email}` : ''}${!!data?.name ? `&name=${data?.name}` : ''}`;
+				return `/photo-booth/preview?sessionId=${sessionId}${
+					!!data?.email ? `&email=${data?.email}` : ''
+				}${!!data?.name ? `&name=${data?.name}` : ''}`;
 			case 'thank-you':
-				return `/photo-booth/thank-you?sessionId=${sessionId}${!!data?.email ? `&email=${data?.email}` : ''}${!!data?.name ? `&name=${data?.name}` : ''}`;
+				return `/photo-booth/thank-you?sessionId=${sessionId}${
+					!!data?.email ? `&email=${data?.email}` : ''
+				}${!!data?.name ? `&name=${data?.name}` : ''}`;
 			default:
 				return `/photo-booth/start`;
 		}
@@ -81,6 +93,8 @@ export function PhotoBoothContainer({
 				isTransitioning ? 'opacity-0' : 'opacity-100'
 			}`}
 		>
+			{!!sessionId && <IdleTimer sessionId={sessionId!} role={DEVICE_TYPE.KIOSK} />}
+
 			{currentScreen === 'landing' && (
 				<PhotoBoothLanding
 					onStart={(sessionId: string) =>
