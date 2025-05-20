@@ -20,11 +20,26 @@ let client: RedisClientType | null = null;
 
 export function getRedisClient(): RedisClientType {
 	if (!client) {
-		client = createClient({ url: redisUrl });
+		client = createClient({
+			url: redisUrl,
+			socket: {
+				reconnectStrategy: (retries) => {
+					// Exponential backoff with max delay of 10s
+					const delay = Math.min(1000 * Math.pow(2, retries), 10000);
+					return delay;
+				},
+				connectTimeout: 10000, // 10s timeout for initial connection
+			},
+		});
+
 		client.on('error', (err) => console.error('Redis Client Error', err));
+		client.on('reconnecting', () => console.log('Redis reconnecting...'));
+		client.on('ready', () => console.log('Redis ready'));
+		client.on('connect', () => console.log('Redis connected'));
+
 		client
 			.connect()
-			.then(() => console.log('Redis connected'))
+			.then(() => console.log('Redis connection established'))
 			.catch((err) => console.error('Redis connection failed:', err));
 	}
 	return client;
