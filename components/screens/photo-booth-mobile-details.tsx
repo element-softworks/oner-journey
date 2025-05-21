@@ -20,8 +20,10 @@ interface Props {
 export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 	const trackEvent = useTrackEvent();
 	const [name, setName] = useState('');
+	const [lastName, setLastName] = useState('');
 	const [email, setEmail] = useState('');
 	const [nameError, setNameError] = useState('');
+	const [lastNameError, setLastNameError] = useState('');
 	const [emailError, setEmailError] = useState('');
 	const [ready, setReady] = useState(false);
 	const { toast } = useToast();
@@ -61,6 +63,14 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 		} else {
 			setNameError('');
 		}
+
+		if (!validateName(lastName)) {
+			setLastNameError('Please enter your last name');
+			valid = false;
+		} else {
+			setLastNameError('');
+		}
+
 		if (!validateEmail(email)) {
 			setEmailError('Please enter a valid email address');
 			valid = false;
@@ -77,7 +87,7 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 		trackEvent('photo-booth-mobile-details', 'submit-details-form', [
 			{
 				key: 'name',
-				value: name,
+				value: `${name} ${lastName}`,
 			},
 			{
 				key: 'email',
@@ -86,7 +96,7 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 		]);
 
 		// 4) Emit mobile_details into the room
-		socket.emit(MOBILE_EVENTS.DETAILS, { sessionId, name, email });
+		socket.emit(MOBILE_EVENTS.DETAILS, { sessionId, name: `${name} ${lastName}`, email });
 		onNavigate('capture');
 	}, [socket, ready, sessionId, name, email, toast, onNavigate]);
 
@@ -113,33 +123,54 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 
 			<div>
 				<div className="text-center mb-8">
-					<h1 className="text-xl lg:text-xl font-semibold text-white mb-2">WELCOME</h1>
+					<h1 className="text-xl lg:text-xl font-semibold text-white mb-">WELCOME</h1>
 					<p className="text-xl lg:text-xl font-semibold text-white mb-2">
 						TAKE A PHOTO AND ENTER YOUR DETAILS BELOW
 					</p>
 				</div>
 
-				<div className="space-y-6 text-white flex flex-col items-center justify-center w-full mx-auto">
+				<div className="space-y-6 flex flex-col items-center justify-center w-full mx-auto">
 					{/* Name field */}
-					<div className="space-y-2 text-white w-full">
-						<Label htmlFor="name" className="text-sm">
-							NAME
-						</Label>
-						<Input
-							id="name"
-							placeholder="Enter your name"
-							text-white
-							value={name}
-							onChange={(e) => setName(e.target.value)}
-							className={`h-12 ${nameError ? 'border-red-500' : ''} text-black`}
-						/>
-						{nameError && <p className="text-red-500 text-xs">{nameError}</p>}
+
+					<div className="flex flex-row gap-6 w-full">
+						<div className="space-y-2  flex-1">
+							<Label htmlFor="name" className="text-sm text-white">
+								First name
+							</Label>
+							<Input
+								id="name"
+								placeholder="Enter first name"
+								text-white
+								value={name}
+								onChange={(e) => setName(e.target.value)}
+								className={`h-12 ${nameError ? 'border-red-500' : ''} !text-black`}
+							/>
+							{nameError && <p className="text-red-500 text-xs">{nameError}</p>}
+						</div>
+						<div className="space-y-2  flex-1">
+							<Label htmlFor="name" className="text-sm text-white">
+								Last name
+							</Label>
+							<Input
+								id="name"
+								placeholder="Enter last name"
+								text-white
+								value={lastName}
+								onChange={(e) => setLastName(e.target.value)}
+								className={`h-12 ${
+									lastNameError ? 'border-red-500' : ''
+								} !text-black`}
+							/>
+							{lastNameError && (
+								<p className="text-red-500 text-xs">{lastNameError}</p>
+							)}
+						</div>
 					</div>
 
 					{/* Email field */}
 					<div className="space-y-2 w-full">
-						<Label htmlFor="email" className="text-sm">
-							EMAIL
+						<Label htmlFor="email" className="text-sm text-white">
+							Email address
 						</Label>
 						<Input
 							placeholder="Enter your email"
@@ -147,7 +178,7 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 							type="email"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
-							className={`h-12 ${emailError ? 'border-red-500' : ''} text-black`}
+							className={`h-12 ${emailError ? 'border-red-500' : ''} !text-black`}
 						/>
 						{emailError && <p className="text-red-500 text-xs">{emailError}</p>}
 					</div>
