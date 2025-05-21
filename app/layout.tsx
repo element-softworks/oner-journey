@@ -1,3 +1,5 @@
+'use client';
+
 import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
@@ -5,13 +7,15 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { UserProvider } from '@/context/user-context';
 import { SocketProvider } from '@/context/socket-context';
+import { MerlinCloudProvider } from '@merlincloud/mc-package';
+import { MCProvider } from '@/context/mc-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata: Metadata = {
-	title: 'ONER Retail',
-	description: 'Premium retail experience in New York',
-};
+// export const metadata: Metadata = {
+// 	title: 'ONER Retail',
+// 	description: 'Premium retail experience in New York',
+// };
 
 export const viewport: Viewport = {
 	width: 'device-width',
@@ -24,15 +28,27 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
+			<head>
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
+				<meta name="theme-color" content="#ffffff" />
+				<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+				<link rel="icon" href="/favicon.ico" />
+				<link rel="manifest" href="/manifest.json" />
+				<link rel="stylesheet" href="/fonts.css" />
+				<title>ONER Retail</title>
+				<meta name="description" content="Premium retail experience in New York" />
+			</head>
 			<body className={inter.className}>
-				<ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-					<SocketProvider>
-						<UserProvider>
-							{children}
-							<Toaster />
-						</UserProvider>
-					</SocketProvider>
-				</ThemeProvider>
+				<MCProvider>
+					<ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+						<SocketProvider>
+							<UserProvider>
+								{children}
+								<Toaster />
+							</UserProvider>
+						</SocketProvider>
+					</ThemeProvider>
+				</MCProvider>
 			</body>
 		</html>
 	);

@@ -8,6 +8,7 @@ import { generateQRCodeDataUrl } from '@/actions/generate-qr-code';
 import { useHapticFeedback } from '@/hooks/use-haptic-feedback';
 import { useSocketRoom } from '@/hooks/use-socket';
 import { CORE_EVENTS, KIOSK_EVENTS, DEVICE_TYPE } from '@/lib/socket-events';
+import { useMerlinSession } from '@merlincloud/mc-package';
 
 interface PhotoBoothLandingProps {
 	onStart: (sessionId: string) => void;
@@ -15,6 +16,7 @@ interface PhotoBoothLandingProps {
 }
 
 export function PhotoBoothLanding({ onStart, onBack }: PhotoBoothLandingProps) {
+	const { startSession: startMerlinSession } = useMerlinSession();
 	const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
 	const [sessionId, setSessionId] = useState<string>('');
 	const { triggerHaptic } = useHapticFeedback();
@@ -45,6 +47,7 @@ export function PhotoBoothLanding({ onStart, onBack }: PhotoBoothLandingProps) {
 			// B) Only: when the mobile joins, advance to the next screen
 			[KIOSK_EVENTS.MOBILE_JOINED]: () => {
 				console.log(`Mobile joined room ${sessionId}`);
+				startMerlinSession(sessionId);
 				onStart(sessionId);
 			},
 		},

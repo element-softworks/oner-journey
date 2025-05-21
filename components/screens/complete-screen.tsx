@@ -1,48 +1,84 @@
-"use client";
+'use client';
 
 import { AppScreen } from '@/components/app-container';
 import { Button } from '@/components/ui/button';
 import { useHapticFeedback } from '@/hooks/use-haptic-feedback';
 import { useUser } from '@/context/user-context';
 import { ArrowRight } from 'lucide-react';
+import { useEffect } from 'react';
+import { useMerlinSession } from '@merlincloud/mc-package';
+import { useRouter } from 'next/navigation';
 
 interface CompleteScreenProps {
-  onNavigate: (screen: AppScreen) => void;
+	onNavigate: (screen: AppScreen) => void;
 }
 
 export function CompleteScreen({ onNavigate }: CompleteScreenProps) {
-  const { userData } = useUser();
-  const { triggerHaptic } = useHapticFeedback();
+	const { userData } = useUser();
+	const { triggerHaptic } = useHapticFeedback();
+	const router = useRouter();
+	const { endSession: endMerlinSession } = useMerlinSession();
 
-  const handleStartOver = () => {
-    triggerHaptic('medium');
-    onNavigate('landing');
-  };
+	const handleStartOver = () => {
+		triggerHaptic('medium');
+		onNavigate('landing');
+	};
 
-  return (
-    <div className="w-full h-screen flex flex-col bg-gray-50 p-6">
-      <div className="flex justify-center mb-8">
-        <img 
-          src="https://www.purpldiscounts.com/_next/image?url=https%3A%2F%2Fverification.purpldiscounts.com%2Fassets%2Fbrand_logo%2FoVEXAJ6RTzflVHvf3ePEs0e&w=828&q=75"
-          alt="ONER"
-          className="h-12 w-auto"
-        />
-      </div>
+	useEffect(() => {
+		setTimeout(() => {
+			endMerlinSession();
 
-      <div className="flex-1 flex flex-col items-center justify-center text-center">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">Thank You!</h1>
-        <p className="text-gray-600 mb-8">
-          We'll be in touch with your perfect fit soon, {userData.name}!
-        </p>
+			router.push('/outfit-selector');
+		}, 10000);
+	}, []);
 
-        <Button
-          onClick={handleStartOver}
-          className="w-full max-w-md h-14 bg-gray-900 text-white hover:bg-gray-800 group"
-        >
-          <span>Start Over</span>
-          <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-        </Button>
-      </div>
-    </div>
-  );
+	return (
+		<div className="flex flex-col h-full bg-[#5B7FCA]">
+			<div className="flex flex-col h-full bg-[#5B7FCA] p-6 py-16">
+				<div className="flex justify-center flex-1">
+					<img
+						src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
+						alt="ONER"
+						className="h-20 w-auto"
+					/>
+				</div>
+
+				<div>
+					<div className="space-y-6 text-white flex flex-col items-center justify-center w-full mx-auto">
+						<div className="flex-1 flex flex-col items-center  space-y-4">
+							<div className="flex flex-col items-center gap-4">
+								<p className="z-[50] text-white text-center text-6xl lg:text-5xl font-bold  ">
+									THANK YOU
+								</p>
+								<p className="z-[50] text-white text-center text-3xl font-medium uppercase ">
+									you have been entered into our competition.
+								</p>
+								<p className="z-[50] text-white text-center text-base font-regular  !my-8">
+									You'll get an email from us if you're one of the lucky winners!
+								</p>
+
+								<p className="z-[50] text-white text-center text-3xl font-medium uppercase ">
+									Scan below to discover more
+								</p>
+								<div className="flex flex-col items-center ">
+									<img
+										src="https://api.merlincloud.ai/pg/BFQP/qr"
+										alt="Scan QR code"
+										className="w-44 h-44 mb-2 rounded-lg border bg-white"
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div className="flex-1 flex items-end justify-center ">
+					<img
+						src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"
+						alt="ONER"
+						className="h-14 w-auto"
+					/>
+				</div>
+			</div>
+		</div>
+	);
 }

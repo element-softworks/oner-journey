@@ -1,8 +1,11 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { useTrackEvent } from '@/lib/MerlinAnalytics';
 
 export function PhotoBoothMobileThankYou() {
+	const trackEvent = useTrackEvent();
+
 	return (
 		<div className="flex flex-col h-full bg-white">
 			<div className="flex flex-col h-full bg-[#1C4639] p-6 py-16">
@@ -25,9 +28,15 @@ export function PhotoBoothMobileThankYou() {
 									We hope you love your photo.
 								</p>
 								<Button
-									onClick={() =>
-										(window.location.href = 'https://www.oneractive.com')
-									}
+									onClick={() => {
+										trackEvent('photo-booth-thank-you', 'click-link', [
+											{
+												key: 'link',
+												value: 'https://www.oneractive.com',
+											},
+										]);
+										window.location.href = 'https://www.oneractive.com';
+									}}
 									className="mx-auto w-full h-14 rounded-full text-xl !mt-8 bg-white text-black hover:bg-gray-100 disabled:opacity-50 px-6"
 								>
 									VISIT ONER ACTIVE WEBSITE

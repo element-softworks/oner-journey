@@ -7,6 +7,7 @@ import { CORE_EVENTS, DEVICE_TYPE, MOBILE_EVENTS, KIOSK_EVENTS } from '@/lib/soc
 import { toast } from '@/hooks/use-toast';
 import { useState, useEffect } from 'react';
 import { EventEmitter } from 'events';
+import { useTrackEvent } from '@/lib/MerlinAnalytics';
 
 interface PhotoBoothMobileCaptureProps {
 	onNavigate: (screen: PhotoBoothMobileScreen, data?: { blob?: Blob }) => void;
@@ -19,6 +20,8 @@ export function PhotoBoothMobileCapture({
 	onCancel,
 	sessionId,
 }: PhotoBoothMobileCaptureProps) {
+	const trackEvent = useTrackEvent();
+
 	const [ready, setReady] = useState(false);
 	const [takingPhoto, setTakingPhoto] = useState(false);
 
@@ -60,6 +63,13 @@ export function PhotoBoothMobileCapture({
 		}
 		setTakingPhoto(true);
 
+		trackEvent('photo-booth-capture', 'take-photo', [
+			{
+				key: 'photo',
+				value: 'take',
+			},
+		]);
+
 		socket.emit(MOBILE_EVENTS.TAKE_PHOTO, { cancel: false });
 
 		setTimeout(() => {
@@ -72,6 +82,13 @@ export function PhotoBoothMobileCapture({
 			toast({ title: 'Not ready', description: 'Still connecting…', variant: 'warning' });
 			return;
 		}
+
+		trackEvent('photo-booth-capture', 'cancel-photo', [
+			{
+				key: 'photo',
+				value: 'cancel',
+			},
+		]);
 
 		socket.emit(MOBILE_EVENTS.TAKE_PHOTO, { cancel: true });
 		onCancel();

@@ -4,6 +4,7 @@ import { PhotoBoothScreen } from '@/components/photo-booth-container';
 import { Button } from '@/components/ui/button';
 import { useHapticFeedback } from '@/hooks/use-haptic-feedback';
 import { toast } from '@/hooks/use-toast';
+import { useMerlinSession } from '@merlincloud/mc-package';
 import { Check } from 'lucide-react';
 import { useEffect } from 'react';
 
@@ -12,6 +13,8 @@ interface PhotoBoothThankYouProps {
 }
 
 export function PhotoBoothThankYou({ onNavigate }: PhotoBoothThankYouProps) {
+	const { endSession: endMerlinSession } = useMerlinSession();
+
 	const { triggerHaptic } = useHapticFeedback();
 
 	const handleFinish = () => {
@@ -23,6 +26,7 @@ export function PhotoBoothThankYou({ onNavigate }: PhotoBoothThankYouProps) {
 		toast({ title: 'Success!', description: 'Your photo is on its way ✉️', duration: 4000 });
 
 		setTimeout(() => {
+			endMerlinSession();
 			handleFinish();
 		}, 10000);
 	}, []);

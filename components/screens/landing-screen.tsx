@@ -6,6 +6,7 @@ import { useHapticFeedback } from '@/hooks/use-haptic-feedback';
 import { Button } from '../ui/button';
 import { ArrowLeft, Router } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useMerlinSession } from '@merlincloud/mc-package';
 
 interface LandingScreenProps {
 	onNavigate: (screen: AppScreen) => void;
@@ -16,6 +17,8 @@ export function LandingScreen({ onNavigate }: LandingScreenProps) {
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const { triggerHaptic } = useHapticFeedback();
 	const router = useRouter();
+
+	const { startSession: startMerlinSession } = useMerlinSession();
 
 	useEffect(() => {
 		setIsLoaded(true);
@@ -54,6 +57,8 @@ export function LandingScreen({ onNavigate }: LandingScreenProps) {
 	}, []);
 
 	const handleStart = () => {
+		startMerlinSession(new Date()?.toISOString());
+
 		triggerHaptic('medium');
 		onNavigate('name');
 	};

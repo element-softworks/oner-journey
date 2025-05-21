@@ -11,12 +11,14 @@ import { PhotoBoothMobileScreen } from './photo-booth-mobile-container';
 
 import { useSocketRoom } from '@/hooks/use-socket';
 import { CORE_EVENTS, MOBILE_EVENTS, DEVICE_TYPE } from '@/lib/socket-events';
+import { useTrackEvent } from '@/lib/MerlinAnalytics';
 
 interface Props {
 	onNavigate: (screen: PhotoBoothMobileScreen) => void;
 }
 
 export function PhotoBoothMobileDetails({ onNavigate }: Props) {
+	const trackEvent = useTrackEvent();
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [nameError, setNameError] = useState('');
@@ -71,6 +73,17 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 			toast({ title: 'Not ready', description: 'Still connecting…', variant: 'warning' });
 			return;
 		}
+
+		trackEvent('photo-booth-mobile-details', 'submit-details-form', [
+			{
+				key: 'name',
+				value: name,
+			},
+			{
+				key: 'email',
+				value: email,
+			},
+		]);
 
 		// 4) Emit mobile_details into the room
 		socket.emit(MOBILE_EVENTS.DETAILS, { sessionId, name, email });

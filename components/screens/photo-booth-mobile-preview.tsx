@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { useSocketRoom } from '@/hooks/use-socket';
 import { toast } from '@/hooks/use-toast';
+import { useTrackEvent } from '@/lib/MerlinAnalytics';
 import { CORE_EVENTS, DEVICE_TYPE, MOBILE_EVENTS } from '@/lib/socket-events';
 import { useState } from 'react';
 
@@ -19,6 +20,8 @@ export function PhotoBoothMobilePreview({
 	onCancel,
 	sessionId,
 }: PhotoBoothMobilePreviewProps) {
+	const trackEvent = useTrackEvent();
+
 	const [ready, setReady] = useState(false);
 	const { socket } = useSocketRoom({
 		sessionId,
@@ -43,6 +46,12 @@ export function PhotoBoothMobilePreview({
 			return;
 		}
 
+		trackEvent('photo-booth-preview', 'retake-photo', [
+			{
+				key: 'photo',
+				value: 'retake',
+			},
+		]);
 		socket.emit(MOBILE_EVENTS.PHOTO_DECISION, { decision: true, retake: true });
 		onRetake();
 	};
@@ -52,6 +61,12 @@ export function PhotoBoothMobilePreview({
 			return;
 		}
 
+		trackEvent('photo-booth-preview', 'accept-photo', [
+			{
+				key: 'photo',
+				value: 'accepted',
+			},
+		]);
 		// 4) Emit mobile_details into the room
 		socket.emit(MOBILE_EVENTS.PHOTO_DECISION, { decision: true });
 		onAccept();
@@ -63,6 +78,12 @@ export function PhotoBoothMobilePreview({
 			return;
 		}
 
+		trackEvent('photo-booth-preview', 'cancel-photo', [
+			{
+				key: 'photo',
+				value: 'cancel',
+			},
+		]);
 		socket.emit(MOBILE_EVENTS.PHOTO_DECISION, { decision: false });
 		onCancel();
 	};
