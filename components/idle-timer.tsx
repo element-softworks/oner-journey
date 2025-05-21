@@ -14,6 +14,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useSocketRoom } from '@/hooks/use-socket';
 import { CORE_EVENTS, DEVICE_TYPE, MOBILE_EVENTS, KIOSK_EVENTS } from '@/lib/socket-events';
+import { useMerlinSession } from '@merlincloud/mc-package';
+import { useTrackEvent } from '@/lib/MerlinAnalytics';
 
 interface IdleTimerProps {
 	sessionId: string;
@@ -21,6 +23,9 @@ interface IdleTimerProps {
 }
 
 export function IdleTimer({ sessionId, role }: IdleTimerProps) {
+	const { endSession: endMerlinSession } = useMerlinSession();
+	const trackEvent = useTrackEvent();
+
 	const [showWarning, setShowWarning] = useState(false);
 	const [countdown, setCountdown] = useState(30);
 	const router = useRouter();
@@ -34,12 +39,33 @@ export function IdleTimer({ sessionId, role }: IdleTimerProps) {
 				setReady(true);
 			},
 			[CORE_EVENTS.ERROR]: (err: string) => console.error('Socket error:', err),
-			[KIOSK_EVENTS.TIMEOUT_WARNING]: () => setShowWarning(true),
+			[KIOSK_EVENTS.TIMEOUT_WARNING]: () => {
+				trackEvent('photo-booth-idle-timer', 'timeout-warning', [
+					{
+						key: 'warning',
+						value: 'true',
+					},
+				]);
+				setShowWarning(true);
+			},
 			[KIOSK_EVENTS.TIMEOUT_CONFIRM]: () => {
+				trackEvent('photo-booth-idle-timer', 'timeout-dismiss', [
+					{
+						key: 'dismissed',
+						value: 'true',
+					},
+				]);
 				setShowWarning(false);
 				setCountdown(30);
 			},
 			[KIOSK_EVENTS.TIMEOUT_CANCEL]: () => {
+				trackEvent('photo-booth-idle-timer', 'timeout-cancelled', [
+					{
+						key: 'cancelled',
+						value: 'true',
+					},
+				]);
+				endMerlinSession();
 				router.push('/photo-booth');
 			},
 		},
@@ -79,6 +105,14 @@ export function IdleTimer({ sessionId, role }: IdleTimerProps) {
 						if (socket && role === DEVICE_TYPE.MOBILE) {
 							socket.emit(MOBILE_EVENTS.TIMEOUT_CANCEL);
 						}
+						trackEvent('photo-booth-idle-timer', 'timeout-expired', [
+							{
+								key: 'expired',
+								value: 'true',
+							},
+						]);
+						endMerlinSession();
+
 						router.push('/photo-booth');
 						return 0;
 					}
@@ -110,6 +144,14 @@ export function IdleTimer({ sessionId, role }: IdleTimerProps) {
 		if (role === DEVICE_TYPE.MOBILE) {
 			socket.emit(MOBILE_EVENTS.TIMEOUT_CANCEL);
 		}
+
+		trackEvent('photo-booth-idle-timer', 'timeout-cancelled', [
+			{
+				key: 'cancelled',
+				value: 'true',
+			},
+		]);
+		endMerlinSession();
 
 		router.push('/photo-booth');
 	};
