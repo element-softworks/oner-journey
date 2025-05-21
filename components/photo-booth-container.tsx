@@ -22,11 +22,15 @@ export type PhotoBoothScreen =
 interface PhotoBoothContainerProps {
 	initialScreen?: PhotoBoothScreen;
 	sessionId?: string;
+	email?: string;
+	name?: string;
 }
 
 export function PhotoBoothContainer({
 	initialScreen = 'landing',
 	sessionId,
+	email,
+	name,
 }: PhotoBoothContainerProps) {
 	const [currentScreen, setCurrentScreen] = useState<PhotoBoothScreen>(initialScreen);
 	const [isTransitioning, setIsTransitioning] = useState(false);
@@ -113,6 +117,8 @@ export function PhotoBoothContainer({
 				<>
 					{!!photo ? (
 						<PhotoBoothPreview
+							name={name}
+							email={email}
 							sessionId={sessionId ?? ''}
 							photo={photo}
 							onNavigate={navigateToScreen}

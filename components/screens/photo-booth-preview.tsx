@@ -17,6 +17,8 @@ interface PhotoBoothPreviewProps {
 	onNavigate: (screen: PhotoBoothScreen) => void;
 	onRetake: () => void;
 	sessionId: string;
+	email?: string;
+	name?: string;
 }
 
 export function PhotoBoothPreview({
@@ -24,6 +26,8 @@ export function PhotoBoothPreview({
 	onNavigate,
 	onRetake,
 	sessionId,
+	email,
+	name,
 }: PhotoBoothPreviewProps) {
 	const router = useRouter();
 
@@ -42,17 +46,16 @@ export function PhotoBoothPreview({
 	}, [photo]);
 
 	const handleContinue = async () => {
-		// if (!url || !userData.email || isSubmitting) return;
-		if (!photo || isSubmitting) return;
-		setIsSubmitting(true);
+		console.log('submitting photo', photo, email, name, photo);
+		if (!email || hasSubmitted.current || !photo) return;
 		triggerHaptic('medium');
+		hasSubmitted.current = true;
 
 		const base64 = await blobToBase64(photo);
 
 		setIsSubmitting(true);
 		triggerHaptic('medium');
 
-		console.log(url, 'confirmted url');
 		try {
 			const res = await fetch('/api/send-photo', {
 				method: 'POST',
@@ -60,17 +63,15 @@ export function PhotoBoothPreview({
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					// email: userData?.email,
-					// photoUrl: url,
-					// name: userData.name,
-					email: 'nathan@and-element.com',
+					email: email,
 					photoData: base64,
-					name: 'Nathan',
+					name: name,
 				}),
 			});
 
 			if (!res.ok) throw new Error('Failed to send email');
 			hasSubmitted.current = false;
+
 			router.push('/photo-booth/thank-you?sessionId=' + sessionId);
 		} catch (err) {
 			toast({ title: 'Error', description: 'Please try again.', variant: 'destructive' });
@@ -97,7 +98,7 @@ export function PhotoBoothPreview({
 				onRetake();
 			},
 			[KIOSK_EVENTS.PHOTO_DECISION]: (data) => {
-				hasSubmitted.current = true;
+				if (hasSubmitted.current) return;
 				console.log('Cancel photo received:', data);
 				handleContinue();
 			},
