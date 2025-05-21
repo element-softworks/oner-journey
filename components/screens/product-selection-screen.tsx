@@ -203,7 +203,7 @@ export function ProductSelectionScreen({
 			<div className="p-6 mx-auto">
 				<Button
 					onClick={handleContinue}
-					className="mx-auto !mt-8 h-12 rounded-full bg-gray-900 text-white hover:bg-gray-800 group disabled:opacity-50 w-fit px-6"
+					className="mx-auto  h-12 rounded-full bg-gray-900 text-white hover:bg-gray-800 group disabled:opacity-50 w-fit px-6"
 				>
 					<span>CONFIRM</span>
 				</Button>
