@@ -115,9 +115,10 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 						<Input
 							id="name"
 							placeholder="Enter your name"
+							text-white
 							value={name}
 							onChange={(e) => setName(e.target.value)}
-							className={`h-12 ${nameError ? 'border-red-500' : ''}`}
+							className={`h-12 ${nameError ? 'border-red-500' : ''} text-black`}
 						/>
 						{nameError && <p className="text-red-500 text-xs">{nameError}</p>}
 					</div>
@@ -133,7 +134,7 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 							type="email"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
-							className={`h-12 ${emailError ? 'border-red-500' : ''}`}
+							className={`h-12 ${emailError ? 'border-red-500' : ''} text-black`}
 						/>
 						{emailError && <p className="text-red-500 text-xs">{emailError}</p>}
 					</div>

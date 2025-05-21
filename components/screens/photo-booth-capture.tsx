@@ -153,6 +153,14 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 				alt="ONER"
 				className="h-20 w-auto mb-8"
 			/>
+
+			{/* Spinner while loading camera */}
+			{isLoading && (
+				<div className="absolute inset-0 z-10 flex items-center justify-center ">
+					<div className="h-12 w-12 animate-spin rounded-full border-4 border-t-transparent border-white" />
+				</div>
+			)}
+
 			<Webcam
 				ref={webcamRef}
 				audio={false}
