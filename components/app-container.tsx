@@ -21,7 +21,7 @@ export type AppScreen =
 	| 'summary'
 	| 'complete';
 
-export function AppContainer() {
+export function AppContainer({ searchParams }: { searchParams?: any }) {
 	const [currentScreen, setCurrentScreen] = useState<AppScreen>('landing');
 	const [isTransitioning, setIsTransitioning] = useState(false);
 	const [selectedTop, setSelectedTop] = useState(0);
@@ -33,9 +33,12 @@ export function AppContainer() {
 
 	useRegisterSW();
 
-	const navigateTo = (screen: AppScreen) => {
+	const navigateTo = (screen: AppScreen, params?: string[]) => {
 		setIsTransitioning(true);
-		const path = screen === 'landing' ? '/' : `/${screen}`;
+		const path =
+			screen === 'landing'
+				? '/'
+				: `/${screen}${!!params?.length ? '?' + params.join('&') : ''}`;
 		router.push(path);
 		setTimeout(() => {
 			setCurrentScreen(screen);
@@ -73,10 +76,14 @@ export function AppContainer() {
 		};
 	}, [pathname]);
 
+	console.log(searchParams?.bottom, 'colors data');
+
 	return (
 		<UserProvider>
 			<div
-				className={`w-full h-full transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+				className={`w-full h-full transition-opacity duration-500 ${
+					isTransitioning ? 'opacity-0' : 'opacity-100'
+				}`}
 			>
 				{currentScreen === 'landing' && <LandingScreen onNavigate={navigateTo} />}
 				{currentScreen === 'intro' && <IntroductionVideo onNavigate={navigateTo} />}
@@ -100,10 +107,10 @@ export function AppContainer() {
 				{currentScreen === 'summary' && (
 					<SummaryScreen
 						onNavigate={navigateTo}
-						selectedTop={selectedTop}
-						selectedTopColor={selectedTopColor}
-						selectedBottom={selectedBottom}
-						selectedBottomColor={selectedBottomColor}
+						selectedTop={Number(searchParams?.top)}
+						selectedTopColor={`#${searchParams?.top_color}`}
+						selectedBottom={Number(searchParams?.bottom)}
+						selectedBottomColor={`#${searchParams?.bottom_color}`}
 					/>
 				)}
 				{currentScreen === 'complete' && <CompleteScreen onNavigate={navigateTo} />}
