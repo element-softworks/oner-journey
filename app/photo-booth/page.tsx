@@ -7,7 +7,7 @@ export default function PhotoBoothPage({
 }) {
 	return (
 		<div className="min-h-screen w-full bg-[#1C4639] flex items-center justify-center">
-			<div className="h-screen w-[56.25vh] bg-[#1C4639] relative overflow-hidden">
+			<div className="h-screen w-[56.25vh] bg-[#1C4639] relative">
 				<PhotoBoothContainer
 					sessionId={searchParams.sessionId}
 					name={searchParams.name}
