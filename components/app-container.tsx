@@ -47,7 +47,7 @@ export function AppContainer({ searchParams }: { searchParams?: any }) {
 	};
 
 	useEffect(() => {
-		const path = pathname === '/' ? 'landing' : (pathname.substring(1) as AppScreen);
+		const path = pathname === '/' ? 'landing' : (pathname?.substring(1) as AppScreen);
 		const validScreens: AppScreen[] = [
 			'landing',
 			'intro',
@@ -62,18 +62,6 @@ export function AppContainer({ searchParams }: { searchParams?: any }) {
 			: 'landing';
 
 		setCurrentScreen(newScreen);
-
-		const setVH = () => {
-			const vh = window.innerHeight * 0.01;
-			document.documentElement.style.setProperty('--vh', `${vh}px`);
-		};
-
-		setVH();
-		window.addEventListener('resize', setVH);
-
-		return () => {
-			window.removeEventListener('resize', setVH);
-		};
 	}, [pathname]);
 
 	console.log(searchParams?.bottom, 'colors data');
