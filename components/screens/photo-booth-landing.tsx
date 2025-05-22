@@ -98,9 +98,9 @@ export function PhotoBoothLanding({ onStart, onBack }: PhotoBoothLandingProps) {
 				Sorry, your browser doesn’t support embedded videos.
 			</video>
 
-			<div className="absolute inset-0 bg-black/40 z-10" />
+			<div className="absolute w-full h-full inset-0 bg-black/40 z-10" />
 
-			<div className="absolute inset-0 z-20 flex flex-col items-center justify-between p-6">
+			<div className="absolute inset-0 z-20 w-full h-full flex flex-col items-center justify-between p-6">
 				<Button
 					onClick={handleBack}
 					variant="ghost"
