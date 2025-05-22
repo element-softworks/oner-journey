@@ -9,6 +9,7 @@ import { UserProvider } from '@/context/user-context';
 import { SocketProvider } from '@/context/socket-context';
 import { MerlinCloudProvider } from '@merlincloud/mc-package';
 import { MCProvider } from '@/context/mc-provider';
+import { useEffect } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -26,6 +27,14 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+	useEffect(() => {
+		if (typeof document === 'object') {
+			(function () {
+				document.querySelector('body')?.requestFullscreen();
+			})();
+		}
+	}, []);
+
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head>
