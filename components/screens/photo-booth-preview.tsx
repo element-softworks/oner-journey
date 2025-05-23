@@ -12,6 +12,23 @@ import { useSocketRoom } from '@/hooks/use-socket';
 import { CORE_EVENTS, DEVICE_TYPE, KIOSK_EVENTS } from '@/lib/socket-events';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import html2canvas from 'html2canvas';
+
+/**
+ * @description Creates a jpeg image from a html div element
+ * @param {HTMLDivElement} element
+ * @returns {Blob}
+ */
+function elementToBlob(element: HTMLDivElement): Promise<Blob | null> {
+	return new Promise(async (resolve) => {
+		try {
+			const canvas = await html2canvas(element, { width: 480, height: 660 });
+			canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 1);
+		} catch (error) {
+			return resolve(null);
+		}
+	});
+}
 
 interface PhotoBoothPreviewProps {
 	photo: Blob | null;
@@ -31,6 +48,7 @@ export function PhotoBoothPreview({
 	name,
 }: PhotoBoothPreviewProps) {
 	const router = useRouter();
+	const photoContainer = useRef<HTMLDivElement>(null);
 
 	const [url, setUrl] = useState<string | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -47,12 +65,26 @@ export function PhotoBoothPreview({
 	}, [photo]);
 
 	const handleContinue = async () => {
+		let photoPayload = null;
+
+		// We always want a fallback of just the photo, in case we couldn't get anything else
+		if (photoContainer.current !== null) {
+			const wrapped = await elementToBlob(photoContainer.current);
+			if (wrapped) {
+				photoPayload = wrapped;
+			} else {
+				photoPayload = photo;
+			}
+		} else {
+			photoPayload = photo;
+		}
+
 		console.log('submitting photo', photo, email, name, photo);
-		if (!email || hasSubmitted.current || !photo) return;
+		if (!email || hasSubmitted.current || !photoPayload) return;
 		triggerHaptic('medium');
 		hasSubmitted.current = true;
 
-		const base64 = await blobToBase64(photo);
+		const base64 = await blobToBase64(photoPayload);
 
 		setIsSubmitting(true);
 		triggerHaptic('medium');
@@ -113,23 +145,32 @@ export function PhotoBoothPreview({
 
 	if (!url) return null;
 
+	const CAMERA_TRANSFORM = `rotate(${process.env.NEXT_PUBLIC_CAMERA_ROTATION})`;
+
 	return (
-		<div className="relative flex h-screen w-full flex-col items-center justify-center bg-[#1C4639] px-4 py-8">
+		<div className="relative flex h-screen mx-auto max-w-lg flex-col items-center justify-center bg-[#1C4639] px-4 py-8">
 			<img
 				src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
 				alt="ONER"
 				className="h-20 w-auto mb-8"
 			/>
-			<div className="border-8 w-full h-full flex items-center justify-center flex-col border-white bg-white">
+			<div
+				className="border-8 w-full aspect-[2/2.75] flex items-center justify-center flex-col border-white bg-white"
+				ref={photoContainer}
+			>
+				<div style={{ transform: CAMERA_TRANSFORM }}>
+					<img
+						src={url}
+						alt="Your captured selfie"
+						className="block object-cover w-full aspect-square"
+					/>
+				</div>
 				<img
-					src={url}
-					alt="Your captured selfie"
-					className="block object-cover w-full h-[80%]"
-				/>
-				<img
-					src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/lockup-green.svg"
+					width={150}
+					height={80}
+					src="/images/oner-green.svg"
 					alt="ONER"
-					className="h-20 w-auto mx-auto mt-auto mb-auto"
+					className="h-20 min-w-[148px] min-h-[80px] w-auto mx-auto mt-auto mb-auto"
 				/>
 			</div>
 			<img

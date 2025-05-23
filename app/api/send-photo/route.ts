@@ -8,8 +8,6 @@ export async function POST(request: Request) {
 	try {
 		const { email, photoData, name } = await request.json();
 
-		console.log('Received data:', { email, photoData, name });
-
 		const data = await resend.emails.send({
 			from: 'ONER Photo Booth <photobooth@and-element.io>',
 			to: email,
