@@ -149,7 +149,7 @@ export function PhotoBoothPreview({
 			<img
 				src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
 				alt="ONER"
-				className="h-20 w-auto mb-8"
+				className="h-40 w-auto mb-8"
 			/>
 			<div
 				className="border-8 w-full aspect-[2/2.75] flex items-center justify-center flex-col border-white bg-white"
@@ -173,7 +173,7 @@ export function PhotoBoothPreview({
 			<img
 				src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"
 				alt="ONER"
-				className="h-14 w-auto mt-8"
+				className="h-28 w-auto mt-8"
 			/>
 		</div>
 	);

@@ -73,7 +73,7 @@ export function NameEntryScreen({ onNavigate }: NameEntryScreenProps) {
 					<img
 						src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
 						alt="ONER"
-						className="h-20 w-auto"
+						className="h-40 w-auto"
 					/>
 				</div>
 
@@ -136,7 +136,7 @@ export function NameEntryScreen({ onNavigate }: NameEntryScreenProps) {
 					<img
 						src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"
 						alt="ONER"
-						className="h-14 w-auto"
+						className="h-28 w-auto"
 					/>
 				</div>
 			</div>

@@ -153,7 +153,7 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 			<img
 				src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
 				alt="ONER"
-				className="h-20 w-auto mb-8"
+				className="h-40 w-auto mb-8"
 			/>
 
 			{/* Spinner while loading camera */}
@@ -183,7 +183,7 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 			<img
 				src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"
 				alt="ONER"
-				className="h-14 w-auto mt-8"
+				className="h-28 w-auto mt-8"
 			/>
 
 			{countdown !== null && (
