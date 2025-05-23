@@ -13,11 +13,11 @@ export function KeyHoldNavigator() {
 	const holds = useRef<Record<string, HoldInfo>>({});
 
 	useEffect(() => {
-		const THRESHOLD = 2000; // ms
+		const THRESHOLD = 5000; // ms
 
 		const handleKeyDown = (e: KeyboardEvent) => {
 			const key = e.key.toLowerCase();
-			if ((key === 'arrowup' || key === 'arrowdown') && !holds.current[key]) {
+			if (key === ' ' && !holds.current[key]) {
 				// mark start time
 				const start = performance.now();
 				// schedule a forced navigation in case `keyup` never arrives
