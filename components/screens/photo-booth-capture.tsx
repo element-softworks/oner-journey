@@ -146,6 +146,8 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 		);
 	}
 
+	const CAMERA_TRANSFORM = `rotate(${process.env.NEXT_PUBLIC_CAMERA_ROTATION})`;
+
 	return (
 		<div className="relative flex h-screen w-full flex-col items-center justify-center bg-[#1C4639] px-4 py-8">
 			<img
@@ -161,20 +163,23 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 				</div>
 			)}
 
-			<Webcam
-				ref={webcamRef}
-				audio={false}
-				mirrored
-				screenshotFormat="image/jpeg"
-				videoConstraints={{
-					facingMode: { ideal: 'user' },
-					width: { ideal: 1920 },
-					height: { ideal: 1080 },
-				}}
-				onUserMedia={handleUserMedia}
-				onUserMediaError={handleUserMediaError}
-				className="h-full w-full object-cover"
-			/>
+			<div style={{ transform: CAMERA_TRANSFORM, aspectRatio: 1, maxWidth: 384 }}>
+				<Webcam
+					ref={webcamRef}
+					audio={false}
+					mirrored
+					screenshotFormat="image/jpeg"
+					videoConstraints={{
+						facingMode: { ideal: 'user' },
+						width: { ideal: 1920 },
+						height: { ideal: 1080 },
+					}}
+					onUserMedia={handleUserMedia}
+					onUserMediaError={handleUserMediaError}
+					className="h-full w-full object-cover"
+				/>
+			</div>
+
 			<img
 				src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"
 				alt="ONER"
