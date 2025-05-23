@@ -63,7 +63,7 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 	};
 
 	const capturePhoto = useCallback(() => {
-		const base64 = webcamRef.current?.getScreenshot({ width: 1920, height: 1080 });
+		const base64 = webcamRef.current?.getScreenshot({ width: 1024, height: 1024 });
 		return base64 ? dataURItoBlob(base64) : null;
 	}, []);
 
@@ -171,8 +171,8 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 					screenshotFormat="image/jpeg"
 					videoConstraints={{
 						facingMode: { ideal: 'user' },
-						width: { ideal: 1920 },
-						height: { ideal: 1080 },
+						width: { ideal: 1024 },
+						height: { ideal: 1024 },
 					}}
 					onUserMedia={handleUserMedia}
 					onUserMediaError={handleUserMediaError}
