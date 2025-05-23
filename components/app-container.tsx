@@ -89,10 +89,10 @@ export function AppContainer({ searchParams }: { searchParams?: any }) {
 							setSelectedBottom(bottom);
 							setSelectedBottomColor(bottomColor);
 						}}
-						initialTop={selectedTop}
-						initialTopColor={selectedTopColor}
-						initialBottom={selectedBottom}
-						initialBottomColor={selectedBottomColor}
+						initialTop={Number(searchParams?.top)}
+						initialTopColor={`#${searchParams?.top_color}`}
+						initialBottom={Number(searchParams?.bottom)}
+						initialBottomColor={`#${searchParams?.bottom_color}`}
 					/>
 				)}
 				{currentScreen === 'summary' && (

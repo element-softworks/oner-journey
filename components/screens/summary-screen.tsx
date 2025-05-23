@@ -11,7 +11,7 @@ import { supabase } from '@/lib/supabase';
 import { useState } from 'react';
 
 interface SummaryScreenProps {
-	onNavigate: (screen: AppScreen) => void;
+	onNavigate: (screen: AppScreen, params?: string[]) => void;
 	selectedTop: number;
 	selectedTopColor: string;
 	selectedBottom: number;
@@ -35,7 +35,14 @@ export function SummaryScreen({
 	const handleEdit = () => {
 		trackEvent('build-your-fit-summary', 'edit', [{ key: 'edit', value: 'true' }]);
 		triggerHaptic('light');
-		onNavigate('products');
+		onNavigate('products', [
+			`top=${searchParams?.top}`,
+			`top_color=${searchParams?.top_color}`,
+			`bottom=${searchParams?.bottom}`,
+			`bottom_color=${searchParams?.bottom_color}`,
+			`email=${searchParams?.email}`,
+			`name=${searchParams?.name}`,
+		]);
 	};
 
 	const handleFinish = async () => {
