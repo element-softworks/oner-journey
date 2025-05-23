@@ -150,11 +150,13 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 							</Label>
 							<Input
 								id="name"
-								placeholder="Enter first name"
+								placeholder="First name"
 								text-white
 								value={name}
 								onChange={(e) => setName(e.target.value)}
-								className={`h-12 ${nameError ? 'border-red-500' : ''} !text-black`}
+								className={`h-12 text-lg ${
+									nameError ? 'border-red-500' : ''
+								} !text-black`}
 							/>
 							{nameError && <p className="text-red-500 text-xs">{nameError}</p>}
 						</div>
@@ -164,11 +166,11 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 							</Label>
 							<Input
 								id="name"
-								placeholder="Enter last name"
+								placeholder="Last name"
 								text-white
 								value={lastName}
 								onChange={(e) => setLastName(e.target.value)}
-								className={`h-12 ${
+								className={`h-12 text-lg ${
 									lastNameError ? 'border-red-500' : ''
 								} !text-black`}
 							/>
@@ -189,7 +191,9 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 							type="email"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
-							className={`h-12 ${emailError ? 'border-red-500' : ''} !text-black`}
+							className={`h-12 text-lg ${
+								emailError ? 'border-red-500' : ''
+							} !text-black`}
 						/>
 						{emailError && <p className="text-red-500 text-xs">{emailError}</p>}
 					</div>
