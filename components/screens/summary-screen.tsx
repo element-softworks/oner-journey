@@ -8,6 +8,7 @@ import { useUser } from '@/context/user-context';
 import { useTrackEvent } from '@/lib/MerlinAnalytics';
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
+import { useState } from 'react';
 
 interface SummaryScreenProps {
 	onNavigate: (screen: AppScreen) => void;
@@ -29,6 +30,7 @@ export function SummaryScreen({
 	const { triggerHaptic } = useHapticFeedback();
 	const { userData } = useUser();
 	const trackEvent = useTrackEvent();
+	const [finishing, setFinishing] = useState(false);
 
 	const handleEdit = () => {
 		trackEvent('build-your-fit-summary', 'edit', [{ key: 'edit', value: 'true' }]);
@@ -37,10 +39,23 @@ export function SummaryScreen({
 	};
 
 	const handleFinish = async () => {
+		setFinishing(true);
 		trackEvent('build-your-fit-summary', 'finish', [{ key: 'finish', value: 'true' }]);
 		triggerHaptic('medium');
 
 		// Save to Supabase
+
+		const res = await fetch('/api/outfit-selector', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				email: searchParams.email,
+				name: searchParams.name,
+			}),
+		});
+
 		const { error: dbError } = await supabase.from('oner_data').insert({
 			email: searchParams.email,
 			raw: {
@@ -71,7 +86,7 @@ export function SummaryScreen({
 	const selectedBottomItem = BOTTOMS[selectedBottom];
 
 	return (
-		<div className="w-full h-screen flex flex-col bg-gray-50 justify-between">
+		<div className="w-full h-screen flex flex-col bg-gray-50 justify-between overflow-auto">
 			{/* header */}
 			<header className="flex flex-col items-center pt-8 px-6 ">
 				<h1 className="text-3xl font-bold tracking-widest uppercase text-gray-900">
@@ -139,16 +154,18 @@ export function SummaryScreen({
 			{/* action buttons */}
 			<footer className="p-6 flex flex-row gap-4 mx-auto">
 				<Button
+					disabled={finishing}
 					onClick={handleEdit}
 					className="!mt-0 h-12 rounded-full bg-gray-900 text-white hover:bg-gray-800 group disabled:opacity-50 w-fit px-6"
 				>
 					<span>EDIT</span>
 				</Button>
 				<Button
+					disabled={finishing}
 					onClick={handleFinish}
 					className="!mt-0 h-12 rounded-full bg-gray-900 text-white hover:bg-gray-800 group disabled:opacity-50 w-fit px-6"
 				>
-					<span>FINISH</span>
+					<span>{finishing ? 'LOADING...' : 'FINISH'}</span>
 				</Button>
 			</footer>
 		</div>

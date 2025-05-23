@@ -56,7 +56,6 @@ export function ProductSelectionScreen({
 			},
 		]);
 
-		onSelectionChange(selectedTopIndex, topColor, selectedBottomIndex, bottomColor);
 		triggerHaptic('medium');
 		onNavigate('summary', [
 			`top=${selectedTopIndex}`,
