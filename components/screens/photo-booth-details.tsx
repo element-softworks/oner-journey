@@ -50,25 +50,25 @@ export function PhotoBoothDetails({ onNavigate, sessionId }: PhotoBoothDetailsPr
 					<source src="/videos/think-live-video.mp4" type="video/mp4" />
 					Sorry, your browser doesn’t support embedded videos.
 				</video>
-				<div className="w-full max-w-md   z-20">
-					<div className="space-y-6">
+				<div className="w-full max-w-2xl   z-20">
+					<div className="space-y-8">
 						<div className="text-start mb-8">
-							<ol className="flex flex-col gap-4 uppercase">
-								<li className="text-2xl text-white">
+							<ol className="flex flex-col gap-12 uppercase">
+								<li className="text-5xl text-white">
 									1. Use your phone to enter your details.
 								</li>
-								<li className="text-2xl text-white">
+								<li className="text-5xl text-white">
 									2. Ok, you're ALL SET to use the MIRROR - now find your best
 									angles!
 								</li>
 
-								<li className="text-2xl text-white">
+								<li className="text-5xl text-white">
 									3. Ready? On your phone, press Take Photo’.
 								</li>
-								<li className="text-2xl text-white">
+								<li className="text-5xl text-white">
 									4. Strike a pose and wait for the countdown.
 								</li>
-								<li className="text-2xl text-white">
+								<li className="text-5xl text-white">
 									5. Send your photo to your email or try a retake.
 								</li>
 							</ol>
