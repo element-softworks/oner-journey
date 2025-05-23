@@ -64,7 +64,7 @@ export async function POST(request: Request) {
 
           <!-- Preheader -->
           <div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">
-            (Optional) This text will appear in the inbox preview, but not the email body.
+            Your ONER Photo Booth Picture
           </div>
 
           <!-- Header -->
