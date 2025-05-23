@@ -19,11 +19,11 @@ export function KeyHoldNavigator() {
 				// start a 10s timer
 				timers.current[key] = window.setTimeout(() => {
 					if (key === 'w') {
-						router.push('/photo-booth');
+						router.push('/');
 					} else {
-						router.push('/outfit-selector');
+						router.push('/');
 					}
-				}, 10_000);
+				}, 2000);
 			}
 		};
 

@@ -150,21 +150,21 @@ export function EmailEntryScreen({ onNavigate, searchParams }: EmailEntryScreenP
 				</div>
 
 				<div
-					className="absolute bottom-20 z-50 left-0 w-full bg-white shadow-lg transition-transform duration-300 ease-out"
+					className=" z-50 left-0 w-full mt-4 bg-white shadow-lg transition-transform duration-300 ease-out"
 					style={{
-						transform: isFocused
-							? 'translateY(-40%) scale(1.5)'
-							: 'translateY(150%) scale(1.5)',
 						transformOrigin: 'top center',
 					}}
 				>
 					<Keyboard
 						onKeyDown={handleKeyDown}
-						onKeyPress={(key) => {
-							if (key === '{enter}') handleSubmit();
+						onKeyPress={(key, e) => {
+							if (key === '{enter}') {
+								handleSubmit();
+							}
 						}}
 						keyboardRef={(r) => (keyboardRef.current = r)}
 						onChange={onKeyboardChange}
+						inputName="default"
 					/>
 				</div>
 

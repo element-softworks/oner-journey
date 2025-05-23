@@ -11,6 +11,7 @@ import { useUser } from '@/context/user-context';
 import { useHapticFeedback } from '@/hooks/use-haptic-feedback';
 import { validateName } from '@/lib/validators';
 import { useTrackEvent } from '@/lib/MerlinAnalytics';
+import { set } from 'react-hook-form';
 
 interface NameEntryScreenProps {
 	onNavigate: (screen: AppScreen, params?: string[]) => void;
@@ -105,19 +106,16 @@ export function NameEntryScreen({ onNavigate }: NameEntryScreenProps) {
 
 						<Button
 							onClick={handleContinue}
-							className="mx-auto !mt-8 h-12 rounded-full bg-white text-black hover:bg-gray-100 disabled:opacity-50 w-fit px-6"
+							className="mx-auto !mt-8 h-12 rounded-full  bg-white text-black hover:bg-gray-100 disabled:opacity-50 w-fit px-6"
 						>
-							NEXT
+							<span className="mt-[3px]">NEXT</span>
 						</Button>
 					</div>
 				</div>
 
 				<div
-					className="absolute bottom-20 z-50 left-0 w-full bg-white shadow-lg transition-transform duration-300 ease-out"
+					className=" z-50 left-0 w-full mt-4 bg-white shadow-lg transition-transform duration-300 ease-out"
 					style={{
-						transform: isFocused
-							? 'translateY(-40%) scale(1.5)'
-							: 'translateY(150%) scale(1.5)',
 						transformOrigin: 'top center',
 					}}
 				>

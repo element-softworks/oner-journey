@@ -47,7 +47,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 				<meta name="description" content="Premium retail experience in New York" />
 			</head>
-			<body className={relevantOner.className}>
+			<body
+				className={`${relevantOner.className} select-none ${
+					process.env.NODE_ENV === 'development' ? '' : '!cursor-none'
+				}`}
+			>
 				<MCProvider>
 					<ThemeProvider attribute="class" defaultTheme="light" enableSystem>
 						<SocketProvider>

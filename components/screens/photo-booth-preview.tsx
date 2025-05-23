@@ -1,18 +1,15 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import { PhotoBoothScreen } from '@/components/photo-booth-container';
-import { Button } from '@/components/ui/button';
-import { useHapticFeedback } from '@/hooks/use-haptic-feedback';
-import { Camera, Check, RotateCcw } from 'lucide-react';
 import { useUser } from '@/context/user-context';
-import { useToast } from '@/hooks/use-toast';
-import { blobToBase64 } from '@/lib/utils';
+import { useHapticFeedback } from '@/hooks/use-haptic-feedback';
 import { useSocketRoom } from '@/hooks/use-socket';
+import { useToast } from '@/hooks/use-toast';
 import { CORE_EVENTS, DEVICE_TYPE, KIOSK_EVENTS } from '@/lib/socket-events';
-import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { blobToBase64 } from '@/lib/utils';
 import html2canvas from 'html2canvas';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * @description Creates a jpeg image from a html div element
