@@ -28,17 +28,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head>
-				<meta name="viewport" content="width=device-width, initial-scale=1" />
+				<meta
+					name="viewport"
+					content="width=device-width, initial-scale=1, maximum-scale=1"
+				/>
 				<meta name="theme-color" content="#ffffff" />
 				<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 				<link rel="icon" href="/favicon.ico" />
 				<link rel="manifest" href="/manifest.json" />
 				<link rel="stylesheet" href="/fonts.css" />
 				<title>ONER Retail</title>
-				<meta
-					name="viewport"
-					content="width=device-width, initial-scale=1, maximum-scale=1"
-				></meta>
+
 				<meta name="description" content="Premium retail experience in New York" />
 			</head>
 			<body className={inter.className}>
