@@ -38,7 +38,7 @@ export function PhotoBoothThankYou({ onNavigate }: PhotoBoothThankYouProps) {
 					<img
 						src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
 						alt="ONER"
-						className="h-40 w-auto"
+						className="h-60 w-auto"
 					/>
 				</div>
 
@@ -46,10 +46,10 @@ export function PhotoBoothThankYou({ onNavigate }: PhotoBoothThankYouProps) {
 					<div className="space-y-6 text-white flex flex-col items-center justify-center w-full mx-auto">
 						<div className="flex-1 flex flex-col items-center  space-y-4">
 							<div className="flex flex-col items-center gap-4">
-								<p className="z-[50] text-white text-center text-4xl lg:text-5xl font-bold  ">
+								<p className="z-[50] text-white text-center text-4xl lg:text-7xl font-bold  ">
 									THANK YOU
 								</p>
-								<p className="z-[50] text-white text-center text-base font-medium ">
+								<p className="z-[50] text-white text-center text-3xl font-medium ">
 									We hope you love your photo.
 								</p>
 							</div>
@@ -60,7 +60,7 @@ export function PhotoBoothThankYou({ onNavigate }: PhotoBoothThankYouProps) {
 					<img
 						src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"
 						alt="ONER"
-						className="h-28 w-auto"
+						className="h-32 w-auto"
 					/>
 				</div>
 			</div>

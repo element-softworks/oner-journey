@@ -149,11 +149,11 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 	const CAMERA_TRANSFORM = `rotate(${process.env.NEXT_PUBLIC_CAMERA_ROTATION})`;
 
 	return (
-		<div className="relative flex h-screen w-full flex-col items-center justify-center bg-[#1C4639] px-4 py-8">
+		<div className="relative flex h-screen w-full flex-col items-center justify-center bg-[#1C4639] px-4 py-16">
 			<img
 				src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
 				alt="ONER"
-				className="h-40 w-auto mb-8"
+				className="h-60 w-auto mb-auto"
 			/>
 
 			{/* Spinner while loading camera */}
@@ -183,7 +183,7 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 			<img
 				src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"
 				alt="ONER"
-				className="h-28 w-auto mt-8"
+				className="h-32 w-auto mt-auto"
 			/>
 
 			{countdown !== null && (

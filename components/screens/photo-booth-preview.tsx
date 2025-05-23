@@ -145,11 +145,11 @@ export function PhotoBoothPreview({
 	const CAMERA_TRANSFORM = `rotate(${process.env.NEXT_PUBLIC_CAMERA_ROTATION})`;
 
 	return (
-		<div className="relative flex h-screen mx-auto max-w-lg flex-col items-center justify-center bg-[#1C4639] px-4 py-8">
+		<div className="relative flex h-screen mx-auto max-w-3xl flex-col items-center justify-center bg-[#1C4639] px-4 py-16">
 			<img
 				src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
 				alt="ONER"
-				className="h-40 w-auto mb-8"
+				className="h-60 w-auto mb-auto"
 			/>
 			<div
 				className="border-8 w-full aspect-[2/2.75] flex items-center justify-center flex-col border-white bg-white"
@@ -173,7 +173,7 @@ export function PhotoBoothPreview({
 			<img
 				src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"
 				alt="ONER"
-				className="h-28 w-auto mt-8"
+				className="h-32 w-auto mt-auto"
 			/>
 		</div>
 	);
