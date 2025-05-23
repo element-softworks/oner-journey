@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { validateName, validateEmail } from '@/lib/validators';
+import { validateName, validateEmail, validateLastName } from '@/lib/validators';
 import { useToast } from '@/hooks/use-toast';
 import { PhotoBoothMobileScreen } from './photo-booth-mobile-container';
 
@@ -64,7 +64,7 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 			setNameError('');
 		}
 
-		if (!validateName(lastName)) {
+		if (!validateLastName(lastName)) {
 			setLastNameError('Please enter your last name');
 			valid = false;
 		} else {
@@ -98,7 +98,7 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 		// 4) Emit mobile_details into the room
 		socket.emit(MOBILE_EVENTS.DETAILS, { sessionId, name: `${name} ${lastName}`, email });
 		onNavigate('capture');
-	}, [socket, ready, sessionId, name, email, toast, onNavigate]);
+	}, [socket, ready, sessionId, name, email, toast, onNavigate, lastName]);
 
 	// If sessionId is missing, you might want to redirect or show an error
 	useEffect(() => {
@@ -112,7 +112,7 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 	}, [sessionId, toast]);
 
 	return (
-		<div className="flex flex-col h-full bg-[#1C4639] p-6 py-16">
+		<div className="flex flex-col min-h-[100dvh] w-full  mx-auto bg-[#1C4639] p-6 py-16 max-w-2xl">
 			<div className="flex justify-center flex-1">
 				<img
 					src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"

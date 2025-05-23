@@ -59,7 +59,7 @@ export function NameEntryScreen({ onNavigate }: NameEntryScreenProps) {
 	};
 
 	return (
-		<div className="flex flex-col h-full bg-[#5B7FCA] p-6 py-16">
+		<div className="flex flex-col h-full bg-[#5B7FCA] p-6 py-16 max-w-2xl mx-auto">
 			<div className="flex justify-center flex-1">
 				<img
 					src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"

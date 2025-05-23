@@ -78,7 +78,7 @@ export function EmblaCarousel({
 
 	return (
 		<div className="relative">
-			<div className="overflow-hidden" ref={emblaRef}>
+			<div className="" ref={emblaRef}>
 				<div className="flex -ml-4">
 					{slides.map((slide, index) => (
 						<div
@@ -86,7 +86,7 @@ export function EmblaCarousel({
 							className="relative flex-[0_0_70%] min-w-0 pl-4"
 							style={{ opacity: index === selectedIndex ? 1 : 0.4 }}
 						>
-							<div className="relative h-[200px] overflow-hidden rounded-lg">
+							<div className="relative h-[20vw] rounded-lg">
 								<img
 									src={slide.image}
 									alt={slide.name}

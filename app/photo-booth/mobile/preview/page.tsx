@@ -6,13 +6,8 @@ export default function PhotoBoothMobilePreviewPage({
 	searchParams: { sessionId: string };
 }) {
 	return (
-		<div className="min-h-screen w-full bg-[#1C4639] flex items-center justify-center">
-			<div className="h-screen w-full max-w-md bg-[#1C4639] relative overflow-hidden">
-				<PhotoBoothMobileContainer
-					initialScreen="preview"
-					sessionId={searchParams.sessionId}
-				/>
-			</div>
+		<div className="min-h-[100dvh] h-[100%] w-full bg-[#1C4639] flex items-center justify-center ">
+			<PhotoBoothMobileContainer initialScreen="preview" sessionId={searchParams.sessionId} />
 		</div>
 	);
 }

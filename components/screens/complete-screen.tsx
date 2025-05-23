@@ -28,13 +28,13 @@ export function CompleteScreen({ onNavigate }: CompleteScreenProps) {
 		setTimeout(() => {
 			endMerlinSession();
 
-			router.push('/outfit-selector');
+			// router.push('/outfit-selector');
 		}, 10000);
 	}, []);
 
 	return (
 		<div className="flex flex-col h-full bg-[#5B7FCA]">
-			<div className="flex flex-col h-full bg-[#5B7FCA] p-6 py-16">
+			<div className="flex flex-col h-full bg-[#5B7FCA] max-w-2xl p-6 py-16 mx-auto">
 				<div className="flex justify-center flex-1">
 					<img
 						src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
@@ -60,11 +60,11 @@ export function CompleteScreen({ onNavigate }: CompleteScreenProps) {
 								<p className="z-[50] text-white text-center text-3xl font-medium uppercase ">
 									Scan below to discover more
 								</p>
-								<div className="flex flex-col items-center ">
+								<div className="flex flex-col items-center mt-4">
 									<img
 										src="https://api.merlincloud.ai/pg/BFQP/qr"
 										alt="Scan QR code"
-										className="w-44 h-44 mb-2 rounded-lg border bg-white"
+										className="sm:w-[40vw] w-[60vw] max-w-[200px] mb-2 rounded-lg border bg-white"
 									/>
 								</div>
 							</div>

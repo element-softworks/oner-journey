@@ -1,14 +1,13 @@
 'use client';
 
-import './globals.css';
-import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
-import { UserProvider } from '@/context/user-context';
-import { SocketProvider } from '@/context/socket-context';
-import { MerlinCloudProvider } from '@merlincloud/mc-package';
 import { MCProvider } from '@/context/mc-provider';
+import { SocketProvider } from '@/context/socket-context';
+import { UserProvider } from '@/context/user-context';
+import type { Viewport } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
