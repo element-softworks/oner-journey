@@ -15,14 +15,13 @@ export function KeyHoldNavigator() {
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			const key = e.key.toLowerCase();
-			if ((key === 'w' || key === 'a') && !timers.current[key]) {
+			console.log('Key pressed:', key);
+
+			if (key === 'arrowup' || key === 'arrowdown') {
+				console.log('Starting timer for key:', key);
 				// start a 10s timer
-				timers.current[key] = window.setTimeout(() => {
-					if (key === 'w') {
-						router.push('/');
-					} else {
-						router.push('/');
-					}
+				window.setTimeout(() => {
+					router.push('/'); // navigate to home
 				}, 2000);
 			}
 		};
@@ -36,7 +35,9 @@ export function KeyHoldNavigator() {
 		};
 
 		window.addEventListener('keydown', handleKeyDown);
+
 		window.addEventListener('keyup', handleKeyUp);
+
 		return () => {
 			window.removeEventListener('keydown', handleKeyDown);
 			window.removeEventListener('keyup', handleKeyUp);
