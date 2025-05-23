@@ -70,10 +70,10 @@ export function NameEntryScreen({ onNavigate }: NameEntryScreenProps) {
 
 			<div>
 				<div className="text-center mb-8">
-					<h1 className="text-5xl lg:text-5xl font-semibold text-white mb-2">
+					<h1 className="text-5xl lg:text-7xl font-semibold text-white mb-2">
 						GET READY
 					</h1>
-					<p className="text-xl lg:text-xl font-regular text-white mb-2">
+					<p className="text-xl lg:text-2xl font-regular text-white mb-2">
 						Please enter your name below
 					</p>
 				</div>

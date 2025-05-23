@@ -94,10 +94,10 @@ export function EmailEntryScreen({ onNavigate, searchParams }: EmailEntryScreenP
 
 			<div>
 				<div className="text-center mb-8">
-					<h1 className="text-5xl lg:text-5xl font-semibold text-white mb-2">
+					<h1 className="text-5xl lg:text-7xl font-semibold text-white mb-2">
 						ALMOST THERE
 					</h1>
-					<p className="text-xl lg:text-xl font-regular text-white mb-2">
+					<p className="text-xl lg:text-2xl font-regular text-white mb-2">
 						Please enter your email address below
 					</p>
 				</div>

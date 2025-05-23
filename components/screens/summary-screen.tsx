@@ -93,74 +93,73 @@ export function SummaryScreen({
 	const selectedBottomItem = BOTTOMS[selectedBottom];
 
 	return (
-		<div className="w-full h-screen flex flex-col bg-gray-50 justify-between overflow-auto">
-			{/* header */}
-			<header className="flex flex-col items-center pt-8 px-6 ">
-				<h1 className="text-3xl font-bold tracking-widest uppercase text-gray-900">
-					FIT CHECK
-				</h1>
-				<p className="mt-1 text-gray-600">Here's what you've selected</p>
-			</header>
-
-			{/* selected items */}
-			<div className="flex flex-col items-center ">
-				{/* TOP */}
-				<motion.div
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.4 }}
-					className="flex flex-col items-center"
-				>
-					<div className="w-[20vw] h-[20vw] rounded-3xl overflow-hidden ">
-						<img
-							src={
-								selectedTopItem?.colorImages?.[selectedTopColor] ??
-								selectedTopItem?.image
-							}
-							alt={selectedTopItem?.name}
-							className="w-full h-full object-cover"
-						/>
-					</div>
-					<h3 className="mt-4 text-lg font-semibold text-gray-900">
-						{selectedTopItem?.name}
-					</h3>
-					<p className="text-sm text-gray-600">
-						{selectedTopItem?.colors?.find?.((c) => c.value === selectedTopColor)?.name}
-					</p>
-				</motion.div>
-
-				{/* BOTTOM */}
-				<motion.div
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.4, delay: 0.1 }}
-					className="flex flex-col items-center"
-				>
-					<div className="w-[20vw] h-[20vw] rounded-3xl overflow-hidden ">
-						<img
-							src={
-								selectedBottomItem?.colorImages?.[selectedBottomColor] ??
-								selectedBottomItem?.image
-							}
-							alt={selectedBottomItem?.name}
-							className="w-full h-full object-cover"
-						/>
-					</div>
-					<h3 className="mt-4 text-lg font-semibold text-gray-900">
-						{selectedBottomItem?.name}
-					</h3>
-					<p className="text-sm text-gray-600">
-						{
-							selectedBottomItem?.colors?.find?.(
-								(c) => c.value === selectedBottomColor
-							)?.name
-						}
-					</p>
-				</motion.div>
+		<div className="w-full h-screen flex flex-col bg-gray-50 max-w-xl mx-auto justify-around ">
+			<div className="flex flex-col items-center pt-8 px-6">
+				<h1 className="text-3xl lg:text-6xl font-bold text-gray-900">BUILD YOUR FIT</h1>
 			</div>
 
-			{/* action buttons */}
-			<footer className="p-6 flex flex-row gap-4 mx-auto">
+			<div className="flex flex-col items-center gap-4">
+				<div className="mt-4">
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.4 }}
+						className="flex flex-col items-center"
+					>
+						<div className="h-[20vw] lg:h-[50vw] w-auto rounded-3xl overflow-hidden ">
+							<img
+								src={
+									selectedTopItem?.colorImages?.[selectedTopColor] ??
+									selectedTopItem?.image
+								}
+								alt={selectedTopItem?.name}
+								className="w-full h-full object-cover"
+							/>
+						</div>
+						<h3 className="mt-4 text-lg font-semibold text-gray-900">
+							{selectedTopItem?.name}
+						</h3>
+						<p className="text-sm text-gray-600">
+							{
+								selectedTopItem?.colors?.find?.((c) => c.value === selectedTopColor)
+									?.name
+							}
+						</p>
+					</motion.div>
+				</div>
+
+				<div className="mt-12">
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.4 }}
+						className="flex flex-col items-center"
+					>
+						<div className="h-[20vw] lg:h-[50vw] w-auto rounded-3xl overflow-hidden ">
+							<img
+								src={
+									selectedBottomItem?.colorImages?.[selectedBottomColor] ??
+									selectedBottomItem?.image
+								}
+								alt={selectedBottomItem?.name}
+								className="w-full h-full object-cover"
+							/>
+						</div>
+						<h3 className="mt-4 text-lg font-semibold text-gray-900">
+							{selectedBottomItem?.name}
+						</h3>
+						<p className="text-sm text-gray-600">
+							{
+								selectedBottomItem?.colors?.find?.(
+									(c) => c.value === selectedBottomColor
+								)?.name
+							}
+						</p>
+					</motion.div>
+				</div>
+			</div>
+
+			<div className="p-6 flex flex-row gap-4 mx-auto">
 				<Button
 					disabled={finishing}
 					onClick={handleEdit}
@@ -175,7 +174,7 @@ export function SummaryScreen({
 				>
 					<span>{finishing ? 'LOADING...' : 'FINISH'}</span>
 				</Button>
-			</footer>
+			</div>
 		</div>
 	);
 }

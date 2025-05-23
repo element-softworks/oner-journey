@@ -124,81 +124,83 @@ export function ProductSelectionScreen({
 	return (
 		<div className="w-full h-screen flex flex-col bg-gray-50 max-w-xl mx-auto justify-around ">
 			<div className="flex flex-col items-center pt-8 px-6">
-				<h1 className="text-3xl font-bold text-gray-900">BUILD YOUR FIT</h1>
+				<h1 className="text-3xl lg:text-6xl font-bold text-gray-900">BUILD YOUR FIT</h1>
 			</div>
 
-			<div className="mt-4">
-				<EmblaCarousel
-					selectedColor={topColor}
-					slides={TOPS.map((top, index) => ({
-						...top,
-						image:
-							index === selectedTopIndex
-								? getCurrentTopImage() || top.image
-								: top.colorImages?.[topColor] || top.image,
-					}))}
-					onSlideChange={handleTopChange}
-					initialSlide={initialTop}
-				/>
+			<div className="flex flex-col items-center gap-4">
+				<div className="mt-4">
+					<EmblaCarousel
+						selectedColor={topColor}
+						slides={TOPS.map((top, index) => ({
+							...top,
+							image:
+								index === selectedTopIndex
+									? getCurrentTopImage() || top.image
+									: top.colorImages?.[topColor] || top.image,
+						}))}
+						onSlideChange={handleTopChange}
+						initialSlide={initialTop}
+					/>
 
-				{selectedTopIndex !== null && TOPS[selectedTopIndex] && (
-					<div className="flex justify-center gap-3 mt-4">
-						{TOPS[selectedTopIndex].colors.map((color) => (
-							<motion.button
-								key={color.value}
-								onClick={() => {
-									setTopColor(color.value);
-									triggerHaptic('light');
-								}}
-								className={`w-8 h-8 rounded-full transition-transform ${
-									topColor === color.value
-										? 'scale-110 ring-2 ring-gray-900 ring-offset-2 ring-offset-gray-50'
-										: ''
-								}`}
-								style={{ backgroundColor: color.value }}
-								whileTap={{ scale: 0.95 }}
-								aria-label={`Select ${color.name}`}
-							/>
-						))}
-					</div>
-				)}
-			</div>
+					{selectedTopIndex !== null && TOPS[selectedTopIndex] && (
+						<div className="flex justify-center gap-3 mt-4">
+							{TOPS[selectedTopIndex].colors.map((color) => (
+								<motion.button
+									key={color.value}
+									onClick={() => {
+										setTopColor(color.value);
+										triggerHaptic('light');
+									}}
+									className={`w-8 h-8 rounded-full transition-transform ${
+										topColor === color.value
+											? 'scale-110 ring-2 ring-gray-900 ring-offset-2 ring-offset-gray-50'
+											: ''
+									}`}
+									style={{ backgroundColor: color.value }}
+									whileTap={{ scale: 0.95 }}
+									aria-label={`Select ${color.name}`}
+								/>
+							))}
+						</div>
+					)}
+				</div>
 
-			<div className="mt-12">
-				<EmblaCarousel
-					selectedColor={bottomColor}
-					slides={BOTTOMS.map((bottom, index) => ({
-						...bottom,
-						image:
-							index === selectedBottomIndex
-								? getCurrentBottomImage() || bottom.image
-								: bottom.colorImages?.[bottomColor] || bottom.image,
-					}))}
-					onSlideChange={handleBottomChange}
-					initialSlide={initialBottom}
-				/>
+				<div className="mt-12">
+					<EmblaCarousel
+						selectedColor={bottomColor}
+						slides={BOTTOMS.map((bottom, index) => ({
+							...bottom,
+							image:
+								index === selectedBottomIndex
+									? getCurrentBottomImage() || bottom.image
+									: bottom.colorImages?.[bottomColor] || bottom.image,
+						}))}
+						onSlideChange={handleBottomChange}
+						initialSlide={initialBottom}
+					/>
 
-				{selectedBottomIndex !== null && BOTTOMS[selectedBottomIndex] && (
-					<div className="flex justify-center gap-3 mt-4">
-						{BOTTOMS[selectedBottomIndex].colors.map((color) => (
-							<motion.button
-								key={color.value}
-								onClick={() => {
-									setBottomColor(color.value);
-									triggerHaptic('light');
-								}}
-								className={`w-8 h-8 rounded-full transition-transform ${
-									bottomColor === color.value
-										? 'scale-110 ring-2 ring-gray-900 ring-offset-2 ring-offset-gray-50'
-										: ''
-								}`}
-								style={{ backgroundColor: color.value }}
-								whileTap={{ scale: 0.95 }}
-								aria-label={`Select ${color.name}`}
-							/>
-						))}
-					</div>
-				)}
+					{selectedBottomIndex !== null && BOTTOMS[selectedBottomIndex] && (
+						<div className="flex justify-center gap-3 mt-4">
+							{BOTTOMS[selectedBottomIndex].colors.map((color) => (
+								<motion.button
+									key={color.value}
+									onClick={() => {
+										setBottomColor(color.value);
+										triggerHaptic('light');
+									}}
+									className={`w-8 h-8 rounded-full transition-transform ${
+										bottomColor === color.value
+											? 'scale-110 ring-2 ring-gray-900 ring-offset-2 ring-offset-gray-50'
+											: ''
+									}`}
+									style={{ backgroundColor: color.value }}
+									whileTap={{ scale: 0.95 }}
+									aria-label={`Select ${color.name}`}
+								/>
+							))}
+						</div>
+					)}
+				</div>
 			</div>
 
 			<div className="p-6 mx-auto">
