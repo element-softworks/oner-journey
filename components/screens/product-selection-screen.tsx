@@ -17,6 +17,7 @@ interface ProductSelectionScreenProps {
 	initialTopColor: string;
 	initialBottom: number;
 	initialBottomColor: string;
+	searchParams?: any;
 }
 
 export function ProductSelectionScreen({
@@ -25,6 +26,7 @@ export function ProductSelectionScreen({
 	initialTop,
 	initialTopColor,
 	initialBottom,
+	searchParams,
 	initialBottomColor,
 }: ProductSelectionScreenProps) {
 	const [selectedTopIndex, setSelectedTopIndex] = useState(initialTop);
@@ -61,6 +63,8 @@ export function ProductSelectionScreen({
 			`top_color=${topColor?.split('#')?.[1]}`,
 			`bottom=${selectedBottomIndex}`,
 			`bottom_color=${bottomColor?.split('#')?.[1]}`,
+			`email=${searchParams?.email}`,
+			`name=${searchParams?.name}`,
 		]);
 	};
 

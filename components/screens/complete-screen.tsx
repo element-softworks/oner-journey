@@ -28,7 +28,7 @@ export function CompleteScreen({ onNavigate }: CompleteScreenProps) {
 		setTimeout(() => {
 			endMerlinSession();
 
-			// router.push('/outfit-selector');
+			router.push('/outfit-selector');
 		}, 10000);
 	}, []);
 

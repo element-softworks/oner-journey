@@ -12,7 +12,7 @@ import { ArrowRight } from 'lucide-react';
 import { useTrackEvent } from '@/lib/MerlinAnalytics';
 
 interface NameEntryScreenProps {
-	onNavigate: (screen: AppScreen) => void;
+	onNavigate: (screen: AppScreen, params?: string[]) => void;
 }
 
 export function NameEntryScreen({ onNavigate }: NameEntryScreenProps) {
@@ -49,7 +49,7 @@ export function NameEntryScreen({ onNavigate }: NameEntryScreenProps) {
 
 		updateName(name);
 		triggerHaptic('success');
-		onNavigate('email');
+		onNavigate('email', [`name=${name}`]);
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {

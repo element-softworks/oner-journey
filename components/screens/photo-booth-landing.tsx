@@ -85,44 +85,42 @@ export function PhotoBoothLanding({ onStart, onBack }: PhotoBoothLandingProps) {
 	};
 
 	return (
-		<div className="relative flex flex-col min-h-[100dvh]">
-			{/* Video background */}
-			<video
-				ref={videoRef}
-				className="absolute inset-0 w-full h-full object-cover"
-				playsInline
-				muted
-				loop
-				autoPlay
-				preload="auto"
+		<div className="relative w-full h-screen cursor-pointer">
+			<div
+				className={`w-full h-full flex items-center justify-center transition-opacity duration-1000`}
 			>
-				<source src="/videos/think-live-video.mp4" type="video/mp4" />
-				Sorry, your browser doesn’t support embedded videos.
-			</video>
+				<video
+					className="w-full h-full object-cover"
+					playsInline
+					muted
+					loop
+					autoPlay
+					preload="auto"
+				>
+					<source src="/videos/think-live-video.mp4" type="video/mp4" />
+					Your browser does not support the video tag.
+				</video>
 
-			{/* Dark overlay */}
-			<div className="absolute inset-0 bg-black/50" />
-
-			{/* Main content */}
-			<div className="relative z-10 flex flex-col flex-1 items-center justify-center px-4 py-safe-top pb-6">
-				{/* Center panel */}
-				<div className="flex flex-col items-center text-center">
-					<h1
-						className="text-white font-bold mb-6 max-w-xl
+				<div className="absolute inset-0 bg-black/40 z-10" />
+				<div className="flex flex-col items-center justify-center w-full h-full gap-4 mx-auto absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+					<div className="flex flex-col items-center text-center">
+						<h1
+							className="text-white font-bold mb-6 max-w-xl
                          text-2xl sm:text-3xl md:text-4xl lg:text-5xl"
-					>
-						SCAN BELOW TO USE OUR SELFIE MIRROR
-					</h1>
+						>
+							SCAN BELOW TO USE OUR SELFIE MIRROR
+						</h1>
 
-					{qrCodeUrl ? (
-						<img
-							src={qrCodeUrl}
-							alt="Scan QR code"
-							className="sm:w-[40vw] w-[60vw] aspect-square rounded-lg border-2 bg-white p-1"
-						/>
-					) : (
-						<p className="text-white text-lg sm:text-xl">Generating session…</p>
-					)}
+						{qrCodeUrl ? (
+							<img
+								src={qrCodeUrl}
+								alt="Scan QR code"
+								className="sm:w-[40vw] w-[60vw] max-w-[500px] aspect-square rounded-lg border-2 bg-white p-1"
+							/>
+						) : (
+							<p className="text-white text-lg sm:text-xl">Generating session…</p>
+						)}
+					</div>
 				</div>
 			</div>
 		</div>

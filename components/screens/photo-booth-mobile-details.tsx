@@ -12,6 +12,7 @@ import { PhotoBoothMobileScreen } from './photo-booth-mobile-container';
 import { useSocketRoom } from '@/hooks/use-socket';
 import { CORE_EVENTS, MOBILE_EVENTS, DEVICE_TYPE } from '@/lib/socket-events';
 import { useTrackEvent } from '@/lib/MerlinAnalytics';
+import { supabase } from '@/lib/supabase';
 
 interface Props {
 	onNavigate: (screen: PhotoBoothMobileScreen) => void;
@@ -55,7 +56,7 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 	});
 
 	// 3) Form submit
-	const handleSubmit = useCallback(() => {
+	const handleSubmit = useCallback(async () => {
 		let valid = true;
 		if (!validateName(name)) {
 			setNameError('Please enter your name');
@@ -94,6 +95,16 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 				value: email,
 			},
 		]);
+
+		const { error: dbError } = await supabase.from('oner_data').insert({
+			email: email,
+			raw: {
+				type: 'photo_booth',
+				name: name,
+				sessionId: sessionId,
+				timestamp: new Date().toISOString(),
+			},
+		});
 
 		// 4) Emit mobile_details into the room
 		socket.emit(MOBILE_EVENTS.DETAILS, { sessionId, name: `${name} ${lastName}`, email });

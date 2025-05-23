@@ -125,7 +125,7 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 	if (error) {
 		return (
 			<div className="flex h-screen w-full flex-col items-center justify-center bg-[#1C4639] p-6">
-				<div className="w-full max-w-md space-y-6 rounded-2xl bg-white p-8 shadow-lg">
+				<div className="w-full  space-y-6 rounded-2xl bg-white p-8 shadow-lg">
 					<h2 className="text-center text-2xl font-bold text-gray-900">
 						Camera Access Required
 					</h2>

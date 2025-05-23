@@ -6,7 +6,7 @@ export default function PhotoBoothStartPage({
 	searchParams: { sessionId: string; name: string; email: string };
 }) {
 	return (
-		<div className="min-h-[100dvh] w-full bg-[#1C4639] flex items-center justify-center">
+		<div className="min-h-[100dvh] w-full bg-[#1C4639] flex items-center justify-center h-full">
 			<PhotoBoothContainer
 				initialScreen="landing"
 				sessionId={searchParams.sessionId}

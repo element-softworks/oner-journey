@@ -11,6 +11,7 @@ import { blobToBase64 } from '@/lib/utils';
 import { useSocketRoom } from '@/hooks/use-socket';
 import { CORE_EVENTS, DEVICE_TYPE, KIOSK_EVENTS } from '@/lib/socket-events';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
 
 interface PhotoBoothPreviewProps {
 	photo: Blob | null;
@@ -57,6 +58,11 @@ export function PhotoBoothPreview({
 		triggerHaptic('medium');
 
 		try {
+			if (dbError) {
+				console.error('Supabase error:', dbError);
+				throw dbError;
+			}
+
 			const res = await fetch('/api/send-photo', {
 				method: 'POST',
 				headers: {

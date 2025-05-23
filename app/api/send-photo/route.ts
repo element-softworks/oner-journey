@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { supabase } from '@/lib/supabase';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -18,7 +19,6 @@ export async function POST(request: Request) {
 					filename: 'photobooth.jpg',
 					content: photoData,
 					contentType: 'image/jpeg',
-					// cid: 'selfie'           // uncomment when Resend ships cid support
 				},
 			],
 			html: `

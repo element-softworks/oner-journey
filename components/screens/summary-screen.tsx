@@ -1,5 +1,3 @@
-'use client';
-
 import { AppScreen } from '@/components/app-container';
 import { Button } from '@/components/ui/button';
 import { useHapticFeedback } from '@/hooks/use-haptic-feedback';
@@ -9,6 +7,7 @@ import { BOTTOMS } from '@/lib/data/bottoms';
 import { useUser } from '@/context/user-context';
 import { useTrackEvent } from '@/lib/MerlinAnalytics';
 import { motion } from 'framer-motion';
+import { supabase } from '@/lib/supabase';
 
 interface SummaryScreenProps {
 	onNavigate: (screen: AppScreen) => void;
@@ -16,6 +15,7 @@ interface SummaryScreenProps {
 	selectedTopColor: string;
 	selectedBottom: number;
 	selectedBottomColor: string;
+	searchParams?: any;
 }
 
 export function SummaryScreen({
@@ -24,6 +24,7 @@ export function SummaryScreen({
 	selectedTopColor,
 	selectedBottom,
 	selectedBottomColor,
+	searchParams,
 }: SummaryScreenProps) {
 	const { triggerHaptic } = useHapticFeedback();
 	const { userData } = useUser();
@@ -35,9 +36,34 @@ export function SummaryScreen({
 		onNavigate('products');
 	};
 
-	const handleFinish = () => {
+	const handleFinish = async () => {
 		trackEvent('build-your-fit-summary', 'finish', [{ key: 'finish', value: 'true' }]);
 		triggerHaptic('medium');
+
+		// Save to Supabase
+		const { error: dbError } = await supabase.from('oner_data').insert({
+			email: searchParams.email,
+			raw: {
+				type: 'outfit_selector',
+				name: searchParams?.name,
+				selected_top: {
+					id: selectedTop,
+					name: TOPS[selectedTop].name,
+					color: selectedTopColor,
+				},
+				selected_bottom: {
+					id: selectedBottom,
+					name: BOTTOMS[selectedBottom].name,
+					color: selectedBottomColor,
+				},
+				timestamp: new Date().toISOString(),
+			},
+		});
+
+		if (dbError) {
+			console.error('Failed to save to Supabase:', dbError);
+		}
+
 		onNavigate('complete');
 	};
 
@@ -51,7 +77,7 @@ export function SummaryScreen({
 				<h1 className="text-3xl font-bold tracking-widest uppercase text-gray-900">
 					FIT CHECK
 				</h1>
-				<p className="mt-1 text-gray-600">Here's what you’ve selected</p>
+				<p className="mt-1 text-gray-600">Here's what you've selected</p>
 			</header>
 
 			{/* selected items */}

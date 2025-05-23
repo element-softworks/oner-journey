@@ -35,6 +35,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<link rel="manifest" href="/manifest.json" />
 				<link rel="stylesheet" href="/fonts.css" />
 				<title>ONER Retail</title>
+				<meta
+					name="viewport"
+					content="width=device-width, initial-scale=1, maximum-scale=1"
+				></meta>
 				<meta name="description" content="Premium retail experience in New York" />
 			</head>
 			<body className={inter.className}>

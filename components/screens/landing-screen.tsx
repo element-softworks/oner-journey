@@ -83,20 +83,7 @@ export function LandingScreen({ onNavigate }: LandingScreenProps) {
 				</video>
 
 				<div className="absolute inset-0 bg-black/40 z-10" />
-				<Button
-					onClick={(e) => {
-						e.stopPropagation();
-						e.preventDefault();
-						triggerHaptic('light');
-						router.push('/');
-					}}
-					variant="ghost"
-					size="icon"
-					className="self-start text-white hover:bg-white/10 z-50 absolute top-6 left-6"
-				>
-					<ArrowLeft className="h-6 w-6" />
-					<span className="sr-only">Back</span>
-				</Button>
+
 				<div className="flex flex-col items-center justify-center w-full h-full gap-4 mx-auto absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 					<p className="z-[50] text-white text-center text-4xl lg:text-5xl font-bold  ">
 						BUILD YOUR FIT

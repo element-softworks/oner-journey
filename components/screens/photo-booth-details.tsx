@@ -4,6 +4,8 @@ import { PhotoBoothScreen } from '@/components/photo-booth-container';
 import { Button } from '@/components/ui/button';
 import { useSocketRoom } from '@/hooks/use-socket';
 import { CORE_EVENTS, DEVICE_TYPE, KIOSK_EVENTS, MOBILE_EVENTS } from '@/lib/socket-events';
+import { supabase } from '@/lib/supabase';
+import { useRef, useState } from 'react';
 
 interface PhotoBoothDetailsProps {
 	onNavigate: (
@@ -14,6 +16,7 @@ interface PhotoBoothDetailsProps {
 }
 
 export function PhotoBoothDetails({ onNavigate, sessionId }: PhotoBoothDetailsProps) {
+	const photoSent = useRef(false);
 	// 2) Join the socket as a kiosk, watch for mobile arrival
 	const { socket } = useSocketRoom({
 		sessionId: sessionId,
@@ -23,8 +26,9 @@ export function PhotoBoothDetails({ onNavigate, sessionId }: PhotoBoothDetailsPr
 			[CORE_EVENTS.JOINED_ROOM]: () => {
 				console.log(`Kiosk joined room ${sessionId}`);
 			},
-			[MOBILE_EVENTS.DETAILS]: (data) => {
+			[MOBILE_EVENTS.DETAILS]: async (data) => {
 				console.log(`Details event listened ${sessionId} ${data?.email} ${data?.name}`);
+
 				onNavigate('capture', { email: data.email, name: data.name });
 			},
 		},

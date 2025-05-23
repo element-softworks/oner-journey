@@ -1,22 +1,22 @@
 'use client';
 
-import { useState } from 'react';
 import { AppScreen } from '@/components/app-container';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useUser } from '@/context/user-context';
 import { useHapticFeedback } from '@/hooks/use-haptic-feedback';
-import { validateEmail } from '@/lib/validators';
-import { ArrowRight, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useTrackEvent } from '@/lib/MerlinAnalytics';
+import { validateEmail } from '@/lib/validators';
+import { Loader2 } from 'lucide-react';
+import { useState } from 'react';
 
 interface EmailEntryScreenProps {
-	onNavigate: (screen: AppScreen) => void;
+	onNavigate: (screen: AppScreen, params?: string[]) => void;
+	searchParams?: any;
 }
 
-export function EmailEntryScreen({ onNavigate }: EmailEntryScreenProps) {
+export function EmailEntryScreen({ onNavigate, searchParams }: EmailEntryScreenProps) {
 	const { userData, updateEmail } = useUser();
 	const [email, setEmail] = useState(userData.email);
 	const [error, setError] = useState('');
@@ -47,7 +47,6 @@ export function EmailEntryScreen({ onNavigate }: EmailEntryScreenProps) {
 			triggerHaptic('medium');
 
 			// Simulate API call
-			await new Promise((resolve) => setTimeout(resolve, 1500));
 
 			trackEvent('build-your-fit-email', 'submit-email-form', [
 				{
@@ -64,7 +63,7 @@ export function EmailEntryScreen({ onNavigate }: EmailEntryScreenProps) {
 				description: `Welcome ${userData.name}! Let's find your perfect fit.`,
 			});
 
-			onNavigate('products');
+			onNavigate('products', [`email=${email}`, `name=${searchParams?.name}`]);
 		} catch (err) {
 			triggerHaptic('error');
 			toast({
@@ -148,7 +147,7 @@ export function EmailEntryScreen({ onNavigate }: EmailEntryScreenProps) {
 
 {
 	/* <div className="w-full h-screen flex flex-col justify-center items-center bg-gray-50 p-6">
-	<div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
+	<div className="w-full  bg-white p-8 rounded-2xl shadow-lg">
 		<div className="flex justify-center mb-8">
 			<img
 				src="https://www.purpldiscounts.com/_next/image?url=https%3A%2F%2Fverification.purpldiscounts.com%2Fassets%2Fbrand_logo%2FoVEXAJ6RTzflVHvf3ePEs0e&w=828&q=75"

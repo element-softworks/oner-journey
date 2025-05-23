@@ -76,9 +76,12 @@ export function AppContainer({ searchParams }: { searchParams?: any }) {
 				{currentScreen === 'landing' && <LandingScreen onNavigate={navigateTo} />}
 				{currentScreen === 'intro' && <IntroductionVideo onNavigate={navigateTo} />}
 				{currentScreen === 'name' && <NameEntryScreen onNavigate={navigateTo} />}
-				{currentScreen === 'email' && <EmailEntryScreen onNavigate={navigateTo} />}
+				{currentScreen === 'email' && (
+					<EmailEntryScreen onNavigate={navigateTo} searchParams={searchParams} />
+				)}
 				{currentScreen === 'products' && (
 					<ProductSelectionScreen
+						searchParams={searchParams}
 						onNavigate={navigateTo}
 						onSelectionChange={(top, topColor, bottom, bottomColor) => {
 							setSelectedTop(top);
@@ -94,6 +97,7 @@ export function AppContainer({ searchParams }: { searchParams?: any }) {
 				)}
 				{currentScreen === 'summary' && (
 					<SummaryScreen
+						searchParams={searchParams}
 						onNavigate={navigateTo}
 						selectedTop={Number(searchParams?.top)}
 						selectedTopColor={`#${searchParams?.top_color}`}
