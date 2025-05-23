@@ -163,7 +163,7 @@ export function PhotoBoothCapture({ onNavigate, sessionId }: PhotoBoothCapturePr
 				</div>
 			)}
 
-			<div style={{ transform: CAMERA_TRANSFORM, aspectRatio: 1, maxWidth: 384 }}>
+			<div style={{ transform: CAMERA_TRANSFORM, aspectRatio: 1, maxWidth: 1024 }}>
 				<Webcam
 					ref={webcamRef}
 					audio={false}
