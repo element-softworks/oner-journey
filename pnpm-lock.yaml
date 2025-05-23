@@ -161,6 +161,9 @@ importers:
       react-resizable-panels:
         specifier: 2.0.9
         version: 2.0.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      react-simple-keyboard:
+        specifier: ^3.8.74
+        version: 3.8.74(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react-webcam:
         specifier: ^7.2.0
         version: 7.2.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -2825,6 +2828,12 @@ packages:
     peerDependencies:
       react: ^16.14.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.14.0 || ^17.0.0 || ^18.0.0
+
+  react-simple-keyboard@3.8.74:
+    resolution: {integrity: sha512-u0uTQEmtq0tpJ9XfGM76dzHX/d0LWwmUQ6Qu11bNGbt+w0iRx816m6n/hdUMnEWtO56+unT9lOnVf3iSNYenmg==}
+    peerDependencies:
+      react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   react-smooth@4.0.4:
     resolution: {integrity: sha512-gnGKTpYwqL0Iii09gHobNolvX4Kiq4PKx6eWBCYYix+8cdw+cGo3do906l1NBPKkSWx1DghC1dlWG9L2uGd61Q==}
@@ -6247,6 +6256,11 @@ snapshots:
       '@types/react': 18.2.57
 
   react-resizable-panels@2.0.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+
+  react-simple-keyboard@3.8.74(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)

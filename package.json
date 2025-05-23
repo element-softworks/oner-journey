@@ -60,6 +60,7 @@
     "react-hook-form": "7.50.0",
     "react-idle-timer": "^5.7.2",
     "react-resizable-panels": "2.0.9",
+    "react-simple-keyboard": "^3.8.74",
     "react-webcam": "^7.2.0",
     "recharts": "2.12.0",
     "redis": "^5.0.1",
