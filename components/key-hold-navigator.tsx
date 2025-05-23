@@ -1,49 +1,57 @@
-// components/KeyHoldNavigator.tsx
 'use client';
 
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
-type KeyTimers = {
-	[key: string]: number; // setTimeout ID
+type HoldInfo = {
+	timestamp: number;
+	timerId: number;
 };
 
 export function KeyHoldNavigator() {
 	const router = useRouter();
-	const timers = useRef<KeyTimers>({});
+	const holds = useRef<Record<string, HoldInfo>>({});
 
 	useEffect(() => {
+		const THRESHOLD = 2000; // ms
+
 		const handleKeyDown = (e: KeyboardEvent) => {
 			const key = e.key.toLowerCase();
-			console.log('Key pressed:', key);
+			if ((key === 'arrowup' || key === 'arrowdown') && !holds.current[key]) {
+				// mark start time
+				const start = performance.now();
+				// schedule a forced navigation in case `keyup` never arrives
+				const id = window.setTimeout(() => {
+					router.push('/');
+					delete holds.current[key];
+				}, THRESHOLD);
 
-			if (key === 'arrowup' || key === 'arrowdown') {
-				console.log('Starting timer for key:', key);
-				// start a 10s timer
-				window.setTimeout(() => {
-					router.push('/'); // navigate to home
-				}, 2000);
+				holds.current[key] = { timestamp: start, timerId: id };
 			}
 		};
 
 		const handleKeyUp = (e: KeyboardEvent) => {
 			const key = e.key.toLowerCase();
-			if (timers.current[key]) {
-				clearTimeout(timers.current[key]);
-				delete timers.current[key];
+			const info = holds.current[key];
+			if (info) {
+				const heldFor = performance.now() - info.timestamp;
+				clearTimeout(info.timerId);
+				delete holds.current[key];
+				// only navigate if they really held it long enough
+				if (heldFor >= THRESHOLD) {
+					router.push('/');
+				}
 			}
 		};
 
 		window.addEventListener('keydown', handleKeyDown);
-
 		window.addEventListener('keyup', handleKeyUp);
-
 		return () => {
 			window.removeEventListener('keydown', handleKeyDown);
 			window.removeEventListener('keyup', handleKeyUp);
-			// clear any remaining timers
-			Object.values(timers.current).forEach(clearTimeout);
-			timers.current = {};
+			// clean up any stray timers
+			Object.values(holds.current).forEach((h) => clearTimeout(h.timerId));
+			holds.current = {};
 		};
 	}, [router]);
 
