@@ -107,18 +107,18 @@ export function SummaryScreen({
 					<div className="w-[20vw] h-[20vw] rounded-3xl overflow-hidden ">
 						<img
 							src={
-								selectedTopItem.colorImages?.[selectedTopColor] ??
-								selectedTopItem.image
+								selectedTopItem?.colorImages?.[selectedTopColor] ??
+								selectedTopItem?.image
 							}
-							alt={selectedTopItem.name}
+							alt={selectedTopItem?.name}
 							className="w-full h-full object-cover"
 						/>
 					</div>
 					<h3 className="mt-4 text-lg font-semibold text-gray-900">
-						{selectedTopItem.name}
+						{selectedTopItem?.name}
 					</h3>
 					<p className="text-sm text-gray-600">
-						{selectedTopItem.colors.find((c) => c.value === selectedTopColor)?.name}
+						{selectedTopItem?.colors?.find?.((c) => c.value === selectedTopColor)?.name}
 					</p>
 				</motion.div>
 
@@ -132,20 +132,21 @@ export function SummaryScreen({
 					<div className="w-[20vw] h-[20vw] rounded-3xl overflow-hidden ">
 						<img
 							src={
-								selectedBottomItem.colorImages?.[selectedBottomColor] ??
-								selectedBottomItem.image
+								selectedBottomItem?.colorImages?.[selectedBottomColor] ??
+								selectedBottomItem?.image
 							}
-							alt={selectedBottomItem.name}
+							alt={selectedBottomItem?.name}
 							className="w-full h-full object-cover"
 						/>
 					</div>
 					<h3 className="mt-4 text-lg font-semibold text-gray-900">
-						{selectedBottomItem.name}
+						{selectedBottomItem?.name}
 					</h3>
 					<p className="text-sm text-gray-600">
 						{
-							selectedBottomItem.colors.find((c) => c.value === selectedBottomColor)
-								?.name
+							selectedBottomItem?.colors?.find?.(
+								(c) => c.value === selectedBottomColor
+							)?.name
 						}
 					</p>
 				</motion.div>

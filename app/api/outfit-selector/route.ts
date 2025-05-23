@@ -54,7 +54,7 @@ export async function POST(request: Request) {
 
           <!-- Preheader -->
           <div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">
-            (Optional) Preview text goes here.
+            Oner Active NY - Your ONER Prize Draw Entry
           </div>
 
           <!-- Header Spacer -->
@@ -81,7 +81,7 @@ export async function POST(request: Request) {
             <!-- Intro Text -->
             <tr>
               <td style="padding:40px; text-align:center; font-family:sans-serif; font-size:15px; line-height:20px; color:#555;">
-                <p>Hi [NAME],</p>
+                <p>Hi ${name},</p>
                 <p>This is a quick email to confirm you’ve entered our competition to win your chosen fit for free!</p>
                 <p>We’ll email our lucky winners soon. In the meantime, click below to browse our website.</p>
 
@@ -159,11 +159,11 @@ export async function POST(request: Request) {
             <!-- Social Footer -->
             <tr>
               <td align="center" bgcolor="#000" style="padding:40px;">
-                <img src="https://think-live.s3.eu-west-2.amazonaws.com/youtub.png" width="50" height="50" alt="YouTube" style="display:inline-block; margin:0 5px;">
-                <img src="https://think-live.s3.eu-west-2.amazonaws.com/faceb.png" width="52" height="50" alt="Facebook" style="display:inline-block; margin:0 5px;">
-                <img src="https://think-live.s3.eu-west-2.amazonaws.com/insta.png" width="50" height="50" alt="Instagram" style="display:inline-block; margin:0 5px;">
-                <img src="https://think-live.s3.eu-west-2.amazonaws.com/pin.png" width="50" height="50" alt="Pinterest" style="display:inline-block; margin:0 5px;">
-                <img src="https://think-live.s3.eu-west-2.amazonaws.com/tt.png" width="50" height="50" alt="TikTok" style="display:inline-block; margin:0 5px;">
+                <a href="https://www.youtube.com/channel/UCsihocLZ7k8l9501v2IDVSg?themeRefresh=1"><img src="https://think-live.s3.eu-west-2.amazonaws.com/youtub.png" width="50" height="50" alt="YouTube" style="display:inline-block; margin:0 5px;"></a>
+                <a href="http://facebook.com/oneractive"><img src="https://think-live.s3.eu-west-2.amazonaws.com/faceb.png" width="52" height="50" alt="Facebook" style="display:inline-block; margin:0 5px;"></a>
+                <a href="https://www.instagram.com/oneractive"><img src="https://think-live.s3.eu-west-2.amazonaws.com/insta.png" width="50" height="50" alt="Instagram" style="display:inline-block; margin:0 5px;"></a>
+                <a href="https://uk.pinterest.com/oneractive/"><img src="https://think-live.s3.eu-west-2.amazonaws.com/pin.png" width="50" height="50" alt="Pinterest" style="display:inline-block; margin:0 5px;"></a>
+                <a href="https://www.tiktok.com/@oneractive"><img src="https://think-live.s3.eu-west-2.amazonaws.com/tt.png" width="50" height="50" alt="TikTok" style="display:inline-block; margin:0 5px;"></a>
               </td>
             </tr>
 

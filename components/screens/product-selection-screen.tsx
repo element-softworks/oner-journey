@@ -135,7 +135,7 @@ export function ProductSelectionScreen({
 						image:
 							index === selectedTopIndex
 								? getCurrentTopImage() || top.image
-								: top.image,
+								: top.colorImages?.[topColor] || top.image,
 					}))}
 					onSlideChange={handleTopChange}
 					initialSlide={initialTop}
@@ -172,7 +172,7 @@ export function ProductSelectionScreen({
 						image:
 							index === selectedBottomIndex
 								? getCurrentBottomImage() || bottom.image
-								: bottom.image,
+								: bottom.colorImages?.[bottomColor] || bottom.image,
 					}))}
 					onSlideChange={handleBottomChange}
 					initialSlide={initialBottom}
