@@ -36,7 +36,7 @@ export function PhotoBoothDetails({ onNavigate, sessionId }: PhotoBoothDetailsPr
 
 	return (
 		<div className="relative w-full h-screen">
-			<div className="w-full z-20 relative h-screen flex flex-col justify-center items-center bg-gray-50 p-6">
+			<div className="w-full z-20 relative h-screen flex flex-col justify-center gap-2 items-center bg-gray-50 p-6">
 				<div className="absolute inset-0 bg-black/60 w-full h-full z-20" />
 
 				<video

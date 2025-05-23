@@ -123,7 +123,7 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 	}, [sessionId, toast]);
 
 	return (
-		<div className="flex flex-col min-h-[100dvh] w-full  mx-auto bg-[#1C4639] p-6 md:md:py-16 max-w-2xl">
+		<div className="flex flex-col min-h-[100dvh] w-full gap-2 mx-auto bg-[#1C4639] p-6 md:md:py-16 max-w-2xl">
 			<div className="flex justify-center flex-1">
 				<img
 					src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
