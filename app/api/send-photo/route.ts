@@ -22,37 +22,169 @@ export async function POST(request: Request) {
 				},
 			],
 			html: `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Your ONER Photo</title>
-          </head>
-          <body style="margin: 0; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
-            <div style="max-width: 600px; margin: 0 auto; background: white;">
-              <img src="https://www.purpldiscounts.com/_next/image?url=https%3A%2F%2Fverification.purpldiscounts.com%2Fassets%2Fbrand_logo%2FoVEXAJ6RTzflVHvf3ePEs0e&w=828&q=75" 
-                   alt="ONER" 
-                   style="display: block; height: 50px; margin: 0 auto 30px;"
-              />
-              
-              <h1 style="color: #1a1a1a; font-size: 24px; margin-bottom: 20px;">Hi ${name}!</h1>
-              
-              <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
-                Thank you for visiting the ONER Photo Booth. Find your photo attached below.
-              </p>
-              
-              <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
-                Visit our website to explore our latest collection and find your perfect fit.
-              </p>
-              
-              <a href="https://www.oneractive.com" 
-                 style="display: inline-block; background: #1a1a1a; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: 500;">
-                Shop Now
-              </a>
-            </div>
-          </body>
-        </html>
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>OnerActive NY</title>
+  <style type="text/css">
+    /* RESET */
+    html, body { margin:0!important; padding:0!important; height:100%!important; width:100%!important; }
+    * { -ms-text-size-adjust:100%; -webkit-text-size-adjust:100%; }
+    .ExternalClass { width:100%; }
+    div[style*="margin: 16px 0"] { margin:0!important; }
+    table, td { mso-table-lspace:0pt!important; mso-table-rspace:0pt!important; }
+    table { border-spacing:0!important; border-collapse:collapse!important; table-layout:fixed!important; margin:0 auto!important; }
+    table table table { table-layout:auto; }
+    img { -ms-interpolation-mode:bicubic; display:block; margin:0 auto; }
+    .yshortcuts a { border-bottom:none!important; }
+    a[x-apple-data-detectors] { color:inherit!important; }
+
+    /* PROGRESSIVE */
+    .button-td, .button-a { transition: all 100ms ease-in; }
+    .button-td:hover, .button-a:hover { background:#555555!important; border-color:#555555!important; }
+
+    @media screen and (max-width:600px) {
+      .email-container { width:100%!important; }
+      .fluid, .fluid-centered { max-width:100%!important; height:auto!important; margin-left:auto!important; margin-right:auto!important; display:block!important; }
+      .stack-column, .stack-column-center { display:block!important; width:100%!important; max-width:100%!important; direction:ltr!important; }
+      .stack-column-center { text-align:center!important; }
+      .center-on-narrow { text-align:center!important; display:block!important; margin:auto!important; float:none!important; }
+      table.center-on-narrow { display:inline-block!important; }
+    }
+  </style>
+</head>
+<body bgcolor="#e0e0e0" width="100%" style="margin:0;" yahoo="yahoo">
+  <table bgcolor="#e0e0e0" cellpadding="0" cellspacing="0" border="0" height="100%" width="100%">
+    <tr>
+      <td>
+        <center style="width:100%;">
+
+          <!-- Preheader -->
+          <div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">
+            (Optional) This text will appear in the inbox preview, but not the email body.
+          </div>
+
+          <!-- Header -->
+          <table align="center" width="600" class="email-container">
+            <tr>
+              <td style="padding:20px 0; text-align:center;">&nbsp;</td>
+            </tr>
+          </table>
+
+          <!-- Body -->
+          <table align="center" width="600" class="email-container" bgcolor="#ffffff" cellpadding="0" cellspacing="0" border="0">
+
+            <!-- Hero Image -->
+            <tr>
+              <td class="full-width-image" align="center" style="padding:0;">
+                <!--[if mso]>
+                <table align="center" cellpadding="0" cellspacing="0" border="0" width="600"><tr><td>
+                <![endif]-->
+                <img
+                  src="https://think-live.s3.eu-west-2.amazonaws.com/01_Zone_1_OA_NY_Header.jpg"
+                  width="600"
+                  alt="Header"
+                  style="display:block; margin:0 auto; width:100%; max-width:600px; height:auto;"
+                  class="fluid-centered"
+                />
+                <!--[if mso]>
+                </td></tr></table>
+                <![endif]-->
+              </td>
+            </tr>
+
+            <!-- Intro Text -->
+            <tr>
+              <td style="padding:40px; text-align:center; font-family:sans-serif; font-size:15px; line-height:20px; color:#555555;">
+                <p>Hi ${name},</p>
+                <p>Thanks for trying our selfie mirror at the Oner Active Showroom in New York. Here’s your photo! We hope you had a great time at our showroom!</p>
+              </td>
+            </tr>
+
+            <!-- Spacer/Button Area (if needed) -->
+            <tr>
+              <td align="center" style="padding:0 20px 40px;">
+                <table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;">
+                  <tr>
+                    <td class="button-td" style="border-radius:3px; background:#222222; text-align:center;">
+                      <a
+                        href="https://us.oneractive.com/collections/shop/new?utm_source=email&utm_medium=newsletter&utm_campaign=Pop-Up-NY"
+                        class="button-a"
+                        style="background:#222222; border:15px solid #222222; padding:0 10px; color:#ffffff; font-family:sans-serif; font-size:13px; line-height:1.1; text-align:center; text-decoration:none; display:block; border-radius:3px; font-weight:300;"
+                      >
+                        SHOP NOW
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Section with Background Image -->
+            <tr>
+              <td class="full-width-image" align="center" style="padding:0;">
+                <img
+                  src="https://think-live.s3.eu-west-2.amazonaws.com/set-the-tone.jpg"
+                  width="600"
+                  alt="Set the Tone"
+                  style="display:block; margin:0 auto; width:100%; max-width:600px; height:auto;"
+                  class="fluid-centered"
+                />
+              </td>
+            </tr>
+
+            <!-- Middle Call-to-Action -->
+            <tr>
+              <td align="center" style="padding:20px; font-family:sans-serif; font-size:15px; line-height:20px; color:#555555;">
+                <table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;">
+                  <tr>
+                    <td class="button-td" style="border-radius:3px; background:#222222; text-align:center;">
+                      <a
+                        href="https://us.oneractive.com/collections/shop/new?utm_source=email&utm_medium=newsletter&utm_campaign=Pop-Up-NY"
+                        class="button-a"
+                        style="background:#222222; border:15px solid #222222; padding:0 10px; color:#ffffff; font-family:sans-serif; font-size:13px; line-height:1.1; text-align:center; text-decoration:none; display:block; border-radius:3px; font-weight:300;"
+                      >
+                        SHOP NOW
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Social Icons -->
+            <tr>
+              <td align="center" style="padding:40px; background-color:#000000;">
+                <img src="https://think-live.s3.eu-west-2.amazonaws.com/youtub.png" width="50" height="50" alt="YouTube" style="display:inline-block; margin:0 5px;">
+                <img src="https://think-live.s3.eu-west-2.amazonaws.com/faceb.png" width="52" height="50" alt="Facebook" style="display:inline-block; margin:0 5px;">
+                <img src="https://think-live.s3.eu-west-2.amazonaws.com/insta.png" width="50" height="50" alt="Instagram" style="display:inline-block; margin:0 5px;">
+                <img src="https://think-live.s3.eu-west-2.amazonaws.com/pin.png" width="50" height="50" alt="Pinterest" style="display:inline-block; margin:0 5px;">
+                <img src="https://think-live.s3.eu-west-2.amazonaws.com/tt.png" width="50" height="50" alt="TikTok" style="display:inline-block; margin:0 5px;">
+              </td>
+            </tr>
+
+          </table>
+          <!-- End Body -->
+
+          <!-- Footer -->
+          <table align="center" width="600" class="email-container" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="padding:40px 10px; font-size:12px; font-family:sans-serif; line-height:18px; text-align:center; color:#888888;">
+                <p>Copyright © 2025 ONER ACTIVE. All rights reserved.</p>
+              </td>
+            </tr>
+          </table>
+
+        </center>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+
       `,
 		});
 

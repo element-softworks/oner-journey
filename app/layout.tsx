@@ -8,6 +8,7 @@ import { UserProvider } from '@/context/user-context';
 import type { Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import { KeyHoldNavigator } from '@/components/key-hold-navigator';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 					<ThemeProvider attribute="class" defaultTheme="light" enableSystem>
 						<SocketProvider>
 							<UserProvider>
+								<KeyHoldNavigator />
 								{children}
 								<Toaster />
 							</UserProvider>

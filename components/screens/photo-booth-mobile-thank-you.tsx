@@ -32,10 +32,11 @@ export function PhotoBoothMobileThankYou() {
 										trackEvent('photo-booth-thank-you', 'click-link', [
 											{
 												key: 'link',
-												value: 'https://www.oneractive.com',
+												value: 'https://us.oneractive.com/collections/shop/new?utm_source=email&utm_medium=newsletter&utm_campaign=Pop-Up-NY',
 											},
 										]);
-										window.location.href = 'https://www.oneractive.com';
+										window.location.href =
+											'https://us.oneractive.com/collections/shop/new?utm_source=email&utm_medium=newsletter&utm_campaign=Pop-Up-NY';
 									}}
 									className="mx-auto w-full h-14 rounded-full text-xl !mt-8 bg-white text-black hover:bg-gray-100 disabled:opacity-50 px-6"
 								>
