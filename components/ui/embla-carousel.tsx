@@ -97,7 +97,10 @@ export function EmblaCarousel({
 							</div>
 							<div className="mt-4 text-center">
 								<h3 className="text-sm font-medium text-gray-900">{slide.name}</h3>
-								<p className="mt-1 text-sm text-gray-500">{currentColorText}</p>
+								<p className="mt-1 text-sm text-gray-500">
+									{slide?.colors?.find((color) => color.value === selectedColor)
+										?.name ?? slide?.colors?.[0]?.name}
+								</p>
 							</div>
 						</div>
 					))}

@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 		const { email, name } = await request.json();
 
 		const data = await resend.emails.send({
-			from: 'ONER Prize Draw Entry <photobooth@and-element.io>',
+			from: 'ONER Prize Draw Entry <noreply@oneractiveny.com>',
 			to: email,
 			subject: 'Your ONER Prize Draw Entry',
 			html: `

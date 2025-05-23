@@ -11,7 +11,7 @@ export async function POST(request: Request) {
 		console.log('Received data:', { email, photoData, name });
 
 		const data = await resend.emails.send({
-			from: 'ONER Photo Booth <photobooth@and-element.io>',
+			from: 'ONER Photo Booth <noreply@oneractiveny.com>',
 			to: email,
 			subject: 'Your ONER Photo Booth Picture',
 			attachments: [
