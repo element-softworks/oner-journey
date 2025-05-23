@@ -103,11 +103,11 @@ export const BOTTOMS: Bottom[] = [
 		image: 'https://merlin-cloud.s3.eu-west-2.amazonaws.com/think-one/250422_SUMMERSEASONAL_SOFTMOTION_FLARED_BOTTOMS_RACINGGREEN_GM_07.png',
 		price: '£38.00',
 		colors: [
-			{ name: 'Glaucous Blue', value: '#8896B2' },
+			{ name: 'Racing Green', value: '#1C4639' },
 			{ name: 'Warm Sand', value: '#b0a79d' },
 		],
 		colorImages: {
-			'#8896B2':
+			'#1C4639':
 				'https://merlin-cloud.s3.eu-west-2.amazonaws.com/think-one/250422_SUMMERSEASONAL_SOFTMOTION_FLARED_BOTTOMS_RACINGGREEN_GM_07.png',
 			'#b0a79d':
 				'https://merlin-cloud.s3.eu-west-2.amazonaws.com/think-one/250422_SUMMERSEASONAL_SOFTMOTION_FLARED_BOTTOMS_WARMSAND_GM_07.png',
