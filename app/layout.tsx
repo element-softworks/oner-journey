@@ -6,11 +6,16 @@ import { MCProvider } from '@/context/mc-provider';
 import { SocketProvider } from '@/context/socket-context';
 import { UserProvider } from '@/context/user-context';
 import type { Viewport } from 'next';
-import { Inter } from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css';
 import { KeyHoldNavigator } from '@/components/key-hold-navigator';
 
-const inter = Inter({ subsets: ['latin'] });
+const relevantOner = localFont({
+	src: '../public/RelevantOner-Bold.otf',
+	weight: '700',
+	style: 'normal',
+	variable: '--font-relevant-oner',
+});
 
 // export const metadata: Metadata = {
 // 	title: 'ONER Retail',
@@ -42,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 				<meta name="description" content="Premium retail experience in New York" />
 			</head>
-			<body className={inter.className}>
+			<body className={relevantOner.className}>
 				<MCProvider>
 					<ThemeProvider attribute="class" defaultTheme="light" enableSystem>
 						<SocketProvider>
