@@ -84,6 +84,7 @@ export function NameEntryScreen({ onNavigate }: NameEntryScreenProps) {
 						<Input
 							onChange={handleNameChange}
 							onKeyDown={handleKeyDown}
+							autoFocus
 							onFocus={() => setIsFocused(true)}
 							onBlur={() => setIsFocused(false)}
 							id="name"

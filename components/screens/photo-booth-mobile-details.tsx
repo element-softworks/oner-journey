@@ -132,7 +132,7 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 				/>
 			</div>
 
-			<div>
+			<form onSubmit={(e) => e.preventDefault()} className="">
 				<div className="text-center mb-8">
 					<h1 className="text-xl lg:text-xl font-semibold text-white mb-">WELCOME</h1>
 					<p className="text-xl lg:text-xl font-semibold text-white mb-2">
@@ -150,6 +150,7 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 							</Label>
 							<Input
 								id="name"
+								autoFocus
 								placeholder="First name"
 								text-white
 								value={name}
@@ -207,7 +208,7 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 						{ready ? 'TAKE A PHOTO' : 'CONNECTING…'}
 					</Button>
 				</div>
-			</div>
+			</form>
 			<div className="flex-1 flex items-end justify-center ">
 				<img
 					src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"

@@ -106,6 +106,7 @@ export function EmailEntryScreen({ onNavigate, searchParams }: EmailEntryScreenP
 					{/* Name field */}
 					<div className="space-y-2 text-white w-full">
 						<Input
+							autoFocus
 							onChange={handleEmailChange}
 							onKeyDown={handleKeyDown}
 							onFocus={() => setIsFocused(true)}
