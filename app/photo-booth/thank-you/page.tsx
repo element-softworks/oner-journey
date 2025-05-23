@@ -9,7 +9,7 @@ export default function PhotoBoothThankYouPage({
 	//We want to navigate back to the home page after 5 seconds
 
 	return (
-		<div className="min-h-[100dvh] h-full w-full bg-[#1C4639] max-w-2xl flex items-center justify-center">
+		<div className="min-h-[100dvh] h-full w-full bg-[#1C4639]  flex items-center justify-center">
 			<PhotoBoothContainer
 				initialScreen="thank-you"
 				sessionId={searchParams.sessionId}
