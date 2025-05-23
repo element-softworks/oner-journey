@@ -58,11 +58,6 @@ export function PhotoBoothPreview({
 		triggerHaptic('medium');
 
 		try {
-			if (dbError) {
-				console.error('Supabase error:', dbError);
-				throw dbError;
-			}
-
 			const res = await fetch('/api/send-photo', {
 				method: 'POST',
 				headers: {
