@@ -132,7 +132,7 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 				/>
 			</div>
 
-			<form onSubmit={(e) => e.preventDefault()} className="">
+			<form autoComplete="off" onSubmit={(e) => e.preventDefault()} className="">
 				<div className="text-center mb-8">
 					<h1 className="text-xl lg:text-xl font-semibold text-white mb-">WELCOME</h1>
 					<p className="text-xl lg:text-xl font-semibold text-white mb-2">
