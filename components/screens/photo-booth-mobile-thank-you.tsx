@@ -7,7 +7,7 @@ export function PhotoBoothMobileThankYou() {
 	const trackEvent = useTrackEvent();
 
 	return (
-		<div className="flex flex-col h-full bg-white">
+		<div className="flex flex-col h-[100dvh] bg-white">
 			<div className="flex flex-col h-full bg-[#1C4639] p-6 md:py-16">
 				<div className="flex justify-center flex-1">
 					<img

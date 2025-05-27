@@ -149,7 +149,7 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 				<img
 					src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/LOCKUP.svg"
 					alt="ONER"
-					className="h-20 w-auto"
+					className="h-20 w-auto mb-4"
 				/>
 			</div>
 
@@ -241,7 +241,7 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 					</div>
 				</div>
 			</form>
-			<div className="flex-1 flex items-end justify-center ">
+			<div className="flex-1 flex items-end justify-center !mt-4 ">
 				<img
 					src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"
 					alt="ONER"
