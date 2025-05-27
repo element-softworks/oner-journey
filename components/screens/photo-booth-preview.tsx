@@ -19,7 +19,7 @@ import { useEffect, useRef, useState } from 'react';
 function elementToBlob(element: HTMLDivElement): Promise<Blob | null> {
 	return new Promise(async (resolve) => {
 		try {
-			const canvas = await html2canvas(element, { width: 480, height: 660 });
+			const canvas = await html2canvas(element, { width: 680, height: 860 });
 			canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 1);
 		} catch (error) {
 			return resolve(null);
@@ -151,24 +151,34 @@ export function PhotoBoothPreview({
 				alt="ONER"
 				className="h-60 w-auto mb-auto"
 			/>
+			{/* ----------------- CAPTURE AREA ----------------- */}
 			<div
-				className="border-8 w-full aspect-[2/2.75] flex items-center justify-center flex-col border-white bg-white"
+				/* this is the element html2canvas will receive */
 				ref={photoContainer}
+				className="relative mx-auto h-[860px] w-[680px] overflow-hidden rounded-none border-8 border-white bg-white"
 			>
-				<div style={{ transform: CAMERA_TRANSFORM }}>
+				{/* selfie */}
+				<div className="absolute inset-0">
+					<div className="rotate-[var(--camera-rotation,0deg)] h-full w-full">
+						<img
+							src={url}
+							alt="Your captured selfie"
+							className=" w-full object-cover h-[680px]"
+							crossOrigin="anonymous"
+						/>
+					</div>
+				</div>
+
+				{/* bottom overlay logo (now z‑10) */}
+				<div className="absolute bottom-2 bg-white justify-center items-center flex py-4 w-full left-1/2 z-10 -translate-x-1/2 mb-0">
 					<img
-						src={url}
-						alt="Your captured selfie"
-						className="block object-cover w-full aspect-square"
+						src="/images/oner-green.svg"
+						alt="ONER"
+						width={200}
+						height={120}
+						crossOrigin="anonymous"
 					/>
 				</div>
-				<img
-					width={150}
-					height={80}
-					src="/images/oner-green.svg"
-					alt="ONER"
-					className="h-20 min-w-[148px] min-h-[80px] w-auto mx-auto mt-auto mb-auto"
-				/>
 			</div>
 			<img
 				src="https://merlin-cloud.s3.eu-west-2.amazonaws.com/logo-think.svg"
