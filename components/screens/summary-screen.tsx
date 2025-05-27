@@ -9,6 +9,7 @@ import { useTrackEvent } from '@/lib/MerlinAnalytics';
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface SummaryScreenProps {
 	onNavigate: (screen: AppScreen, params?: string[]) => void;
@@ -31,6 +32,7 @@ export function SummaryScreen({
 	const { userData } = useUser();
 	const trackEvent = useTrackEvent();
 	const [finishing, setFinishing] = useState(false);
+	const router = useRouter();
 
 	const handleEdit = () => {
 		trackEvent('build-your-fit-summary', 'edit', [{ key: 'edit', value: 'true' }]);
@@ -93,9 +95,34 @@ export function SummaryScreen({
 	const selectedBottomItem = BOTTOMS[selectedBottom];
 
 	return (
-		<div className="w-full h-screen flex flex-col bg-gray-50 max-w-xl mx-auto justify-around ">
+		<div className="w-full h-screen flex flex-col bg-gray-50 max-w-xl mx-auto py-8 ">
 			<div className="flex flex-col items-center pt-8 px-6">
 				<h1 className="text-3xl lg:text-6xl font-bold text-gray-900">BUILD YOUR FIT</h1>
+			</div>
+
+			<div className="p-6 flex flex-row gap-4 mx-auto">
+				<Button
+					onClick={() => {
+						router.push('/outfit-selector');
+					}}
+					className="mx-auto  h-12 rounded-full border-gray-900 border bg-transparent text-black hover:border-gray-800 group disabled:opacity-50 w-fit px-6"
+				>
+					<span>CANCEL</span>
+				</Button>
+				<Button
+					disabled={finishing}
+					onClick={handleEdit}
+					className="!mt-0 h-12 rounded-full bg-gray-900 text-white hover:bg-gray-800 group disabled:opacity-50 w-fit px-6"
+				>
+					<span>EDIT</span>
+				</Button>
+				<Button
+					disabled={finishing}
+					onClick={handleFinish}
+					className="!mt-0 h-12 rounded-full bg-gray-900 text-white hover:bg-gray-800 group disabled:opacity-50 w-fit px-6"
+				>
+					<span>{finishing ? 'LOADING...' : 'FINISH'}</span>
+				</Button>
 			</div>
 
 			<div className="flex flex-col items-center gap-4">
@@ -116,15 +143,18 @@ export function SummaryScreen({
 								className="w-full h-full object-cover"
 							/>
 						</div>
-						<h3 className="mt-4 text-lg font-semibold text-gray-900">
-							{selectedTopItem?.name}
-						</h3>
-						<p className="text-sm text-gray-600">
-							{
-								selectedTopItem?.colors?.find?.((c) => c.value === selectedTopColor)
-									?.name
-							}
-						</p>
+						<div className="text-center">
+							<h3 className="mt-4 text-lg font-semibold text-gray-900">
+								{selectedTopItem?.name}
+							</h3>
+							<p className="text-sm text-gray-600">
+								{
+									selectedTopItem?.colors?.find?.(
+										(c) => c.value === selectedTopColor
+									)?.name
+								}
+							</p>
+						</div>
 					</motion.div>
 				</div>
 
@@ -145,35 +175,20 @@ export function SummaryScreen({
 								className="w-full h-full object-cover"
 							/>
 						</div>
-						<h3 className="mt-4 text-lg font-semibold text-gray-900">
-							{selectedBottomItem?.name}
-						</h3>
-						<p className="text-sm text-gray-600">
-							{
-								selectedBottomItem?.colors?.find?.(
-									(c) => c.value === selectedBottomColor
-								)?.name
-							}
-						</p>
+						<div className="text-center">
+							<h3 className="mt-4 text-lg font-semibold text-gray-900">
+								{selectedBottomItem?.name}
+							</h3>
+							<p className="text-sm text-gray-600">
+								{
+									selectedBottomItem?.colors?.find?.(
+										(c) => c.value === selectedBottomColor
+									)?.name
+								}
+							</p>
+						</div>
 					</motion.div>
 				</div>
-			</div>
-
-			<div className="p-6 flex flex-row gap-4 mx-auto">
-				<Button
-					disabled={finishing}
-					onClick={handleEdit}
-					className="!mt-0 h-12 rounded-full bg-gray-900 text-white hover:bg-gray-800 group disabled:opacity-50 w-fit px-6"
-				>
-					<span>EDIT</span>
-				</Button>
-				<Button
-					disabled={finishing}
-					onClick={handleFinish}
-					className="!mt-0 h-12 rounded-full bg-gray-900 text-white hover:bg-gray-800 group disabled:opacity-50 w-fit px-6"
-				>
-					<span>{finishing ? 'LOADING...' : 'FINISH'}</span>
-				</Button>
 			</div>
 		</div>
 	);

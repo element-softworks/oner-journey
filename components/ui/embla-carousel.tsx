@@ -88,19 +88,19 @@ export function EmblaCarousel({
 							className="relative flex-[0_0_70%] min-w-0 pl-4"
 							style={{ opacity: index === selectedIndex ? 1 : 0.4 }}
 						>
-							<div className="relative h-[20vw] lg:h-[50vw]  rounded-lg">
-								<img
-									src={slide.image}
-									alt={slide.name}
-									className="absolute inset-0 h-full w-full object-cover"
-								/>
-							</div>
 							<div className="mt-4 text-center">
 								<h3 className="text-sm font-medium text-gray-900">{slide.name}</h3>
 								<p className="mt-1 text-sm text-gray-500">
 									{slide?.colors?.find((color) => color.value === selectedColor)
 										?.name ?? slide?.colors?.[0]?.name}
 								</p>
+							</div>
+							<div className="relative h-[20vw] lg:h-[50vw]  rounded-lg">
+								<img
+									src={slide.image}
+									alt={slide.name}
+									className="absolute inset-0 h-full w-full object-cover"
+								/>
 							</div>
 						</div>
 					))}

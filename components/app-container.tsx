@@ -11,6 +11,7 @@ import { SummaryScreen } from '@/components/screens/summary-screen';
 import { CompleteScreen } from '@/components/screens/complete-screen';
 import { UserProvider } from '@/context/user-context';
 import { useRegisterSW } from '@/hooks/use-register-sw';
+import { IdleTimer } from './idle-timer';
 
 export type AppScreen =
 	| 'landing'
@@ -68,6 +69,8 @@ export function AppContainer({ searchParams }: { searchParams?: any }) {
 
 	return (
 		<UserProvider>
+			<IdleTimer />
+
 			<div
 				className={`w-full h-full transition-opacity duration-500 ${
 					isTransitioning ? 'opacity-0' : 'opacity-100'

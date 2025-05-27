@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useIdleTimer } from 'react-idle-timer';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -18,18 +18,22 @@ import { useMerlinSession } from '@merlincloud/mc-package';
 import { useTrackEvent } from '@/lib/MerlinAnalytics';
 
 interface IdleTimerProps {
-	sessionId: string;
-	role: DEVICE_TYPE;
+	sessionId?: string;
+	role?: DEVICE_TYPE;
+	noSocket?: boolean;
 }
 
 export function IdleTimer({ sessionId, role }: IdleTimerProps) {
 	const { endSession: endMerlinSession } = useMerlinSession();
 	const trackEvent = useTrackEvent();
 
+	const pathName = usePathname();
 	const [showWarning, setShowWarning] = useState(false);
 	const [countdown, setCountdown] = useState(30);
 	const router = useRouter();
 	const [ready, setReady] = useState(false);
+
+	const isPhotoBooth = pathName?.includes('/photo-booth');
 
 	const { socket } = useSocketRoom({
 		sessionId,
@@ -66,13 +70,16 @@ export function IdleTimer({ sessionId, role }: IdleTimerProps) {
 					},
 				]);
 				endMerlinSession();
-				router.push('/photo-booth');
+				router.push(isPhotoBooth ? '/photo-booth' : '/outfit-selector');
 			},
 		},
 	});
 
 	const onIdle = () => {
-		console.log('User is idle', socket);
+		if (!isPhotoBooth) {
+			router.push('/outfit-selector');
+		}
+
 		if (!socket) return;
 
 		if (role === DEVICE_TYPE.MOBILE) {
@@ -83,7 +90,7 @@ export function IdleTimer({ sessionId, role }: IdleTimerProps) {
 
 	const { reset } = useIdleTimer({
 		// timeout: 60 * 1000, // 1 minute
-		timeout: 1000 * 60,
+		timeout: 1000 * (isPhotoBooth ? 30 : 60),
 		onIdle,
 		onActive(event, idleTimer) {
 			console.log('User is active', event, idleTimer);

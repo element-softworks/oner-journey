@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -28,6 +28,7 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 	const [emailError, setEmailError] = useState('');
 	const [ready, setReady] = useState(false);
 	const { toast } = useToast();
+	const router = useRouter();
 
 	// 1) Grab sessionId from query string
 	const searchParams = useSearchParams();
@@ -122,6 +123,26 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 		}
 	}, [sessionId, toast]);
 
+	const handleCancel = () => {
+		if (!socket || !ready) {
+			toast({ title: 'Not ready', description: 'Still connecting…', variant: 'warning' });
+			return;
+		}
+
+		trackEvent('photo-booth-capture', 'cancel-photo', [
+			{
+				key: 'photo',
+				value: 'cancel',
+			},
+		]);
+
+		socket.emit(MOBILE_EVENTS.TAKE_PHOTO, { cancel: true });
+
+		router.push(
+			'https://us.oneractive.com/collections/shop/new?utm_source=email&utm_medium=newsletter&utm_campaign=Pop-Up-NY'
+		);
+	};
+
 	return (
 		<div className="flex flex-col min-h-[100dvh] w-full gap-2 mx-auto bg-[#1C4639] p-6 md:md:py-16 max-w-2xl">
 			<div className="flex justify-center flex-1">
@@ -200,13 +221,24 @@ export function PhotoBoothMobileDetails({ onNavigate }: Props) {
 					</div>
 
 					{/* Submit */}
-					<Button
-						onClick={handleSubmit}
-						disabled={!ready}
-						className="mx-auto  h-12 rounded-full bg-white text-black hover:bg-gray-100 disabled:opacity-50 w-fit px-6"
-					>
-						{ready ? 'TAKE A PHOTO' : 'CONNECTING…'}
-					</Button>
+					<div className="flex flex-row gap-4 items-center">
+						<Button
+							type="button"
+							onClick={handleCancel}
+							variant="outline"
+							className="mx-auto  h-12 rounded-full bg-transparent border-white border-2 hover:text-gray-100 hover:border-gray-100 text-white hover:bg-transparent disabled:opacity-50 w-full px-6"
+						>
+							CANCEL
+						</Button>
+						<Button
+							type="submit"
+							onClick={handleSubmit}
+							disabled={!ready}
+							className="mx-auto  h-12 rounded-full bg-white text-black hover:bg-gray-100 disabled:opacity-50 w-fit px-6"
+						>
+							{ready ? 'TAKE A PHOTO' : 'CONNECTING…'}
+						</Button>
+					</div>
 				</div>
 			</form>
 			<div className="flex-1 flex items-end justify-center ">

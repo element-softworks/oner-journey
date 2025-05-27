@@ -8,10 +8,11 @@ import { BOTTOMS } from '@/lib/data/bottoms';
 import { TOPS } from '@/lib/data/tops';
 import { useTrackEvent } from '@/lib/MerlinAnalytics';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface ProductSelectionScreenProps {
-	onNavigate: (screen: AppScreen, params: string[]) => void;
+	onNavigate: (screen: AppScreen, params?: string[]) => void;
 	onSelectionChange: (top: number, topColor: string, bottom: number, bottomColor: string) => void;
 	initialTop: number;
 	initialTopColor: string;
@@ -35,6 +36,7 @@ export function ProductSelectionScreen({
 	const [bottomColor, setBottomColor] = useState(initialBottomColor);
 	const { triggerHaptic } = useHapticFeedback();
 	const trackEvent = useTrackEvent();
+	const router = useRouter();
 
 	const handleContinue = () => {
 		trackEvent('build-your-fit-product-selection', 'confirm', [
@@ -122,29 +124,33 @@ export function ProductSelectionScreen({
 	}
 
 	return (
-		<div className="w-full h-full overflow-x-hidden">
-			<div className="w-full h-screen flex flex-col bg-gray-50 max-w-xl mx-auto justify-around ">
+		<div className="w-full h-full overflow-x-hidden py-8">
+			<div className="w-full h-screen flex flex-col bg-gray-50 max-w-xl mx-auto justify-start ">
 				<div className="flex flex-col items-center pt-8 px-6">
 					<h1 className="text-3xl lg:text-6xl font-bold text-gray-900">BUILD YOUR FIT</h1>
 				</div>
 
+				<div className="p-6 mx-auto flex flex-row gap-4 items-center">
+					<Button
+						onClick={() => {
+							router.push('/outfit-selector');
+						}}
+						className="mx-auto  h-12 rounded-full border-gray-900 border bg-transparent text-black hover:border-gray-800 group disabled:opacity-50 w-fit px-6"
+					>
+						<span>CANCEL</span>
+					</Button>
+					<Button
+						onClick={handleContinue}
+						className="mx-auto  h-12 rounded-full bg-gray-900 text-white hover:bg-gray-800 group disabled:opacity-50 w-fit px-6"
+					>
+						<span>CONFIRM</span>
+					</Button>
+				</div>
+
 				<div className="flex flex-col items-center gap-4">
 					<div className="mt-4">
-						<EmblaCarousel
-							selectedColor={topColor}
-							slides={TOPS.map((top, index) => ({
-								...top,
-								image:
-									index === selectedTopIndex
-										? getCurrentTopImage() || top.image
-										: top.colorImages?.[topColor] || top.image,
-							}))}
-							onSlideChange={handleTopChange}
-							initialSlide={initialTop}
-						/>
-
 						{selectedTopIndex !== null && TOPS[selectedTopIndex] && (
-							<div className="flex justify-center gap-3 mt-4">
+							<div className="flex justify-center gap-3 mt-4 mb-4">
 								{TOPS[selectedTopIndex].colors.map((color) => (
 									<motion.button
 										key={color.value}
@@ -164,24 +170,23 @@ export function ProductSelectionScreen({
 								))}
 							</div>
 						)}
+						<EmblaCarousel
+							selectedColor={topColor}
+							slides={TOPS.map((top, index) => ({
+								...top,
+								image:
+									index === selectedTopIndex
+										? getCurrentTopImage() || top.image
+										: top.colorImages?.[topColor] || top.image,
+							}))}
+							onSlideChange={handleTopChange}
+							initialSlide={initialTop}
+						/>
 					</div>
 
-					<div className="mt-12">
-						<EmblaCarousel
-							selectedColor={bottomColor}
-							slides={BOTTOMS.map((bottom, index) => ({
-								...bottom,
-								image:
-									index === selectedBottomIndex
-										? getCurrentBottomImage() || bottom.image
-										: bottom.colorImages?.[bottomColor] || bottom.image,
-							}))}
-							onSlideChange={handleBottomChange}
-							initialSlide={initialBottom}
-						/>
-
+					<div className="mt-12 lg:-mt-10">
 						{selectedBottomIndex !== null && BOTTOMS[selectedBottomIndex] && (
-							<div className="flex justify-center gap-3 mt-4">
+							<div className="flex justify-center gap-3 mt-4 mb-4">
 								{BOTTOMS[selectedBottomIndex].colors.map((color) => (
 									<motion.button
 										key={color.value}
@@ -201,16 +206,19 @@ export function ProductSelectionScreen({
 								))}
 							</div>
 						)}
+						<EmblaCarousel
+							selectedColor={bottomColor}
+							slides={BOTTOMS.map((bottom, index) => ({
+								...bottom,
+								image:
+									index === selectedBottomIndex
+										? getCurrentBottomImage() || bottom.image
+										: bottom.colorImages?.[bottomColor] || bottom.image,
+							}))}
+							onSlideChange={handleBottomChange}
+							initialSlide={initialBottom}
+						/>
 					</div>
-				</div>
-
-				<div className="p-6 mx-auto">
-					<Button
-						onClick={handleContinue}
-						className="mx-auto  h-12 rounded-full bg-gray-900 text-white hover:bg-gray-800 group disabled:opacity-50 w-fit px-6"
-					>
-						<span>CONFIRM</span>
-					</Button>
 				</div>
 			</div>
 		</div>

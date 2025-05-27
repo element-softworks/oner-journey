@@ -8,8 +8,8 @@ import { DEVICE_TYPE } from '@/lib/socket-events';
 type EventHandler = (...args: any[]) => void;
 
 interface UseSocketRoomOptions {
-	sessionId: string;
-	role: DEVICE_TYPE;
+	sessionId?: string;
+	role?: DEVICE_TYPE;
 	handlers?: Record<string, EventHandler>;
 }
 
@@ -17,6 +17,7 @@ export function useSocketRoom({ sessionId, role, handlers }: UseSocketRoomOption
 	const { socket, isConnected } = useSocket();
 
 	useEffect(() => {
+		if (!sessionId) return;
 		if (!socket) return;
 
 		// 1) Wake server & connect if needed
