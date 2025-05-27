@@ -70,12 +70,25 @@ export function IdleTimer({ sessionId, role }: IdleTimerProps) {
 					},
 				]);
 				endMerlinSession();
-				router.push(isPhotoBooth ? '/photo-booth' : '/outfit-selector');
+
+				const isMobile = pathName?.includes('/mobile');
+
+				!isPhotoBooth
+					? router.push('/outfit-selector')
+					: isMobile
+					? router.push(
+							'https://us.oneractive.com/collections/shop/new?utm_source=email&utm_medium=newsletter&utm_campaign=Pop-Up-NY'
+					  )
+					: router.push('/photo-booth');
 			},
 		},
 	});
 
 	const onIdle = () => {
+		if (pathName?.includes('/mobile/thank-you')) {
+			return;
+		}
+
 		if (!isPhotoBooth) {
 			router.push('/outfit-selector');
 		}
@@ -103,6 +116,10 @@ export function IdleTimer({ sessionId, role }: IdleTimerProps) {
 	});
 
 	useEffect(() => {
+		if (pathName?.includes('/mobile/thank-you')) {
+			return;
+		}
+
 		let timer: NodeJS.Timeout;
 
 		if (showWarning) {
@@ -120,7 +137,13 @@ export function IdleTimer({ sessionId, role }: IdleTimerProps) {
 						]);
 						endMerlinSession();
 
-						router.push('/photo-booth');
+						const isMobile = pathName?.includes('/mobile');
+
+						isMobile
+							? router.push(
+									'https://us.oneractive.com/collections/shop/new?utm_source=email&utm_medium=newsletter&utm_campaign=Pop-Up-NY'
+							  )
+							: router.push('/photo-booth');
 						return 0;
 					}
 					return prev - 1;
@@ -160,7 +183,13 @@ export function IdleTimer({ sessionId, role }: IdleTimerProps) {
 		]);
 		endMerlinSession();
 
-		router.push('/photo-booth');
+		const isMobile = pathName?.includes('/mobile');
+
+		isMobile
+			? router.push(
+					'https://us.oneractive.com/collections/shop/new?utm_source=email&utm_medium=newsletter&utm_campaign=Pop-Up-NY'
+			  )
+			: router.push('/photo-booth');
 	};
 
 	return (
