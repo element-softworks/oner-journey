@@ -155,23 +155,23 @@ export function PhotoBoothPreview({
 			<div
 				/* this is the element html2canvas will receive */
 				ref={photoContainer}
-				className="relative mx-auto h-[860px] w-[680px] overflow-hidden rounded-none border-8 border-white bg-white"
+				className="relative mx-auto max-h-[860px] max-w-[680px] h-[860px] w-[680px] overflow-hidden rounded-none border-8 border-white bg-white"
 			>
 				{/* selfie */}
 				<div
 					style={{ transform: CAMERA_TRANSFORM }}
-					className=" h-full min-w-full w-full min-h-full"
+					className=" h-full  w-full  min-h-[860px] min-w-[680px] bg-white"
 				>
 					<img
 						src={url}
 						alt="Your captured selfie"
-						className=" w-full object-cover h-[680px]"
+						className="object-cover h-full w-full min-h-[860px] min-w-[680px]"
 						crossOrigin="anonymous"
 					/>
 				</div>
 
 				{/* bottom overlay logo (now z‑10) */}
-				<div className="absolute bottom-2 bg-white justify-center items-center flex py-4 w-full left-1/2 z-10 -translate-x-1/2 mb-0">
+				<div className="absolute bottom-0 bg-white justify-center items-center flex py-4 w-full left-1/2 z-10 -translate-x-1/2 mb-0">
 					<img
 						src="/images/oner-green.svg"
 						alt="ONER"
