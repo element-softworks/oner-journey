@@ -157,15 +157,17 @@ export function PhotoBoothPreview({
 				ref={photoContainer}
 				className="relative mx-auto h-[860px] w-[680px] overflow-hidden rounded-none border-8 border-white bg-white"
 			>
-				{/* selfie */}
-				<div className="absolute inset-0">
-					<div className="rotate-[var(--camera-rotation,0deg)] h-full w-full">
-						<img
-							src={url}
-							alt="Your captured selfie"
-							className=" w-full object-cover h-[680px]"
-							crossOrigin="anonymous"
-						/>
+				<div style={{ transform: CAMERA_TRANSFORM }}>
+					{/* selfie */}
+					<div className="absolute inset-0">
+						<div className="rotate-[var(--camera-rotation,0deg)] h-full w-full">
+							<img
+								src={url}
+								alt="Your captured selfie"
+								className=" w-full object-cover h-[680px]"
+								crossOrigin="anonymous"
+							/>
+						</div>
 					</div>
 				</div>
 
