@@ -160,7 +160,7 @@ export function PhotoBoothPreview({
 				<div style={{ transform: CAMERA_TRANSFORM }}>
 					{/* selfie */}
 					<div className="absolute inset-0">
-						<div className="rotate-[var(--camera-rotation,0deg)] h-full w-full">
+						<div className=" h-full w-full">
 							<img
 								src={url}
 								alt="Your captured selfie"
