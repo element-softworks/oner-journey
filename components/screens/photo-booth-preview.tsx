@@ -158,15 +158,16 @@ export function PhotoBoothPreview({
 				className="relative mx-auto h-[860px] w-[680px] overflow-hidden rounded-none border-8 border-white bg-white"
 			>
 				{/* selfie */}
-				<div className="absolute inset-0">
-					<div style={{ transform: CAMERA_TRANSFORM }} className=" h-full w-full">
-						<img
-							src={url}
-							alt="Your captured selfie"
-							className=" w-full object-cover h-[680px]"
-							crossOrigin="anonymous"
-						/>
-					</div>
+				<div
+					style={{ transform: CAMERA_TRANSFORM }}
+					className=" h-full min-w-full w-full min-h-full"
+				>
+					<img
+						src={url}
+						alt="Your captured selfie"
+						className=" w-full object-cover h-[680px]"
+						crossOrigin="anonymous"
+					/>
 				</div>
 
 				{/* bottom overlay logo (now z‑10) */}
