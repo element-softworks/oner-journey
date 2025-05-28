@@ -160,7 +160,7 @@ export function PhotoBoothPreview({
 				{/* selfie */}
 				<div
 					style={{ transform: CAMERA_TRANSFORM }}
-					className=" h-full  w-full  min-h-[860px] min-w-[680px] bg-white"
+					className=" h-full  w-full  min-h-[680px] min-w-[860px] bg-white"
 				>
 					<img
 						src={url}
