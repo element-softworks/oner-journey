@@ -79,6 +79,17 @@ export function PhotoBoothLanding({ onStart, onBack }: PhotoBoothLandingProps) {
 		};
 	}, []);
 
+	useEffect(() => {
+		const interval = setInterval(
+			() => {
+				window.location.reload();
+			},
+			5 * 60 * 1000
+		);
+
+		return () => clearInterval(interval); // Cleanup on unmount
+	}, []);
+
 	const handleBack = () => {
 		triggerHaptic('light');
 		onBack();
