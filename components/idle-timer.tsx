@@ -93,17 +93,19 @@ export function IdleTimer({ sessionId, role }: IdleTimerProps) {
 			router.push('/outfit-selector');
 		}
 
+		setShowWarning(true);
+
 		if (!socket) return;
 
 		if (role === DEVICE_TYPE.MOBILE) {
 			socket.emit(MOBILE_EVENTS.TIMEOUT_WARNING);
-			setShowWarning(true);
 		}
 	};
 
-	const { reset } = useIdleTimer({
+	const { reset, getRemainingTime } = useIdleTimer({
 		// timeout: 60 * 1000, // 1 minute
 		timeout: 1000 * (isPhotoBooth ? 30 : 60),
+
 		onIdle,
 		onActive(event, idleTimer) {
 			console.log('User is active', event, idleTimer);
@@ -111,9 +113,24 @@ export function IdleTimer({ sessionId, role }: IdleTimerProps) {
 		onAction: () => {
 			console.log('User did something');
 		},
+		events: [
+			'mousemove',
+			'keydown',
+			'wheel',
+			'DOMMouseScroll',
+			'mousewheel',
+			'mousedown',
+			'touchstart',
+			'touchmove',
+			'MSPointerDown',
+			'MSPointerMove',
+			'focus',
+		],
 
 		debounce: 500,
 	});
+
+	console.log(getRemainingTime(), 'getRemainingTime');
 
 	useEffect(() => {
 		if (pathName?.includes('/mobile/thank-you')) {
