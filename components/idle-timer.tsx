@@ -104,7 +104,7 @@ export function IdleTimer({ sessionId, role }: IdleTimerProps) {
 
 	const { reset, getRemainingTime } = useIdleTimer({
 		// timeout: 60 * 1000, // 1 minute
-		timeout: 1000 * (isPhotoBooth ? 30 : 60),
+		timeout: 1000 * (isPhotoBooth ? 300 : 60),
 
 		onIdle,
 		onActive(event, idleTimer) {
